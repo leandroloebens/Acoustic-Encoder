@@ -1,5 +1,7 @@
 package com.acoustic.encoder.gui;
 
+import com.acoustic.encoder.controller.AppController;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,8 +29,48 @@ public class MainScreen {
 
     private final static String EMPTY_INPUT_WARNING = "Please enter some text first!";
 
-
     private static JFrame frame;
+
+    private final AppController controller;
+
+    public MainScreen(AppController controller) {
+
+        if (frame == null)  frame = new JFrame(WINDOW_TITLE);
+
+        if (controller == null) throw new IllegalArgumentException("Controller cannot be null!");
+        this.controller = controller;
+    }
+
+    public void startFrame() {
+
+        // Sets the window to close when the user clicks the close button.
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        // Divides the window in NORTH, SOUTH, EAST, WEST and CENTER.
+        // The numbers (BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP) are the gap between the areas.
+        frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
+
+        JLabel instruction = createInstructionLabel();
+
+        JTextArea textArea = createMainTextArea();
+
+        JScrollPane scrollTextArea = createMainScrollTextArea(textArea);
+
+        JButton converterButton = createConverterButton(textArea);
+
+        // Adding components to the frame
+        frame.add(instruction, BorderLayout.NORTH);
+        frame.add(scrollTextArea, BorderLayout.CENTER);
+        frame.add(converterButton, BorderLayout.SOUTH);
+
+        // Centering the frame
+        frame.setLocationRelativeTo(null);
+
+        frame.setVisible(true);
+
+    }
 
     private static JLabel createInstructionLabel() {
 
@@ -72,7 +114,7 @@ public class MainScreen {
         return scrollPane;
     }
 
-    private static JButton createConverterButton(JTextArea textArea) {
+    private JButton createConverterButton(JTextArea textArea) {
 
         JButton converterButton = new JButton(CONVERTER_BUTTON_TEXT);
 
@@ -80,9 +122,10 @@ public class MainScreen {
 
             if (event.getSource() != converterButton) return;
 
-            String inputText = textArea.getText();
-
-            if (inputText.isEmpty()) {
+            try {
+                this.controller.onConvertButtonClick(textArea.getText());
+            }
+            catch (IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(frame, EMPTY_INPUT_WARNING);
                 return;
             }
@@ -94,41 +137,6 @@ public class MainScreen {
         });
 
         return converterButton;
-    }
-
-    public static void startFrame() {
-
-        if (frame != null) return;
-
-        frame = new JFrame(WINDOW_TITLE);
-
-        // Sets the window to close when the user clicks the close button.
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        // Divides the window in NORTH, SOUTH, EAST, WEST and CENTER.
-        // The numbers (BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP) are the gap between the areas.
-        frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
-
-        JLabel instruction = createInstructionLabel();
-
-        JTextArea textArea = createMainTextArea();
-
-        JScrollPane scrollTextArea = createMainScrollTextArea(textArea);
-
-        JButton converterButton = createConverterButton(textArea);
-
-        // Adding components to the frame
-        frame.add(instruction, BorderLayout.NORTH);
-        frame.add(scrollTextArea, BorderLayout.CENTER);
-        frame.add(converterButton, BorderLayout.SOUTH);
-
-        // Centering the frame
-        frame.setLocationRelativeTo(null);
-
-        frame.setVisible(true);
-
     }
 
 }
