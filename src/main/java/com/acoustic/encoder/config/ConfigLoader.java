@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class ConfigLoader {
 
-    private final static String CONFIG_FILE_NAME = "encoderMapping.properties";
+    public final static String CONFIG_FILE_NAME = "encoderMapping.properties";
 
     private final String fileName;
 

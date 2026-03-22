@@ -12,9 +12,9 @@ public class AppController {
 
     public void onConvertButtonClick(String inputText) {
 
-        if (inputText.isEmpty()) throw new IllegalArgumentException("Input text cannot be empty!");
+        if (inputText == null || inputText.isEmpty()) throw new IllegalArgumentException("Input text cannot be empty!");
 
-        this.musicService.textToMusic(inputText);
+        this.musicService.textToMusic(inputText, 0, 120, 4, 100);
 
     }
 }
