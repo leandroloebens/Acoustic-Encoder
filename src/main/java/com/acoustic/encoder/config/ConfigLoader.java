@@ -40,7 +40,7 @@ public class ConfigLoader {
             prop.load(stream);
 
             //  Char -> MusicalInstruction structure in .properties
-            prop.forEach((character, instruction) -> {
+            prop.forEach((key, instruction) -> {
 
                 //  Parse COMMAND:PARAMETER structure (MusicalInstruction)
                 String[] parts = instruction.toString().split(":");
@@ -49,7 +49,7 @@ public class ConfigLoader {
                 int parameter = (parts.length > 1) ? Integer.parseInt(parts[1]) : 0;
 
                 configMap.put(
-                        character.toString(),
+                        key.toString(),
                         new MusicalInstruction(
                                 MusicalCommand.valueOf(commandStr),
                                 parameter

@@ -10,11 +10,11 @@ public class Main {
 
     void main() {
 
-        TextParser parser = new TextParser();
-        AudioPlayer player = new AudioPlayer();
-        MusicService musicService = new MusicService(parser, player);
-        AppController controller = new AppController(musicService);
-        MainScreen mainScreen = new MainScreen(controller);
-        mainScreen.startFrame();
+//        TextParser parser = new TextParser();
+//        AudioPlayer player = new AudioPlayer();
+//        MusicService musicService = new MusicService(parser, player);
+//        AppController controller = new AppController(musicService);
+//        MainScreen mainScreen = new MainScreen(controller);
+//        mainScreen.startFrame();
     }
 }
