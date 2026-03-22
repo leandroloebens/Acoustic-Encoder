@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class NotesMapper {
 
-    private final String NOTES_MAP_FILE = "notesMap.properties";
+    private final String NOTES_MAP_FILE = "encoderMapping.properties";
 
     private Map<Character, String> notesMap;
 
