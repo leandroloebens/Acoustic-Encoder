@@ -1,6 +1,7 @@
 package com.acoustic.encoder.gui;
 
 import com.acoustic.encoder.controller.AppController;
+import com.acoustic.encoder.controller.ConvertTextController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,14 +32,14 @@ public class MainScreen {
 
     private static JFrame frame;
 
-    private final AppController controller;
+    private final ConvertTextController convertTextController;
 
-    public MainScreen(AppController controller) {
+    public MainScreen(ConvertTextController convertTextController) {
 
         if (frame == null)  frame = new JFrame(WINDOW_TITLE);
 
-        if (controller == null) throw new IllegalArgumentException("Controller cannot be null!");
-        this.controller = controller;
+        if (convertTextController == null) throw new IllegalArgumentException("Controller cannot be null!");
+        this.convertTextController = convertTextController;
     }
 
     public void startFrame() {
@@ -123,7 +124,7 @@ public class MainScreen {
             if (event.getSource() != converterButton) return;
 
             try {
-                this.controller.onConvertButtonClick(textArea.getText());
+                this.convertTextController.onConvertButtonClick(textArea.getText());
             }
             catch (IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(frame, EMPTY_INPUT_WARNING);

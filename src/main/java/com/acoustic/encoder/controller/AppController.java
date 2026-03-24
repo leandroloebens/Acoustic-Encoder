@@ -1,20 +1,20 @@
 package com.acoustic.encoder.controller;
 
-import com.acoustic.encoder.service.MusicService;
+import com.acoustic.encoder.service.MusicUseCase;
 
-public class AppController {
+public class AppController implements ConvertTextController {
 
-    private final MusicService musicService;
+    private final MusicUseCase musicUseCase;
 
-    public AppController(MusicService musicService) {
-        this.musicService = musicService;
+    public AppController(MusicUseCase musicUseCase) {
+        this.musicUseCase = musicUseCase;
     }
 
     public void onConvertButtonClick(String inputText) {
 
         if (inputText == null || inputText.isEmpty()) throw new IllegalArgumentException("Input text cannot be empty!");
 
-        this.musicService.textToMusic(inputText, 0, 120, 4, 100);
+        this.musicUseCase.textToMusic(inputText, 0, 120, 4, 100);
 
     }
 }
