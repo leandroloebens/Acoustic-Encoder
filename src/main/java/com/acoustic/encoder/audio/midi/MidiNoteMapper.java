@@ -7,7 +7,7 @@ public class MidiNoteMapper {
     public static int mapNote(MusicalNote note) {
 
         // Music note is represented by MIDI note number
-        return 12*(note.getOctave()-1) + (note.getPitch().getValue());
+        return 12*(note.octave()-1) + (note.pitch().getValue());
 
     }
 }
