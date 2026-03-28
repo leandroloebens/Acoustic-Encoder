@@ -1,5 +1,6 @@
 package com.acoustic.encoder.service;
 
+import com.acoustic.encoder.model.MusicConfig;
 import com.acoustic.encoder.model.MusicModel;
 import com.acoustic.encoder.model.MusicalInstruction;
 import com.acoustic.encoder.parser.InstructionParser;
@@ -15,11 +16,11 @@ public class DefaultConversionService implements ConversionService {
         this.parser = parser;
     }
 
-    public MusicModel textToMusic(String text, int instrument, int bpm, int defaultOctave, int volume) {
+    public MusicModel textToMusic(String text, MusicConfig config) {
 
         List<MusicalInstruction> musicalInstructions = this.parser.parseText(text);
 
-        MusicModel music = new MusicModel(musicalInstructions, defaultOctave, volume, instrument, bpm);
+        MusicModel music = new MusicModel(musicalInstructions, config);
 
         for (MusicalInstruction musicalInstruction : musicalInstructions) {
             System.out.println(musicalInstruction);

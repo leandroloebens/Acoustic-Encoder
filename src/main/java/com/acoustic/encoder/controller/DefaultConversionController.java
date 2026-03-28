@@ -1,5 +1,6 @@
 package com.acoustic.encoder.controller;
 
+import com.acoustic.encoder.model.MusicConfig;
 import com.acoustic.encoder.model.MusicModel;
 import com.acoustic.encoder.model.UserConversionInput;
 import com.acoustic.encoder.service.ConversionService;
@@ -14,16 +15,18 @@ public class DefaultConversionController implements ConversionController {
         this.conversionService = conversionService;
     }
 
-    public void onConvertButtonClick(UserConversionInput input) {
+    public void handleConvertAction(UserConversionInput input) {
 
         Objects.requireNonNull(input, "UserInput cannot be null!");
 
         MusicModel music = this.conversionService.textToMusic(
                 input.text(),
-                input.defaultMidiInstrument(),
-                input.bpm(),
-                input.defaultOctave(),
-                input.defaultVolume()
+                new MusicConfig(
+                        input.defaultMidiInstrument(),
+                        input.bpm(),
+                        input.defaultOctave(),
+                        input.defaultVolume()
+                )
         );
 
         System.out.println(music);

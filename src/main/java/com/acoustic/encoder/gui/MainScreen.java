@@ -125,7 +125,7 @@ public class MainScreen {
 
             try {
 
-                this.conversionController.onConvertButtonClick(
+                this.conversionController.handleConvertAction(
                         new UserConversionInput(
                                 textArea.getText(),
                                 0,

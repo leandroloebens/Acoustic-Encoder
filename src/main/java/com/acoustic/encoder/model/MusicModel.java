@@ -4,8 +4,13 @@ import java.util.List;
 
 public record MusicModel(
         List<MusicalInstruction> musicalInstructions,
-        int defaultMidiInstrument,
-        int bpm,
-        int defaultOctave,
-        int defaultVolume
-) { }
+        MusicConfig config
+) {
+    @Override
+    public String toString() {
+        return "MusicModel{" +
+                "\nmusicalInstructions=" + musicalInstructions +
+                "\n" + this.config.toString() +
+                "\n}";
+    }
+}
