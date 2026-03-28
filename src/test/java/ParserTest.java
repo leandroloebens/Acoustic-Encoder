@@ -4,21 +4,21 @@ import com.acoustic.encoder.parser.TextToInstructionParser;
 
 import java.util.List;
 
-public class ParserTest {
 
-    void main() throws Exception {
 
-        TextToInstructionParser parser = new TextToInstructionParser(
-                new ConfigLoader(ConfigLoader.CONFIG_FILE_NAME).loadConfigMap()
-        );
-        List<MusicalInstruction> instructions = parser.parseText(
-                "ABCDEFGHIK !0123456789?.;,\n"
+void main() throws Exception {
 
-        );
-        for (MusicalInstruction instruction : instructions) {
+    TextToInstructionParser parser = new TextToInstructionParser(
+            new ConfigLoader(ConfigLoader.CONFIG_FILE_NAME).loadConfigMap()
+    );
+    List<MusicalInstruction> instructions = parser.parseText(
+            "ABCDEFGHIK !0123456789?.;,\n"
 
-            System.out.println(instruction);
-        }
+    );
+    for (MusicalInstruction instruction : instructions) {
+
+        System.out.println(instruction);
     }
 }
+
 
