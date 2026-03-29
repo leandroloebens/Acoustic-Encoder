@@ -6,7 +6,7 @@ import javax.sound.midi.InvalidMidiDataException;
 
 public interface AudioPlayerService {
 
-    public void loadMusic(MusicModel musicModel) throws InvalidMidiDataException, Exception;
+    public void setPlayerMusic(MusicModel musicModel) throws IllegalArgumentException, InvalidMidiDataException;
 
     public void playMusic();
 

@@ -3,16 +3,18 @@ package com.acoustic.encoder.service;
 import com.acoustic.encoder.audio.AudioPlayer;
 import com.acoustic.encoder.model.MusicModel;
 
-public class DefaultPlayerService implements AudioPlayerService {
+import javax.sound.midi.InvalidMidiDataException;
+
+public class DefaultAudioPlayerService implements AudioPlayerService {
 
     private final AudioPlayer player;
 
-    public DefaultPlayerService(AudioPlayer player) {
+    public DefaultAudioPlayerService(AudioPlayer player) {
 
         this.player = player;
     }
 
-    public void loadMusic(MusicModel musicModel) throws Exception {
+    public void setPlayerMusic(MusicModel musicModel) throws IllegalArgumentException, InvalidMidiDataException {
         player.loadMusic(musicModel);
     }
 

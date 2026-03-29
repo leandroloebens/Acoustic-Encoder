@@ -1,18 +1,24 @@
 package com.acoustic.encoder.controller;
 
+import com.acoustic.encoder.app.AppNavigator;
 import com.acoustic.encoder.model.MusicConfig;
 import com.acoustic.encoder.model.MusicModel;
 import com.acoustic.encoder.model.UserConversionInput;
 import com.acoustic.encoder.service.ConversionService;
 
+import javax.sound.midi.InvalidMidiDataException;
 import java.util.Objects;
 
 public class DefaultConversionController implements ConversionController {
 
     private final ConversionService conversionService;
 
-    public DefaultConversionController(ConversionService conversionService) {
+    private final AppNavigator navigator;
+
+    public DefaultConversionController(ConversionService conversionService, AppNavigator navigator) {
+
         this.conversionService = conversionService;
+        this.navigator = navigator;
     }
 
     public void handleConvertAction(UserConversionInput input) {
@@ -28,6 +34,12 @@ public class DefaultConversionController implements ConversionController {
                         input.defaultVolume()
                 )
         );
+
+        try {
+            navigator.displayPlayerScreen(music);
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(music);
 
