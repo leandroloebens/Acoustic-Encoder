@@ -8,7 +8,6 @@ import javax.sound.midi.InvalidMidiDataException;
 public class DefaultAudioPlayerController implements AudioPlayerController{
 
     private final AudioPlayerService playerService;
-    private MusicModel musicModel;
 
     public DefaultAudioPlayerController(AudioPlayerService playerService, MusicModel musicModel) {
 

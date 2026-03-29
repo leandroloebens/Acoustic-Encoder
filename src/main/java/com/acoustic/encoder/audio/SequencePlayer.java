@@ -5,13 +5,13 @@ import javax.sound.midi.Sequence;
 
 public interface SequencePlayer {
 
-    public void loadSequence(Sequence sequence) throws InvalidMidiDataException;
+    void loadSequence(Sequence sequence) throws InvalidMidiDataException;
 
-    public void setBpm(int bpm);
+    void setBpm(int bpm);
 
-    public void play();
+    void play();
 
-    public void stop();
+    void stop();
 
-    public void rewind();
+    void rewind();
 }

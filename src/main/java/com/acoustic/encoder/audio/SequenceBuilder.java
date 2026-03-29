@@ -6,6 +6,6 @@ import javax.sound.midi.Sequence;
 
 public interface SequenceBuilder {
 
-    public Sequence buildSequence(MusicModel musicModel);
+    Sequence buildSequence(MusicModel musicModel);
 
 }

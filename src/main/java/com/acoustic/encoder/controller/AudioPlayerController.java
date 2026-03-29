@@ -2,9 +2,9 @@ package com.acoustic.encoder.controller;
 
 public interface AudioPlayerController {
 
-    public void handlePlayAction();
+    void handlePlayAction();
 
-    public void handlePauseAction();
+    void handlePauseAction();
 
-    public void handleRewindAction();
+    void handleRewindAction();
 }

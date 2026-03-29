@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface InstructionParser {
 
-    public List<MusicalInstruction> parseText(String text);
+    List<MusicalInstruction> parseText(String text);
 
 }

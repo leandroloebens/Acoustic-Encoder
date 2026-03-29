@@ -6,8 +6,8 @@ import javax.sound.midi.InvalidMidiDataException;
 
 public interface AppNavigator {
 
-    public void startApp();
+    void startApp();
 
-    public void displayPlayerScreen(MusicModel musicModel) throws InvalidMidiDataException;
+    void displayPlayerScreen(MusicModel musicModel) throws InvalidMidiDataException;
 
 }

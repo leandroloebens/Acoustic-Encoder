@@ -6,11 +6,11 @@ import javax.sound.midi.InvalidMidiDataException;
 
 public interface AudioPlayerService {
 
-    public void setPlayerMusic(MusicModel musicModel) throws IllegalArgumentException, InvalidMidiDataException;
+    void setPlayerMusic(MusicModel musicModel) throws IllegalArgumentException, InvalidMidiDataException;
 
-    public void playMusic();
+    void playMusic();
 
-    public void stopMusic();
+    void stopMusic();
 
-    public void rewindMusic();
+    void rewindMusic();
 }

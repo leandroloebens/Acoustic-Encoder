@@ -10,8 +10,6 @@ import com.acoustic.encoder.model.MusicModel;
 import com.acoustic.encoder.service.AudioPlayerService;
 import com.acoustic.encoder.service.ConversionService;
 
-import javax.sound.midi.InvalidMidiDataException;
-
 public class DefaultAppNavigator implements AppNavigator{
 
     private final ConversionService conversionService;
@@ -33,7 +31,7 @@ public class DefaultAppNavigator implements AppNavigator{
         mainScreen.startFrame();
     }
 
-    public void displayPlayerScreen(MusicModel musicModel) throws IllegalArgumentException, InvalidMidiDataException {
+    public void displayPlayerScreen(MusicModel musicModel) throws IllegalArgumentException {
 
         AudioPlayerController playerController = new DefaultAudioPlayerController(playerService, musicModel);
 
