@@ -1,7 +1,6 @@
 package com.acoustic.encoder;
 
-import com.acoustic.encoder.audio.AudioOutput;
-import com.acoustic.encoder.audio.MidiPlayer;
+import com.acoustic.encoder.audio.*;
 import com.acoustic.encoder.config.ConfigLoader;
 import com.acoustic.encoder.controller.DefaultConversionController;
 import com.acoustic.encoder.controller.ConversionController;
@@ -19,13 +18,11 @@ public class Main {
 
         InstructionParser parser = new TextToInstructionParser(configLoader.loadConfigMap());
 
-        AudioOutput player = new MidiPlayer();
+        ConversionService conversionService = new DefaultConversionService(parser);
 
-        ConversionService musicService = new DefaultConversionService(parser);
+        ConversionController conversionController = new DefaultConversionController(conversionService);
 
-        ConversionController controller = new DefaultConversionController(musicService);
-
-        MainScreen mainScreen = new MainScreen(controller);
+        MainScreen mainScreen = new MainScreen(conversionController);
 
         mainScreen.startFrame();
 

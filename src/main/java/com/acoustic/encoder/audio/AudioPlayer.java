@@ -1,10 +1,16 @@
 package com.acoustic.encoder.audio;
 
-public class AudioPlayer implements AudioOutput {
+import com.acoustic.encoder.model.MusicModel;
 
-    public void play() {}
+import javax.sound.midi.InvalidMidiDataException;
 
-    public void stop() {}
+public interface AudioPlayer {
 
-    public void rewind() {}
+    public void loadMusic(MusicModel musicModel) throws InvalidMidiDataException;
+
+    public void play();
+
+    public void stop();
+
+    public void rewind();
 }
