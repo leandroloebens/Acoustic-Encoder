@@ -16,6 +16,7 @@ public class PlayerScreen {
 
     private final static String PLAY_BUTTON_TEXT = "Play";
     private final static String PAUSE_BUTTON_TEXT = "Pause";
+    private final static String REWIND_BUTTON_TEXT = "Rewind";
 
     private final static int BUTTON_PANEL_TGAP = 10;
     private final static int BUTTON_PANEL_LGAP = 10;
@@ -69,9 +70,11 @@ public class PlayerScreen {
 
         JButton playButton = createPlayButton();
         JButton pauseButton = createPauseButton();
+        JButton rewindButton = createRewindButton();
 
         panel.add(playButton);
         panel.add(pauseButton);
+        panel.add(rewindButton);
 
         return panel;
     }
@@ -102,5 +105,19 @@ public class PlayerScreen {
         });
 
         return pauseButton;
+    }
+
+    private JButton createRewindButton() {
+
+        JButton rewindButton = new JButton(REWIND_BUTTON_TEXT);
+
+        rewindButton.addActionListener(event -> {
+
+            if (event.getSource() != rewindButton) return;
+
+            this.playerController.handleRewindAction();
+        });
+
+        return rewindButton;
     }
 }

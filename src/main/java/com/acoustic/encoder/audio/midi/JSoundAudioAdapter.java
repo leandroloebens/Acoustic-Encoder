@@ -36,6 +36,6 @@ public class JSoundAudioAdapter implements AudioPlayer {
     }
 
     public void rewind() {
-
+        this.sequencePlayer.rewind();
     }
 }

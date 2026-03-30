@@ -35,5 +35,8 @@ public class DefaultSequencePlayer implements SequencePlayer {
         this.sequencer.stop();
     }
 
-    public void rewind() {}
+    public void rewind() {
+
+        this.sequencer.setTickPosition(0);
+    }
 }
