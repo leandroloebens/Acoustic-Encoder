@@ -6,6 +6,7 @@ import java.util.Objects;
 public class DefaultSequencePlayer implements SequencePlayer {
 
     private final Sequencer sequencer;
+    private int currentBpm;
 
     public DefaultSequencePlayer(Sequencer sequencer) throws MidiUnavailableException {
 
@@ -22,12 +23,13 @@ public class DefaultSequencePlayer implements SequencePlayer {
 
     public void setBpm(int bpm) {
 
-        this.sequencer.setTempoInBPM(bpm);
+        this.currentBpm = bpm;
     }
 
     public void play() {
 
         this.sequencer.start();
+        this.sequencer.setTempoInBPM(this.currentBpm);
     }
 
     public void stop() {
