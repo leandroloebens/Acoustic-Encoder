@@ -1,4 +1,4 @@
-package com.acoustic.encoder.audio;
+package com.acoustic.encoder.audio.midi;
 
 import javax.sound.midi.*;
 import java.util.Objects;

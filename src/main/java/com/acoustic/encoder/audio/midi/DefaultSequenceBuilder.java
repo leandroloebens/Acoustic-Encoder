@@ -1,4 +1,4 @@
-package com.acoustic.encoder.audio;
+package com.acoustic.encoder.audio.midi;
 
 import com.acoustic.encoder.model.*;
 
@@ -85,7 +85,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
         return context.withTick(context.tick() + NOTE_TICK_DURATION);
     }
 
-    private TrackContext handleSilence(TrackContext context) throws InvalidMidiDataException {
+    private TrackContext handleSilence(TrackContext context) {
 
         return context.withTick(context.tick() + NOTE_TICK_DURATION);
     }
@@ -134,7 +134,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
         return newContext;
     }
 
-    private TrackContext handleIncrementOctave(TrackContext context, int incVal) throws InvalidMidiDataException {
+    private TrackContext handleIncrementOctave(TrackContext context, int incVal) {
 
         return context.incrementOctave(incVal);
     }

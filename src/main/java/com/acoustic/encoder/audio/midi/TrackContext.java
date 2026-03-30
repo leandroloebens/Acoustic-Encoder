@@ -1,4 +1,4 @@
-package com.acoustic.encoder.audio;
+package com.acoustic.encoder.audio.midi;
 
 import com.acoustic.encoder.model.MusicConfig;
 

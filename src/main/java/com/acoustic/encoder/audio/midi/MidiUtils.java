@@ -1,4 +1,4 @@
-package com.acoustic.encoder.audio;
+package com.acoustic.encoder.audio.midi;
 
 import com.acoustic.encoder.model.MusicalNote;
 
@@ -14,7 +14,6 @@ public class MidiUtils {
 
     public final static int INSTRUMENT_MAX = 127;
 
-    public final static int OCTAVE_MIN = 0;
     public final static int OCTAVE_MAX = 9;
 
     private final static int USELESS_VAL = 0;
