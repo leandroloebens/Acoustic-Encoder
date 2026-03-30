@@ -34,6 +34,11 @@ public class MainScreen {
 
     private final ConversionController conversionController;
 
+    int defaultVolume = 64;
+    int defaultOctave = 5;
+    int defaultInstrument = 0;
+    int defaultBpm = 120;
+
     public MainScreen(ConversionController conversionController) {
 
         if (frame == null)  frame = new JFrame(WINDOW_TITLE);
@@ -53,7 +58,7 @@ public class MainScreen {
         // The numbers (BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP) are the gap between the areas.
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
-        JLabel instruction = createInstructionLabel();
+        JLabel instructionLabel = createInstructionLabel();
 
         JTextArea textArea = createMainTextArea();
 
@@ -62,9 +67,10 @@ public class MainScreen {
         JButton converterButton = createConverterButton(textArea);
 
         // Adding components to the frame
-        frame.add(instruction, BorderLayout.NORTH);
+        frame.add(instructionLabel, BorderLayout.NORTH);
         frame.add(scrollTextArea, BorderLayout.CENTER);
         frame.add(converterButton, BorderLayout.SOUTH);
+        frame.add(createParameterPanel(), BorderLayout.EAST);
 
         // Centering the frame
         frame.setLocationRelativeTo(null);
@@ -128,10 +134,10 @@ public class MainScreen {
                 this.conversionController.handleConvertAction(
                         new UserConversionInput(
                                 textArea.getText(),
-                                0,
-                                120,
-                                4,
-                                100
+                                defaultInstrument,
+                                defaultBpm,
+                                defaultOctave,
+                                defaultVolume
                         )
                 );
             }
@@ -147,6 +153,120 @@ public class MainScreen {
         });
 
         return converterButton;
+    }
+
+    private JPanel createParameterPanel() {
+
+        JPanel panel = new JPanel();
+
+        panel.setLayout(new GridLayout(4, 1));
+
+        panel.add(createVolumePanel());
+        panel.add(createOctavePanel());
+        panel.add(createInstrumentPanel());
+        panel.add(createBpmPanel());
+
+        return panel;
+    }
+
+    private JPanel createVolumePanel() {
+
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel();
+
+        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 127, 64);
+        slider.setMajorTickSpacing(32);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(e -> {
+            label.setText("Volume: " + slider.getValue());
+            defaultVolume = slider.getValue();
+        });
+
+        label.setText("Volume: " + slider.getValue());
+
+        panel.add(slider);
+        panel.add(label);
+
+        return panel;
+    }
+
+    private JPanel createOctavePanel() {
+
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel();
+
+        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 9, 5);
+        slider.setMajorTickSpacing(2);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(e -> {
+            label.setText("Octave: " + slider.getValue());
+            defaultOctave = slider.getValue();
+        });
+
+        label.setText("Octave: " + slider.getValue());
+
+        panel.add(slider);
+        panel.add(label);
+
+        return panel;
+    }
+
+    private JPanel createInstrumentPanel() {
+
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel();
+
+        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 127, 0);
+        slider.setMajorTickSpacing(32);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(e -> {
+            label.setText("Instrument: " + slider.getValue());
+            defaultInstrument = slider.getValue();
+        });
+
+        label.setText("Instrument: " + slider.getValue());
+
+        panel.add(slider);
+        panel.add(label);
+
+        return panel;
+    }
+
+    private JPanel createBpmPanel() {
+
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel();
+
+        JSlider slider = createSlider(JSlider.HORIZONTAL, 10, 1000, 120);
+        slider.setMajorTickSpacing(250);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+
+        slider.addChangeListener(e -> {
+            label.setText("BPM: " + slider.getValue());
+            defaultBpm = slider.getValue();
+        });
+
+        label.setText("BPM: " + slider.getValue());
+
+        panel.add(slider);
+        panel.add(label);
+
+        return panel;
+    }
+
+
+    private JSlider createSlider(int direction, int min, int max, int startValue) {
+
+        JSlider slider = new JSlider(direction, min, max, startValue);
+
+        return slider;
     }
 
 }
