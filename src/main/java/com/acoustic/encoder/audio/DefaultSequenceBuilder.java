@@ -1,42 +1,166 @@
 package com.acoustic.encoder.audio;
 
-import com.acoustic.encoder.model.MusicModel;
+import com.acoustic.encoder.model.*;
 
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Track;
+import javax.sound.midi.*;
+import java.util.List;
 
 public class DefaultSequenceBuilder implements SequenceBuilder {
 
-    public Sequence buildSequence(MusicModel musicModel) {
+    private final static float DIVISION_TYPE = Sequence.PPQ;
+    private final static int PPQ_RESOLUTION = 480;
+    private final static int DEFAULT_CHANNEL = 0;
+    private final static int NOTE_VELOCITY = 64;
+    final static int NOTE_TICK_DURATION = (int) ((1.0f/2.0f)*PPQ_RESOLUTION);
 
-        try {
-            Sequence sequence = new Sequence(Sequence.PPQ, 10);
-            Track track = sequence.createTrack();
+    public Sequence buildSequence(MusicModel musicModel) throws InvalidMidiDataException {
 
-            // Nota ON
-            ShortMessage noteOn = new ShortMessage();
-            noteOn.setMessage(ShortMessage.NOTE_ON, 0, 60, 126);
+        Sequence sequence = new Sequence(DIVISION_TYPE, PPQ_RESOLUTION);
+        Track mainTrack = sequence.createTrack();
 
-            // Nota OFF
-            ShortMessage noteOff = new ShortMessage();
-            noteOff.setMessage(ShortMessage.NOTE_OFF, 0, 60, 0);
+        initializeTrack(mainTrack, musicModel.config());
+        processInstructionsToTrack(mainTrack, musicModel.musicalInstructions(), musicModel.config());
 
-            track.add(new MidiEvent(noteOn, 1));
-            track.add(new MidiEvent(noteOff, 10));
-            track.add(new MidiEvent(noteOn, 5));
-            track.add(new MidiEvent(noteOff, 14));
+        return sequence;
+    }
 
-            ShortMessage instrument = new ShortMessage();
-            instrument.setMessage(ShortMessage.PROGRAM_CHANGE, 0, 0, 0);
+    private void initializeTrack(Track track, MusicConfig config) throws InvalidMidiDataException {
 
-            track.add(new MidiEvent(instrument, 0));
+        track.add(new MidiEvent(
+                MidiUtils.createInstrumentChange(config.defaultMidiInstrument(), DEFAULT_CHANNEL),
+                0
+        ));
 
-            return sequence;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        track.add(new MidiEvent(
+                MidiUtils.createVolumeChange(config.defaultVolume(), DEFAULT_CHANNEL),
+                0
+        ));
+    }
+
+    private void processInstructionsToTrack(
+            Track track,
+            List<MusicalInstruction> musicalInstructions,
+            MusicConfig config
+    ) throws InvalidMidiDataException {
+
+        TrackContext trackContext = TrackContext.initialContext(config);
+
+        for (int i = 0; i < musicalInstructions.size(); i++) {
+
+            MusicalInstruction instruction = musicalInstructions.get(i);
+
+            trackContext = switch (instruction.command()) {
+                case PLAY_NOTE -> handlePlayNote(track, trackContext, instruction.parameter());
+                case SILENCE -> handleSilence(trackContext);
+                case DOUBLE_VOLUME -> handleDoubleVolume(track, trackContext);
+                case CHANGE_INSTRUMENT -> handleChangeInstrument(track, trackContext, instruction.parameter());
+                case INCREMENT_INSTRUMENT -> handleIncrementInstrument(track, trackContext, instruction.parameter());
+                case INCREMENT_OCTAVE -> handleIncrementOctave(trackContext, instruction.parameter());
+                case PLAY_PREVIOUS -> handlePlayPreviousNote(track, trackContext, musicalInstructions, i);
+                case NULL_COMMAND -> trackContext;
+            };
         }
     }
+
+    private TrackContext handlePlayNote(
+            Track track,
+            TrackContext context,
+            int parameter
+    ) throws InvalidMidiDataException {
+
+        MusicalNote note = createNote(parameter, context.octave());
+
+        // Note ON
+        track.add(new MidiEvent(
+                MidiUtils.createNoteOn(note, DEFAULT_CHANNEL),
+                context.tick())
+        );
+
+        // Note OFF
+        track.add(new MidiEvent(
+                MidiUtils.createNoteOff(note, DEFAULT_CHANNEL),
+                context.tick() + NOTE_TICK_DURATION)
+        );
+
+        return context.withTick(context.tick() + NOTE_TICK_DURATION);
+    }
+
+    private TrackContext handleSilence(TrackContext context) throws InvalidMidiDataException {
+
+        return context.withTick(context.tick() + NOTE_TICK_DURATION);
+    }
+
+    private TrackContext handleDoubleVolume(Track track, TrackContext context) throws InvalidMidiDataException {
+
+        TrackContext newContext = context.doubleVolume();
+
+        track.add(new MidiEvent(
+                MidiUtils.createVolumeChange(newContext.volume(), DEFAULT_CHANNEL),
+                newContext.tick()
+        ));
+
+        return newContext;
+    }
+
+    private TrackContext handleChangeInstrument(
+            Track track,
+            TrackContext context,
+            int newInstrument
+    ) throws InvalidMidiDataException {
+
+        TrackContext newContext = context.withInstrument(newInstrument);
+
+        track.add(new MidiEvent(
+                MidiUtils.createInstrumentChange(newContext.instrument(), DEFAULT_CHANNEL),
+                newContext.tick()
+        ));
+
+        return newContext;
+    }
+
+    private TrackContext handleIncrementInstrument(
+            Track track,
+            TrackContext context,
+            int incVal
+    ) throws InvalidMidiDataException {
+
+        TrackContext newContext = context.incrementInstrument(incVal);
+
+        track.add(new MidiEvent(
+                MidiUtils.createInstrumentChange(newContext.instrument(), DEFAULT_CHANNEL),
+                newContext.tick()
+        ));
+
+        return newContext;
+    }
+
+    private TrackContext handleIncrementOctave(TrackContext context, int incVal) throws InvalidMidiDataException {
+
+        return context.incrementOctave(incVal);
+    }
+
+    private TrackContext handlePlayPreviousNote(
+            Track track,
+            TrackContext context,
+            List<MusicalInstruction> musicalInstructions,
+            int currentIndex
+    ) throws InvalidMidiDataException {
+
+        if (isPreviousInstructionPlayNote(musicalInstructions, currentIndex)) {
+            return handlePlayNote(track, context, musicalInstructions.get(currentIndex - 1).parameter());
+        }
+
+        return handleSilence(context);
+    }
+
+    private boolean isPreviousInstructionPlayNote(List<MusicalInstruction> musicalInstructions, int currentIndex) {
+
+        return musicalInstructions.get(currentIndex - 1).command() == MusicalCommand.PLAY_NOTE;
+    }
+
+    private MusicalNote createNote(int pitch, int octave) {
+
+        return new MusicalNote(Pitch.fromValue(pitch), octave, NOTE_VELOCITY);
+    }
+
 }

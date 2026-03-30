@@ -30,12 +30,6 @@ public class Main {
         AppNavigator navigator = new DefaultAppNavigator(conversionService, audioPlayerService);
 
         navigator.startApp();
-//
-//        ConversionController conversionController = new DefaultConversionController(conversionService);
-//
-//        MainScreen mainScreen = new MainScreen(conversionController);
-//
-//        mainScreen.startFrame();
 
-        }
+    }
 }

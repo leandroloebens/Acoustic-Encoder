@@ -5,7 +5,7 @@ import com.acoustic.encoder.model.MusicModel;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.Sequence;
 
-public class JSoundAudioAdapter implements AudioPlayer{
+public class JSoundAudioAdapter implements AudioPlayer {
 
     private final SequenceBuilder builder;
     private final SequencePlayer sequencePlayer;
