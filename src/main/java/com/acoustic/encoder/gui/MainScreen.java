@@ -197,7 +197,7 @@ public class MainScreen {
         JPanel panel = new JPanel();
         JLabel label = new JLabel();
 
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 9, 5);
+        JSlider slider = createSlider(JSlider.HORIZONTAL, 1, 10, 5);
         slider.setMajorTickSpacing(2);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);

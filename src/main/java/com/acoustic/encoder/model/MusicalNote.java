@@ -12,7 +12,7 @@ public record MusicalNote(
 
         Objects.requireNonNull(pitch, "Pitch cannot be null!");
 
-        if (octave < 0 || octave > 9) {
+        if (octave < 1 || octave > 10) {
             throw new IllegalArgumentException("Octave out of range!");
         }
         if (velocity < 0 || velocity > 127) {
