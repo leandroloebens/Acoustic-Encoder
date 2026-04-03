@@ -4,7 +4,7 @@ import com.acoustic.encoder.controller.AudioPlayerController;
 import com.acoustic.encoder.controller.ConversionController;
 import com.acoustic.encoder.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.controller.DefaultConversionController;
-import com.acoustic.encoder.gui.MainScreen;
+import com.acoustic.encoder.gui.ConversionScreen;
 import com.acoustic.encoder.gui.PlayerScreen;
 import com.acoustic.encoder.model.MusicModel;
 import com.acoustic.encoder.service.AudioPlayerService;
@@ -26,9 +26,9 @@ public class DefaultAppNavigator implements AppNavigator{
 
         ConversionController conversionController = new DefaultConversionController(conversionService, this);
 
-        MainScreen mainScreen = new MainScreen(conversionController);
+        ConversionScreen defaultConversionScreen = new ConversionScreen(conversionController);
 
-        mainScreen.startFrame();
+        defaultConversionScreen.startFrame();
     }
 
     public void displayPlayerScreen(MusicModel musicModel) throws IllegalArgumentException {

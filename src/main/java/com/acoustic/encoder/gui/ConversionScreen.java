@@ -6,7 +6,7 @@ import com.acoustic.encoder.model.UserConversionInput;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainScreen {
+public class ConversionScreen implements Screen {
 
     private final static String WINDOW_TITLE = "Conversor: Texto para Som";
     private final static int WINDOW_HEIGHT = 400;
@@ -30,7 +30,7 @@ public class MainScreen {
 
     private final static String EMPTY_INPUT_WARNING = "Please enter some text first!";
 
-    private static JFrame frame;
+    private JFrame frame;
 
     private final ConversionController conversionController;
 
@@ -39,9 +39,9 @@ public class MainScreen {
     int defaultInstrument = 0;
     int defaultBpm = 120;
 
-    public MainScreen(ConversionController conversionController) {
+    public ConversionScreen(ConversionController conversionController) {
 
-        if (frame == null)  frame = new JFrame(WINDOW_TITLE);
+        this.frame = new JFrame(WINDOW_TITLE);
 
         if (conversionController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.conversionController = conversionController;
@@ -78,6 +78,8 @@ public class MainScreen {
         frame.setVisible(true);
 
     }
+
+    public void closeFrame() {}
 
     private static JLabel createInstructionLabel() {
 
@@ -260,7 +262,6 @@ public class MainScreen {
 
         return panel;
     }
-
 
     private JSlider createSlider(int direction, int min, int max, int startValue) {
 

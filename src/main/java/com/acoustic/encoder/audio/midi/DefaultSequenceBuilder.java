@@ -11,7 +11,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
     private final static int PPQ_RESOLUTION = 480;
     private final static int DEFAULT_CHANNEL = 0;
     private final static int NOTE_VELOCITY = 64;
-    final static int NOTE_TICK_DURATION = (int) ((1.0f/2.0f)*PPQ_RESOLUTION);
+    private final static int NOTE_TICK_DURATION = (int) ((1.0f/2.0f)*PPQ_RESOLUTION);
 
     public Sequence buildSequence(MusicModel musicModel) throws InvalidMidiDataException {
 

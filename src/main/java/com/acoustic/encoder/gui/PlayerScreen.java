@@ -5,7 +5,7 @@ import com.acoustic.encoder.controller.AudioPlayerController;
 import javax.swing.*;
 import java.awt.*;
 
-public class PlayerScreen {
+public class PlayerScreen implements Screen {
 
     private final static String WINDOW_TITLE = "Music Player";
     private final static int WINDOW_HEIGHT = 200;
@@ -23,13 +23,13 @@ public class PlayerScreen {
     private final static int BUTTON_PANEL_BGAP = 10;
     private final static int BUTTON_PANEL_RGAP = 10;
 
-    private static JFrame frame;
+    private JFrame frame;
 
     private final AudioPlayerController playerController;
 
     public PlayerScreen(AudioPlayerController playerController) {
 
-        if (frame == null) frame = new JFrame(WINDOW_TITLE);
+        this.frame = new JFrame(WINDOW_TITLE);
 
         if (playerController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.playerController = playerController;
@@ -55,6 +55,8 @@ public class PlayerScreen {
 
         frame.setVisible(true);
     }
+
+    public void closeFrame() {}
 
     private JPanel createButtonPanel() {
 
