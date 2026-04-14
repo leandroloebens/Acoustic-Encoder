@@ -155,6 +155,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
 
     private boolean isPreviousInstructionPlayNote(List<MusicalInstruction> musicalInstructions, int currentIndex) {
 
+        if (currentIndex == 0) return false;
         return musicalInstructions.get(currentIndex - 1).command() == MusicalCommand.PLAY_NOTE;
     }
 
