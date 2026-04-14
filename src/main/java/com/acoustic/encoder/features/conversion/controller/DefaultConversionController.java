@@ -1,0 +1,38 @@
+package com.acoustic.encoder.features.conversion.controller;
+
+import com.acoustic.encoder.shared.model.MusicConfig;
+import com.acoustic.encoder.shared.model.MusicModel;
+import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.features.conversion.service.ConversionService;
+
+import java.util.Objects;
+
+public class DefaultConversionController implements ConversionController {
+
+    private final ConversionService conversionService;
+
+    public DefaultConversionController(ConversionService conversionService) {
+
+        this.conversionService = conversionService;
+
+    }
+
+    public void handleConvertAction(UserConversionInput input) {
+
+        Objects.requireNonNull(input, "UserInput cannot be null!");
+
+        MusicModel music = this.conversionService.textToMusic(
+                input.text(),
+                new MusicConfig(
+                        input.defaultMidiInstrument(),
+                        input.bpm(),
+                        input.defaultOctave(),
+                        input.defaultVolume()
+                )
+        );
+
+        //TESTE-----------
+        System.out.println(music);
+
+    }
+}

@@ -1,6 +1,6 @@
-import com.acoustic.encoder.config.ConfigLoader;
-import com.acoustic.encoder.model.MusicalInstruction;
-import com.acoustic.encoder.parser.TextToInstructionParser;
+import com.acoustic.encoder.features.conversion.config.ConfigLoader;
+import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.features.conversion.parser.TextToInstructionParser;
 
 import java.util.List;
 

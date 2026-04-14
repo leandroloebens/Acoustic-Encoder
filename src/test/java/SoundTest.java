@@ -40,7 +40,7 @@ void main() throws Exception{
     sequencer.start();
 
     while (sequencer.isRunning()) {
-        Thread.sleep(100);
+        Thread.sleep(1000);
     }
 
     sequencer.close();
