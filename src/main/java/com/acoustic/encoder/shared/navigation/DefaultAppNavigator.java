@@ -3,7 +3,6 @@ package com.acoustic.encoder.shared.navigation;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
 import com.acoustic.encoder.shared.factory.ScreenFactory;
-import com.acoustic.encoder.shared.model.MusicModel;
 
 public class DefaultAppNavigator implements AppNavigator {
 

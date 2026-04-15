@@ -1,7 +1,6 @@
 package com.acoustic.encoder.features.conversion.service;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
-import com.acoustic.encoder.shared.event.DefaultEventBus;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicConfig;
 import com.acoustic.encoder.shared.model.MusicModel;
