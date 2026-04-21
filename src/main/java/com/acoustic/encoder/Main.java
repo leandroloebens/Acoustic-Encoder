@@ -2,23 +2,15 @@ package com.acoustic.encoder;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.player.audio.midi.*;
-import com.acoustic.encoder.features.player.export.MusicExporter;
 import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
-import com.acoustic.encoder.shared.event.EventBus;
-import com.acoustic.encoder.shared.navigation.AppNavigator;
 import com.acoustic.encoder.shared.navigation.DefaultAppNavigator;
-import com.acoustic.encoder.features.player.audio.AudioPlayer;
 import com.acoustic.encoder.features.conversion.config.ConfigLoader;
 import com.acoustic.encoder.shared.factory.DefaultScreenFactory;
-import com.acoustic.encoder.shared.factory.ScreenFactory;
-import com.acoustic.encoder.features.conversion.parser.InstructionParser;
 import com.acoustic.encoder.features.conversion.parser.TextToInstructionParser;
-import com.acoustic.encoder.features.player.service.AudioPlayerService;
 import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
-import com.acoustic.encoder.features.conversion.service.ConversionService;
 import com.acoustic.encoder.shared.navigation.listener.NavigationConversionCompletedListener;
 
 import javax.sound.midi.MidiSystem;

@@ -3,7 +3,6 @@ package com.acoustic.encoder.features.player.export.midi;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.export.MusicExporter;
 
-import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import java.io.File;
