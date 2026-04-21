@@ -15,10 +15,6 @@ public class DefaultPlayerScreen implements PlayerScreen {
     private final static int BORDERLAYOUT_HGAP = 10;
     private final static int BORDERLAYOUT_WGAP = 10;
 
-    private final static String PLAY_BUTTON_TEXT = "Play";
-    private final static String PAUSE_BUTTON_TEXT = "Pause";
-    private final static String REWIND_BUTTON_TEXT = "Rewind";
-
     private final static int BUTTON_PANEL_TGAP = 10;
     private final static int BUTTON_PANEL_LGAP = 10;
     private final static int BUTTON_PANEL_BGAP = 10;
@@ -48,91 +44,97 @@ public class DefaultPlayerScreen implements PlayerScreen {
         // Divides the window in NORTH, SOUTH, EAST, WEST and CENTER.
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
-        JPanel buttonPanel = createButtonPanel();
+//        JPanel buttonPanel = createButtonPanel();
 
         // Adding components to the frame
-        frame.add(buttonPanel, BorderLayout.CENTER);
+//        frame.add(buttonPanel, BorderLayout.CENTER);
+        PlayerControlsComponent controlsComponent = new PlayerControlsComponent(playerController);
+        PlayerFooterComponent footerComponent = new PlayerFooterComponent(playerController);
+
+        frame.add(controlsComponent, BorderLayout.CENTER);
+        frame.add(footerComponent, BorderLayout.SOUTH);
 
         // Centering the frame
         frame.setLocationRelativeTo(null);
-
     }
 
+    @Override
     public void startFrame() {
         this.frame.setVisible(true);
     }
 
+    @Override
     public void closeFrame() {
         this.frame.setVisible(false);
     }
 
+    @Override
     public void loadMusic(MusicModel musicModel) {
-
         this.playerController.handleLoadAction(musicModel);
     }
 
-    private JPanel createButtonPanel() {
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-
-        panel.setBorder(BorderFactory.createEmptyBorder(
-                BUTTON_PANEL_TGAP,
-                BUTTON_PANEL_LGAP,
-                BUTTON_PANEL_BGAP,
-                BUTTON_PANEL_RGAP
-        ));
-
-        JButton playButton = createPlayButton();
-        JButton pauseButton = createPauseButton();
-        JButton rewindButton = createRewindButton();
-
-        panel.add(playButton);
-        panel.add(pauseButton);
-        panel.add(rewindButton);
-
-        return panel;
-    }
-
-    private JButton createPlayButton() {
-
-        JButton playButton = new JButton(PLAY_BUTTON_TEXT);
-
-        playButton.addActionListener(event -> {
-
-            if (event.getSource() != playButton) return;
-
-            this.playerController.handlePlayAction();
-        });
-
-        return playButton;
-    }
-
-    private JButton createPauseButton() {
-
-        JButton pauseButton = new JButton(PAUSE_BUTTON_TEXT);
-
-        pauseButton.addActionListener(event -> {
-
-            if (event.getSource() != pauseButton) return;
-
-            this.playerController.handlePauseAction();
-        });
-
-        return pauseButton;
-    }
-
-    private JButton createRewindButton() {
-
-        JButton rewindButton = new JButton(REWIND_BUTTON_TEXT);
-
-        rewindButton.addActionListener(event -> {
-
-            if (event.getSource() != rewindButton) return;
-
-            this.playerController.handleRewindAction();
-        });
-
-        return rewindButton;
-    }
+//    private JPanel createButtonPanel() {
+//
+//        JPanel panel = new JPanel();
+//        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+//
+//        panel.setBorder(BorderFactory.createEmptyBorder(
+//                BUTTON_PANEL_TGAP,
+//                BUTTON_PANEL_LGAP,
+//                BUTTON_PANEL_BGAP,
+//                BUTTON_PANEL_RGAP
+//        ));
+//
+//        JButton playButton = createPlayButton();
+//        JButton pauseButton = createPauseButton();
+//        JButton rewindButton = createRewindButton();
+//
+//        panel.add(playButton);
+//        panel.add(pauseButton);
+//        panel.add(rewindButton);
+//
+//        return panel;
+//    }
+//
+//    private JButton createPlayButton() {
+//
+//        JButton playButton = new JButton(PLAY_BUTTON_TEXT);
+//
+//        playButton.addActionListener(event -> {
+//
+//            if (event.getSource() != playButton) return;
+//
+//            this.playerController.handlePlayAction();
+//        });
+//
+//        return playButton;
+//    }
+//
+//    private JButton createPauseButton() {
+//
+//        JButton pauseButton = new JButton(PAUSE_BUTTON_TEXT);
+//
+//        pauseButton.addActionListener(event -> {
+//
+//            if (event.getSource() != pauseButton) return;
+//
+//            this.playerController.handlePauseAction();
+//        });
+//
+//        return pauseButton;
+//    }
+//
+//    private JButton createRewindButton() {
+//
+//        JButton rewindButton = new JButton(REWIND_BUTTON_TEXT);
+//
+//        rewindButton.addActionListener(event -> {
+//
+//            if (event.getSource() != rewindButton) return;
+//
+//            this.playerController.handleRewindAction();
+//        });
+//
+//        return rewindButton;
+//    }
 }
