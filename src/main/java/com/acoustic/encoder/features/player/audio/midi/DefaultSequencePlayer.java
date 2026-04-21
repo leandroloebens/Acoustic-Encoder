@@ -41,4 +41,8 @@ public class DefaultSequencePlayer implements SequencePlayer {
 
         this.sequencer.setTickPosition(0);
     }
+
+    public Sequence getSequence() {
+        return this.sequencer.getSequence();
+    }
 }

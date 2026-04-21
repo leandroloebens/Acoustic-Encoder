@@ -1,24 +1,16 @@
 package com.acoustic.encoder;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
+import com.acoustic.encoder.features.player.audio.midi.*;
+import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
-import com.acoustic.encoder.shared.event.EventBus;
-import com.acoustic.encoder.shared.navigation.AppNavigator;
 import com.acoustic.encoder.shared.navigation.DefaultAppNavigator;
-import com.acoustic.encoder.features.player.audio.AudioPlayer;
-import com.acoustic.encoder.features.player.audio.midi.DefaultSequenceBuilder;
-import com.acoustic.encoder.features.player.audio.midi.DefaultSequencePlayer;
-import com.acoustic.encoder.features.player.audio.midi.JSoundAudioAdapter;
 import com.acoustic.encoder.features.conversion.config.ConfigLoader;
 import com.acoustic.encoder.shared.factory.DefaultScreenFactory;
-import com.acoustic.encoder.shared.factory.ScreenFactory;
-import com.acoustic.encoder.features.conversion.parser.InstructionParser;
 import com.acoustic.encoder.features.conversion.parser.TextToInstructionParser;
-import com.acoustic.encoder.features.player.service.AudioPlayerService;
 import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
-import com.acoustic.encoder.features.conversion.service.ConversionService;
 import com.acoustic.encoder.shared.navigation.listener.NavigationConversionCompletedListener;
 
 import javax.sound.midi.MidiSystem;
@@ -27,20 +19,26 @@ public class Main {
 
     void main() throws Exception {
 
-        ConfigLoader configLoader = new ConfigLoader(ConfigLoader.CONFIG_FILE_NAME);
-        InstructionParser parser = new TextToInstructionParser(configLoader.loadConfigMap());
+        // Conversion Service
+        var configLoader = new ConfigLoader(ConfigLoader.CONFIG_FILE_NAME);
+        var instructionParser = new TextToInstructionParser(configLoader.loadConfigMap());
 
-        EventBus eventBus = new DefaultEventBus();
-        ConversionService conversionService = new DefaultConversionService(parser, eventBus);
+        var eventBus = new DefaultEventBus();
 
-        AudioPlayer audioPlayer = new JSoundAudioAdapter(
-                new DefaultSequenceBuilder(),
-                new DefaultSequencePlayer(MidiSystem.getSequencer())
-        );
-        AudioPlayerService audioPlayerService = new DefaultAudioPlayerService(audioPlayer);
+        var conversionService = new DefaultConversionService(instructionParser, eventBus);
 
-        ScreenFactory screenFactory = new DefaultScreenFactory(conversionService, audioPlayerService);
-        AppNavigator navigator = new DefaultAppNavigator(screenFactory);
+        // Audio Player Service
+        var sequenceBuilder = new DefaultSequenceBuilder();
+        var sequencePlayer = new DefaultSequencePlayer(MidiSystem.getSequencer());
+
+        var audioPlayer = new JSoundAudioAdapter(sequenceBuilder, sequencePlayer);
+        var musicExporter = new MidiFileExporter(sequencePlayer);
+
+        var audioPlayerService = new DefaultAudioPlayerService(audioPlayer, musicExporter);
+
+        // Navigation
+        var screenFactory = new DefaultScreenFactory(conversionService, audioPlayerService);
+        var appNavigator = new DefaultAppNavigator(screenFactory);
 
         // subscribes listeners to their events
         eventBus.subscribe(
@@ -49,10 +47,10 @@ public class Main {
         );
         eventBus.subscribe(
                 ConversionCompletedEvent.class,
-                new NavigationConversionCompletedListener(navigator)
+                new NavigationConversionCompletedListener(appNavigator)
         );
 
-        navigator.startApp();
+        appNavigator.startApp();
 
     }
 }
