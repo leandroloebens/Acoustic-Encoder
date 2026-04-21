@@ -1,8 +1,10 @@
 package com.acoustic.encoder.features.player.service;
 
+import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.shared.model.MusicModel;
 
 import javax.sound.midi.InvalidMidiDataException;
+import java.io.File;
 
 public interface AudioPlayerService {
 
@@ -13,4 +15,6 @@ public interface AudioPlayerService {
     void stopMusic();
 
     void rewindMusic();
+
+    void exportMusic(File destination) throws MusicExportException;
 }

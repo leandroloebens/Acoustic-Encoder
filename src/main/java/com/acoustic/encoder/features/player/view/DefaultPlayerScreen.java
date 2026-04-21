@@ -1,10 +1,12 @@
 package com.acoustic.encoder.features.player.view;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
+import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.shared.model.MusicModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class DefaultPlayerScreen implements PlayerScreen {
 
@@ -18,6 +20,7 @@ public class DefaultPlayerScreen implements PlayerScreen {
     private final static String PLAY_BUTTON_TEXT = "Play";
     private final static String PAUSE_BUTTON_TEXT = "Pause";
     private final static String REWIND_BUTTON_TEXT = "Rewind";
+    private final static String SAVE_BUTTON_TEXT = "Save";
 
     private final static int BUTTON_PANEL_TGAP = 10;
     private final static int BUTTON_PANEL_LGAP = 10;
@@ -86,10 +89,12 @@ public class DefaultPlayerScreen implements PlayerScreen {
         JButton playButton = createPlayButton();
         JButton pauseButton = createPauseButton();
         JButton rewindButton = createRewindButton();
+        JButton saveButton = createSaveButton();
 
         panel.add(playButton);
         panel.add(pauseButton);
         panel.add(rewindButton);
+        panel.add(saveButton);
 
         return panel;
     }
@@ -134,5 +139,46 @@ public class DefaultPlayerScreen implements PlayerScreen {
         });
 
         return rewindButton;
+    }
+
+    private JButton createSaveButton() {
+
+        JButton saveButton = new JButton(SAVE_BUTTON_TEXT);
+
+        saveButton.addActionListener(event -> {
+
+            if (event.getSource() != saveButton) return;
+
+            try {
+                this.playerController.handleSaveAction(chooseFile());
+                JOptionPane.showMessageDialog(frame, "Saved!");
+            } catch (MusicExportException e) {
+                JOptionPane.showMessageDialog(frame, "Error while exporting!");
+            }
+        });
+
+        return saveButton;
+    }
+
+    private static File chooseFile() {
+
+        JFileChooser chooser = new JFileChooser();
+
+        chooser.setDialogTitle("Save MIDI file");
+
+        chooser.setSelectedFile(new File("music.mid"));
+
+        int result = chooser.showSaveDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+
+            if (!file.getName().endsWith(".mid")) {
+                file = new File(file.getAbsolutePath() + ".mid");
+            }
+            return file;
+        }
+
+        return null;
     }
 }
