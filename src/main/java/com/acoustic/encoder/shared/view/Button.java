@@ -1,8 +1,0 @@
-package com.acoustic.encoder.shared.view;
-
-public interface Button<T> {
-
-    T getNativeComponent();
-
-    void onClick(Runnable clickHandler);
-}

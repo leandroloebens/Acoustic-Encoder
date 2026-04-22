@@ -2,7 +2,9 @@ package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
-import com.acoustic.encoder.features.conversion.view.components.ConversionScreenComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.ConversionScreenComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.factory.ConversionScreenComponentsFactory;
+import com.acoustic.encoder.shared.model.MusicConfig;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,263 +15,65 @@ public class DefaultConversionScreen implements ConversionScreen {
     private final static int WINDOW_HEIGHT = 400;
     private final static int WINDOW_WIDTH = 500;
 
-    private final static int BORDERLAYOUT_HGAP = 10;
-    private final static int BORDERLAYOUT_WGAP = 10;
-
-    private final static String INSTRUCTION_LABEL_TEXT = "Write the text you want to convert to sound:";
-    private final static int INSTRUCTION_LABEL_TGAP = 10;
-    private final static int INSTRUCTION_LABEL_LGAP = 10;
-    private final static int INSTRUCTION_LABEL_BGAP = 0;
-    private final static int INSTRUCTION_LABEL_RGAP = 10;
-
-    private final static int MAIN_SCROLL_TEXTAREA_TGAP = 0;
-    private final static int MAIN_SCROLL_TEXTAREA_LGAP = 10;
-    private final static int MAIN_SCROLL_TEXTAREA_BGAP = 0;
-    private final static int MAIN_SCROLL_TEXTAREA_RGAP = 10;
-
-    private final static String CONVERTER_BUTTON_TEXT = "Convert to Sound!";
-
-    private final static String EMPTY_INPUT_WARNING = "Please enter some text first!";
-
-    private final JFrame frame;
-
     private final ConversionController conversionController;
 
-    int defaultVolume = 64;
-    int defaultOctave = 5;
-    int defaultInstrument = 0;
-    int defaultBpm = 120;
+    private final ConversionScreenComponentsAssembler assembler;
 
-    public DefaultConversionScreen(ConversionController conversionController, ConversionScreenComponentsWrapper components) {
+    private int defaultVolume = 64;
+    private int defaultOctave = 5;
+    private int defaultInstrument = 0;
+    private int defaultBpm = 120;
 
-        this.frame = new JFrame(WINDOW_TITLE);
+    public DefaultConversionScreen(ConversionController conversionController, ConversionScreenComponentsAssembler assembler) {
 
         if (conversionController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.conversionController = conversionController;
+
+        if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
+        this.assembler = assembler;
+
+        setConversionAction();
+
+        this.assembler.setDefaultParameters(new MusicConfig(defaultInstrument, defaultBpm, defaultOctave, defaultVolume));
+    }
+
+    private void setConversionAction() {
+        Runnable action = () -> {
+            accessDefaultParameters();
+            this.conversionController.handleConvertAction(
+                new UserConversionInput(
+                        this.assembler.getInputText(),
+                        defaultInstrument,
+                        defaultBpm,
+                        defaultOctave,
+                        defaultVolume
+                )
+        );};
+
+        this.assembler.setConversionAction(action);
+    }
+
+    private void accessDefaultParameters() {
+        MusicConfig parameters = this.assembler.getDefaultParameters();
+
+        defaultInstrument = parameters.defaultMidiInstrument();
+        defaultBpm = parameters.bpm();
+        defaultOctave = parameters.defaultOctave();
+        defaultVolume = parameters.defaultVolume();
     }
 
     public void startFrame() {
 
-        // Sets the window to close when the user clicks the close button.
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.assembler.assemble(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        // Divides the window in NORTH, SOUTH, EAST, WEST and CENTER.
-        // The numbers (BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP) are the gap between the areas.
-        frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
-
-        JLabel instructionLabel = createInstructionLabel();
-
-        JTextArea textArea = createMainTextArea();
-
-        JScrollPane scrollTextArea = createMainScrollTextArea(textArea);
-
-        JButton converterButton = createConverterButton(textArea);
-
-        // Adding components to the frame
-        frame.add(instructionLabel, BorderLayout.NORTH);
-        frame.add(scrollTextArea, BorderLayout.CENTER);
-        frame.add(converterButton, BorderLayout.SOUTH);
-        frame.add(createParameterPanel(), BorderLayout.EAST);
-
-        // Centering the frame
-        frame.setLocationRelativeTo(null);
-
-        frame.setVisible(true);
+        this.assembler.showFrame();
 
     }
 
-    public void closeFrame() {}
+    public void closeFrame() {
 
-    private static JLabel createInstructionLabel() {
+        this.assembler.hideFrame();
 
-        JLabel instruction = new JLabel(INSTRUCTION_LABEL_TEXT);
-
-        instruction.setBorder(BorderFactory.createEmptyBorder(
-                INSTRUCTION_LABEL_TGAP,
-                INSTRUCTION_LABEL_LGAP,
-                INSTRUCTION_LABEL_BGAP,
-                INSTRUCTION_LABEL_RGAP
-        ));
-
-        return instruction;
     }
-
-    private static JTextArea createMainTextArea() {
-
-        JTextArea textArea = new JTextArea();
-
-        // Breaks the text automatically when it reaches the border
-        textArea.setLineWrap(true);
-
-        // Prevents the text from being cut in the middle
-        textArea.setWrapStyleWord(true);
-
-        return textArea;
-    }
-
-    private static JScrollPane createMainScrollTextArea(JTextArea textArea) {
-
-        // Creates a scrollable text area
-        JScrollPane scrollPane = new JScrollPane(textArea);
-
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(
-                MAIN_SCROLL_TEXTAREA_TGAP,
-                MAIN_SCROLL_TEXTAREA_LGAP,
-                MAIN_SCROLL_TEXTAREA_BGAP,
-                MAIN_SCROLL_TEXTAREA_RGAP
-        ));
-
-        return scrollPane;
-    }
-
-    private JButton createConverterButton(JTextArea textArea) {
-
-        JButton converterButton = new JButton(CONVERTER_BUTTON_TEXT);
-
-        converterButton.addActionListener(event -> {
-
-            if (event.getSource() != converterButton) return;
-
-            try {
-
-                this.conversionController.handleConvertAction(
-                        new UserConversionInput(
-                                textArea.getText(),
-                                defaultInstrument,
-                                defaultBpm,
-                                defaultOctave,
-                                defaultVolume
-                        )
-                );
-            }
-            catch (IllegalArgumentException e) {
-                JOptionPane.showMessageDialog(frame, EMPTY_INPUT_WARNING);
-                return;
-            }
-
-            // WORK IN PROGRESS
-            // ----------------------------------------------------------------------------------
-            JOptionPane.showMessageDialog(frame, "Maybe im converting your text to sound!");
-            // ----------------------------------------------------------------------------------
-        });
-
-        return converterButton;
-    }
-
-    private JPanel createParameterPanel() {
-
-        JPanel panel = new JPanel();
-
-        panel.setLayout(new GridLayout(4, 1));
-
-        panel.add(createVolumePanel());
-        panel.add(createOctavePanel());
-        panel.add(createInstrumentPanel());
-        panel.add(createBpmPanel());
-
-        return panel;
-    }
-
-    private JPanel createVolumePanel() {
-
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 127, 64);
-        slider.setMajorTickSpacing(32);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        slider.addChangeListener(e -> {
-            label.setText("Volume: " + slider.getValue());
-            defaultVolume = slider.getValue();
-        });
-
-        label.setText("Volume: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JPanel createOctavePanel() {
-
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 1, 10, 5);
-        slider.setMajorTickSpacing(2);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        slider.addChangeListener(e -> {
-            label.setText("Octave: " + slider.getValue());
-            defaultOctave = slider.getValue();
-        });
-
-        label.setText("Octave: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JPanel createInstrumentPanel() {
-
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 127, 0);
-        slider.setMajorTickSpacing(32);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        slider.addChangeListener(e -> {
-            label.setText("Instrument: " + slider.getValue());
-            defaultInstrument = slider.getValue();
-        });
-
-        label.setText("Instrument: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JPanel createBpmPanel() {
-
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 10, 1000, 120);
-        slider.setMajorTickSpacing(250);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        slider.addChangeListener(e -> {
-            label.setText("BPM: " + slider.getValue());
-            defaultBpm = slider.getValue();
-        });
-
-        label.setText("BPM: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JSlider createSlider(int direction, int min, int max, int startValue) {
-
-        JSlider slider = new JSlider(direction, min, max, startValue);
-
-        return slider;
-    }
-
 }
 

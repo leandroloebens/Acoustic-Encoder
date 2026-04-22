@@ -1,8 +1,10 @@
 package com.acoustic.encoder.shared.factory;
 
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
+import com.acoustic.encoder.features.conversion.view.ConversionScreenComponentsAssembler;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
-import com.acoustic.encoder.features.conversion.view.components.factory.ConversionScreenComponentsFactory;
+
+import com.acoustic.encoder.features.conversion.view.swing.components.factory.ConversionScreenComponentsFactory;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
@@ -14,7 +16,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     private final ConversionService conversionService;
 
-    private final ConversionScreenComponentsFactory conversionComponentsFactory;
+    private final ConversionScreenComponentsAssembler conversionComponentsAssembler;
 
     private final AudioPlayerService audioPlayerService;
 
@@ -23,12 +25,12 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     public DefaultScreenFactory(
             ConversionService conversionService,
-            ConversionScreenComponentsFactory conversionComponentsFactory,
+            ConversionScreenComponentsAssembler conversionComponentsAssembler,
             AudioPlayerService audioPlayerService
     ) {
 
         this.conversionService = conversionService;
-        this.conversionComponentsFactory = conversionComponentsFactory;
+        this.conversionComponentsAssembler = conversionComponentsAssembler;
         this.audioPlayerService = audioPlayerService;
 
     }
@@ -37,7 +39,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
         return new DefaultConversionScreen(
                 new DefaultConversionController(this.conversionService),
-                conversionComponentsFactory.createComponents()
+                conversionComponentsAssembler
         );
     }
 

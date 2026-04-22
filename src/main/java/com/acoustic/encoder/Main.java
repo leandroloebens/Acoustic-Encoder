@@ -1,8 +1,10 @@
 package com.acoustic.encoder;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
-import com.acoustic.encoder.features.conversion.view.components.factory.ConversionScreenComponentsFactory;
-import com.acoustic.encoder.features.conversion.view.components.factory.DefaultConversionScreenComponentsFactory;
+import com.acoustic.encoder.features.conversion.view.ConversionScreenComponentsAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.SwingConversionScreenAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.components.factory.ConversionScreenComponentsFactory;
+import com.acoustic.encoder.features.conversion.view.swing.components.factory.SwingConversionScreenComponentsFactory;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
 import com.acoustic.encoder.shared.event.EventBus;
@@ -35,7 +37,8 @@ public class Main {
         EventBus eventBus = new DefaultEventBus();
         ConversionService conversionService = new DefaultConversionService(parser, eventBus);
 
-        ConversionScreenComponentsFactory conversionScreenComponentsFactory = new DefaultConversionScreenComponentsFactory();
+        ConversionScreenComponentsFactory conversionScreenComponentsFactory = new SwingConversionScreenComponentsFactory();
+        ConversionScreenComponentsAssembler conversionScreenAssembler = new SwingConversionScreenAssembler(conversionScreenComponentsFactory.createComponents());
 
         AudioPlayer audioPlayer = new JSoundAudioAdapter(
                 new DefaultSequenceBuilder(),
@@ -45,7 +48,7 @@ public class Main {
 
         ScreenFactory screenFactory = new DefaultScreenFactory(
                 conversionService,
-                conversionScreenComponentsFactory,
+                conversionScreenAssembler,
                 audioPlayerService
         );
         AppNavigator navigator = new DefaultAppNavigator(screenFactory);
