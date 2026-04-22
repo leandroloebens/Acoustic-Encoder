@@ -1,6 +1,8 @@
 package com.acoustic.encoder;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
+import com.acoustic.encoder.features.conversion.view.components.factory.ConversionScreenComponentsFactory;
+import com.acoustic.encoder.features.conversion.view.components.factory.DefaultConversionScreenComponentsFactory;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
 import com.acoustic.encoder.shared.event.EventBus;
@@ -33,13 +35,19 @@ public class Main {
         EventBus eventBus = new DefaultEventBus();
         ConversionService conversionService = new DefaultConversionService(parser, eventBus);
 
+        ConversionScreenComponentsFactory conversionScreenComponentsFactory = new DefaultConversionScreenComponentsFactory();
+
         AudioPlayer audioPlayer = new JSoundAudioAdapter(
                 new DefaultSequenceBuilder(),
                 new DefaultSequencePlayer(MidiSystem.getSequencer())
         );
         AudioPlayerService audioPlayerService = new DefaultAudioPlayerService(audioPlayer);
 
-        ScreenFactory screenFactory = new DefaultScreenFactory(conversionService, audioPlayerService);
+        ScreenFactory screenFactory = new DefaultScreenFactory(
+                conversionService,
+                conversionScreenComponentsFactory,
+                audioPlayerService
+        );
         AppNavigator navigator = new DefaultAppNavigator(screenFactory);
 
         // subscribes listeners to their events

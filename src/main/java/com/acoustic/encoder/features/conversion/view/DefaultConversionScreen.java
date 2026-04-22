@@ -2,6 +2,7 @@ package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.features.conversion.view.components.ConversionScreenComponentsWrapper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +40,7 @@ public class DefaultConversionScreen implements ConversionScreen {
     int defaultInstrument = 0;
     int defaultBpm = 120;
 
-    public DefaultConversionScreen(ConversionController conversionController) {
+    public DefaultConversionScreen(ConversionController conversionController, ConversionScreenComponentsWrapper components) {
 
         this.frame = new JFrame(WINDOW_TITLE);
 
