@@ -21,6 +21,14 @@ public class DefaultAppNavigator implements AppNavigator {
     public void startApp() {
 
         this.conversionScreen.startFrame();
+
+    }
+
+    @Override
+    public void displayConversionScreen() {
+
+        this.conversionScreen.showFrame();
+
     }
 
     public void displayPlayerScreen() {

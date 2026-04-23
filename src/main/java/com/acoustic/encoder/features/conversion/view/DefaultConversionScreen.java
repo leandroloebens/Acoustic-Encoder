@@ -1,7 +1,6 @@
 package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.shared.model.MusicConfig;
 
 public class DefaultConversionScreen implements ConversionScreen {
@@ -32,14 +31,21 @@ public class DefaultConversionScreen implements ConversionScreen {
                 ));
     }
 
+    @Override
     public void startFrame() {
 
         this.manager.startFrame(this.conversionController);
+
+    }
+
+    @Override
+    public void showFrame() {
 
         this.manager.showFrame();
 
     }
 
+    @Override
     public void closeFrame() {
 
         this.manager.hideFrame();

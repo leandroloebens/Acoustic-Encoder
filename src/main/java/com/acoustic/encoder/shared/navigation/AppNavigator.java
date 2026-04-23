@@ -4,6 +4,8 @@ public interface AppNavigator {
 
     void startApp();
 
+    void displayConversionScreen();
+
     void displayPlayerScreen();
 
 }

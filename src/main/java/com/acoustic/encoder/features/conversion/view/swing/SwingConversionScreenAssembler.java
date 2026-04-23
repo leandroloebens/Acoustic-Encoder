@@ -1,6 +1,5 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
-import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.shared.view.swing.SwingFrame;
 
 public interface SwingConversionScreenAssembler {

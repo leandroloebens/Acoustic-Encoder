@@ -36,6 +36,8 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
             WINDOW_HEIGHT,
             new EventHandler(controller)
         );
+
+        showFrame();
     }
 
     @Override
@@ -71,6 +73,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
                             defaultOctave,
                             defaultVolume
                     ));
+            hideFrame();
         }
 
         @Override
