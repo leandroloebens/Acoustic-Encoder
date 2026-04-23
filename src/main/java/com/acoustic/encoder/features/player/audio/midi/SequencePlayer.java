@@ -9,8 +9,6 @@ public interface SequencePlayer extends SequenceProvider {
 
     void loadSequence(Sequence sequence) throws InvalidMidiDataException;
 
-    void setBpm(int bpm);
-
     void play();
 
     void stop();

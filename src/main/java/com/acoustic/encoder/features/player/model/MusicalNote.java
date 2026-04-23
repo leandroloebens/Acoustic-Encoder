@@ -19,4 +19,10 @@ public record MusicalNote(
             throw new IllegalArgumentException("Note velocity out of range!");
         }
     }
+
+    public MusicalNote(int pitch, int octave, int velocity) {
+
+        this(Pitch.fromValue(pitch), octave, velocity);
+    }
+
 }
