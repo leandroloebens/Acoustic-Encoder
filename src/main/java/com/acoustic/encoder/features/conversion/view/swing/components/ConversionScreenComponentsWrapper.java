@@ -1,12 +1,15 @@
 package com.acoustic.encoder.features.conversion.view.swing.components;
 
+import com.acoustic.encoder.shared.view.swing.SwingButton;
+import com.acoustic.encoder.shared.view.swing.SwingLabel;
+import com.acoustic.encoder.shared.view.swing.SwingVerticalScrollPane;
+
 public record ConversionScreenComponentsWrapper(
-        Object converterButton,
-        Object textArea,
-        Object scrollPane,
-        Object instructionLabel,
-        Object volumePanel,
-        Object octavePanel,
-        Object instrumentPanel,
-        Object bpmPanel
+        SwingButton converterButton,
+        SwingVerticalScrollPane scrollPane,
+        SwingLabel instructionLabel,
+        ParameterPanel volumePanel,
+        ParameterPanel octavePanel,
+        ParameterPanel instrumentPanel,
+        ParameterPanel bpmPanel
 ) { }

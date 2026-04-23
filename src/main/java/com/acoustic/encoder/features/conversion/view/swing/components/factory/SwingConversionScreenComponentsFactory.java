@@ -1,10 +1,11 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ConversionScreenComponentsWrapper;
-import com.acoustic.encoder.shared.view.swing.Button;
+import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
+import com.acoustic.encoder.shared.view.swing.*;
 
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.border.Border;
 
 public class SwingConversionScreenComponentsFactory implements ConversionScreenComponentsFactory {
 
@@ -21,21 +22,67 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
     private final static int MAIN_SCROLL_TEXTAREA_BGAP = 0;
     private final static int MAIN_SCROLL_TEXTAREA_RGAP = 10;
 
+    private final static int VOLUME_SLIDER_DIRECTION = JSlider.HORIZONTAL;
+    private final static int VOLUME_SLIDER_MIN = 0;
+    private final static int VOLUME_SLIDER_MAX = 127;
+    private final static int VOLUME_SLIDER_VALUE = 64;
+    private final static int VOLUME_SLIDER_TICK_SPACING = 32;
+    private final static boolean VOLUME_SLIDER_SHOW_LABELS = true;
+
+    private final static int OCTAVE_SLIDER_DIRECTION = JSlider.HORIZONTAL;
+    private final static int OCTAVE_SLIDER_MIN = 1;
+    private final static int OCTAVE_SLIDER_MAX = 10;
+    private final static int OCTAVE_SLIDER_VALUE = 5;
+    private final static int OCTAVE_SLIDER_TICK_SPACING = 2;
+    private final static boolean OCTAVE_SLIDER_SHOW_LABELS = true;
+
+    private final static int INSTRUMENT_SLIDER_DIRECTION = JSlider.HORIZONTAL;
+    private final static int INSTRUMENT_SLIDER_MIN = 0;
+    private final static int INSTRUMENT_SLIDER_MAX = 127;
+    private final static int INSTRUMENT_SLIDER_VALUE = 0;
+    private final static int INSTRUMENT_SLIDER_TICK_SPACING = 32;
+    private final static boolean INSTRUMENT_SLIDER_SHOW_LABELS = true;
+
+    private final static int BPM_SLIDER_DIRECTION = JSlider.HORIZONTAL;
+    private final static int BPM_SLIDER_MIN = 10;
+    private final static int BPM_SLIDER_MAX = 1000;
+    private final static int BPM_SLIDER_VALUE = 120;
+    private final static int BPM_SLIDER_TICK_SPACING = 250;
+    private final static boolean BPM_SLIDER_SHOW_LABELS = true;
+
+
     @Override
     public ConversionScreenComponentsWrapper createComponents() {
 
-        Object conversionButton = new Button(CONVERTER_BUTTON_TEXT);
-        Object textArea = createTextArea();
-        Object scrollPane = createScrollPane();
-        Object instructionLabel = createInstructionLabel();
-        Object volumePanel = createVolumePanel();
-        Object octavePanel = createOctavePanel();
-        Object instrumentPanel = createInstrumentPanel();
-        Object bpmPanel = createBpmPanel();
+        SwingButton conversionButton = new SwingButton(CONVERTER_BUTTON_TEXT, null, null);
+
+        SwingTextArea textArea = new SwingTextArea(null, null);
+        Border scrollPaneBorder = BorderFactory.createEmptyBorder(
+                MAIN_SCROLL_TEXTAREA_TGAP,
+                MAIN_SCROLL_TEXTAREA_LGAP,
+                MAIN_SCROLL_TEXTAREA_BGAP,
+                MAIN_SCROLL_TEXTAREA_RGAP
+        );
+        SwingVerticalScrollPane scrollPane = new SwingVerticalScrollPane(textArea, scrollPaneBorder);
+
+        Border instructionLabelBorder = BorderFactory.createEmptyBorder(
+                INSTRUCTION_LABEL_TGAP,
+                INSTRUCTION_LABEL_LGAP,
+                INSTRUCTION_LABEL_BGAP,
+                INSTRUCTION_LABEL_RGAP
+        );
+        SwingLabel instructionLabel = new SwingLabel(INSTRUCTION_LABEL_TEXT, null, instructionLabelBorder);
+
+        ParameterPanel volumePanel = createVolumePanel();
+
+        ParameterPanel octavePanel = createOctavePanel();
+
+        ParameterPanel instrumentPanel = createInstrumentPanel();
+
+        ParameterPanel bpmPanel = createBpmPanel();
 
         return new ConversionScreenComponentsWrapper(
                 conversionButton,
-                textArea,
                 scrollPane,
                 instructionLabel,
                 volumePanel,
@@ -45,124 +92,67 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
         );
     }
 
-    private static JLabel createInstructionLabel() {
+    private ParameterPanel createVolumePanel() {
+        SwingSlider volumeSlider = new SwingSlider(
+                VOLUME_SLIDER_DIRECTION,
+                VOLUME_SLIDER_MIN,
+                VOLUME_SLIDER_MAX,
+                VOLUME_SLIDER_VALUE,
+                VOLUME_SLIDER_TICK_SPACING,
+                VOLUME_SLIDER_SHOW_LABELS
+        );
 
-        JLabel instruction = new JLabel(INSTRUCTION_LABEL_TEXT);
+        String labelText = "Volume: " + volumeSlider.getValue();
+        SwingLabel volumeLabel = new SwingLabel(labelText, null, null);
 
-        instruction.setBorder(BorderFactory.createEmptyBorder(
-                INSTRUCTION_LABEL_TGAP,
-                INSTRUCTION_LABEL_LGAP,
-                INSTRUCTION_LABEL_BGAP,
-                INSTRUCTION_LABEL_RGAP
-        ));
-
-        return instruction;
+        return new ParameterPanel(null, volumeSlider, volumeLabel);
     }
 
-    private static JTextArea createTextArea() {
+    private ParameterPanel createOctavePanel() {
+        SwingSlider octaveSlider = new SwingSlider(
+                OCTAVE_SLIDER_DIRECTION,
+                OCTAVE_SLIDER_MIN,
+                OCTAVE_SLIDER_MAX,
+                OCTAVE_SLIDER_VALUE,
+                OCTAVE_SLIDER_TICK_SPACING,
+                OCTAVE_SLIDER_SHOW_LABELS
+        );
 
-        JTextArea textArea = new JTextArea();
+        String labelText = "Octave: " + octaveSlider.getValue();
+        SwingLabel octaveLabel = new SwingLabel(labelText, null, null);
 
-        // Breaks the text automatically when it reaches the border
-        textArea.setLineWrap(true);
-
-        // Prevents the text from being cut in the middle
-        textArea.setWrapStyleWord(true);
-
-        return textArea;
+        return new ParameterPanel(null, octaveSlider, octaveLabel);
     }
 
-    private static JScrollPane createScrollPane() {
+    private ParameterPanel createInstrumentPanel() {
+        SwingSlider instrumentSlider = new SwingSlider(
+                INSTRUMENT_SLIDER_DIRECTION,
+                INSTRUMENT_SLIDER_MIN,
+                INSTRUMENT_SLIDER_MAX,
+                INSTRUMENT_SLIDER_VALUE,
+                INSTRUMENT_SLIDER_TICK_SPACING,
+                INSTRUMENT_SLIDER_SHOW_LABELS
+        );
 
-        // Creates a scrollable text area
-        JScrollPane scrollPane = new JScrollPane(createTextArea());
+        String labelText = "Instrument: " + instrumentSlider.getValue();
+        SwingLabel instrumentLabel = new SwingLabel(labelText, null, null);
 
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(
-                MAIN_SCROLL_TEXTAREA_TGAP,
-                MAIN_SCROLL_TEXTAREA_LGAP,
-                MAIN_SCROLL_TEXTAREA_BGAP,
-                MAIN_SCROLL_TEXTAREA_RGAP
-        ));
-
-        return scrollPane;
+        return new ParameterPanel(null, instrumentSlider, instrumentLabel);
     }
 
-    private JPanel createVolumePanel() {
+    private ParameterPanel createBpmPanel() {
+        SwingSlider bpmSlider = new SwingSlider(
+                BPM_SLIDER_DIRECTION,
+                BPM_SLIDER_MIN,
+                BPM_SLIDER_MAX,
+                BPM_SLIDER_VALUE,
+                BPM_SLIDER_TICK_SPACING,
+                BPM_SLIDER_SHOW_LABELS
+        );
 
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
+        String labelText = "BPM: " + bpmSlider.getValue();
+        SwingLabel bpmLabel = new SwingLabel(labelText, null, null);
 
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 127, 64);
-        slider.setMajorTickSpacing(32);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        label.setText("Volume: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JPanel createOctavePanel() {
-
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 1, 10, 5);
-        slider.setMajorTickSpacing(2);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        label.setText("Octave: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JPanel createInstrumentPanel() {
-
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 0, 127, 0);
-        slider.setMajorTickSpacing(32);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        label.setText("Instrument: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JPanel createBpmPanel() {
-
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel();
-
-        JSlider slider = createSlider(JSlider.HORIZONTAL, 10, 1000, 120);
-        slider.setMajorTickSpacing(250);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-
-        label.setText("BPM: " + slider.getValue());
-
-        panel.add(slider);
-        panel.add(label);
-
-        return panel;
-    }
-
-    private JSlider createSlider(int direction, int min, int max, int startValue) {
-
-        JSlider slider = new JSlider(direction, min, max, startValue);
-
-        return slider;
+        return new ParameterPanel(null, bpmSlider, bpmLabel);
     }
 }
