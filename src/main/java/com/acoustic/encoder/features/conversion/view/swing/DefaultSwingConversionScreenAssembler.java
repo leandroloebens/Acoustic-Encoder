@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
-import com.acoustic.encoder.features.conversion.view.swing.components.ConversionScreenComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionScreenComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
 import com.acoustic.encoder.shared.view.swing.*;
 

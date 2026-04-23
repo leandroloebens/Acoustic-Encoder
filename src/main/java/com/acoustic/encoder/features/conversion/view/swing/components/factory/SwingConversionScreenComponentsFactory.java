@@ -1,77 +1,47 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
-import com.acoustic.encoder.features.conversion.view.swing.components.ConversionScreenComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.config.SwingConversionConfig;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionScreenComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
 import com.acoustic.encoder.shared.view.swing.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import java.util.HashMap;
 
 public class SwingConversionScreenComponentsFactory implements ConversionScreenComponentsFactory {
 
-    private final static String CONVERTER_BUTTON_TEXT = "Convert to Sound!";
+    private final static String ILLEGAL_CONFIG_ARGUMENT_MESSAGE = "Illegal config argument!";
 
-    private final static String INSTRUCTION_LABEL_TEXT = "Write the text you want to convert to sound:";
-    private final static int INSTRUCTION_LABEL_TGAP = 10;
-    private final static int INSTRUCTION_LABEL_LGAP = 10;
-    private final static int INSTRUCTION_LABEL_BGAP = 0;
-    private final static int INSTRUCTION_LABEL_RGAP = 10;
+    private final SwingConversionConfig config;
 
-    private final static int MAIN_SCROLL_TEXTAREA_TGAP = 0;
-    private final static int MAIN_SCROLL_TEXTAREA_LGAP = 10;
-    private final static int MAIN_SCROLL_TEXTAREA_BGAP = 0;
-    private final static int MAIN_SCROLL_TEXTAREA_RGAP = 10;
-
-    private final static int VOLUME_SLIDER_DIRECTION = JSlider.HORIZONTAL;
-    private final static int VOLUME_SLIDER_MIN = 0;
-    private final static int VOLUME_SLIDER_MAX = 127;
-    private final static int VOLUME_SLIDER_VALUE = 64;
-    private final static int VOLUME_SLIDER_TICK_SPACING = 32;
-    private final static boolean VOLUME_SLIDER_SHOW_LABELS = true;
-
-    private final static int OCTAVE_SLIDER_DIRECTION = JSlider.HORIZONTAL;
-    private final static int OCTAVE_SLIDER_MIN = 1;
-    private final static int OCTAVE_SLIDER_MAX = 10;
-    private final static int OCTAVE_SLIDER_VALUE = 5;
-    private final static int OCTAVE_SLIDER_TICK_SPACING = 2;
-    private final static boolean OCTAVE_SLIDER_SHOW_LABELS = true;
-
-    private final static int INSTRUMENT_SLIDER_DIRECTION = JSlider.HORIZONTAL;
-    private final static int INSTRUMENT_SLIDER_MIN = 0;
-    private final static int INSTRUMENT_SLIDER_MAX = 127;
-    private final static int INSTRUMENT_SLIDER_VALUE = 0;
-    private final static int INSTRUMENT_SLIDER_TICK_SPACING = 32;
-    private final static boolean INSTRUMENT_SLIDER_SHOW_LABELS = true;
-
-    private final static int BPM_SLIDER_DIRECTION = JSlider.HORIZONTAL;
-    private final static int BPM_SLIDER_MIN = 10;
-    private final static int BPM_SLIDER_MAX = 1000;
-    private final static int BPM_SLIDER_VALUE = 120;
-    private final static int BPM_SLIDER_TICK_SPACING = 250;
-    private final static boolean BPM_SLIDER_SHOW_LABELS = true;
-
+    public SwingConversionScreenComponentsFactory(HashMap<String, String> configMap) {
+        if (configMap == null) throw new IllegalArgumentException(ILLEGAL_CONFIG_ARGUMENT_MESSAGE);
+        this.config = new SwingConversionConfig(configMap);
+    }
 
     @Override
     public ConversionScreenComponentsWrapper createComponents() {
 
-        SwingButton conversionButton = new SwingButton(CONVERTER_BUTTON_TEXT, null, null);
+        SwingButton conversionButton =
+                new SwingButton(config.getString("CONVERTER_BUTTON_TEXT"), null, null);
 
         SwingTextArea textArea = new SwingTextArea(null, null);
         Border scrollPaneBorder = BorderFactory.createEmptyBorder(
-                MAIN_SCROLL_TEXTAREA_TGAP,
-                MAIN_SCROLL_TEXTAREA_LGAP,
-                MAIN_SCROLL_TEXTAREA_BGAP,
-                MAIN_SCROLL_TEXTAREA_RGAP
+                config.getInt("MAIN_SCROLL_TEXTAREA_TGAP"),
+                config.getInt("MAIN_SCROLL_TEXTAREA_LGAP"),
+                config.getInt("MAIN_SCROLL_TEXTAREA_BGAP"),
+                config.getInt("MAIN_SCROLL_TEXTAREA_RGAP")
         );
         SwingVerticalScrollPane scrollPane = new SwingVerticalScrollPane(textArea, scrollPaneBorder);
 
         Border instructionLabelBorder = BorderFactory.createEmptyBorder(
-                INSTRUCTION_LABEL_TGAP,
-                INSTRUCTION_LABEL_LGAP,
-                INSTRUCTION_LABEL_BGAP,
-                INSTRUCTION_LABEL_RGAP
+                config.getInt("INSTRUCTION_LABEL_TGAP"),
+                config.getInt("INSTRUCTION_LABEL_LGAP"),
+                config.getInt("INSTRUCTION_LABEL_BGAP"),
+                config.getInt("INSTRUCTION_LABEL_RGAP")
         );
-        SwingLabel instructionLabel = new SwingLabel(INSTRUCTION_LABEL_TEXT, null, instructionLabelBorder);
+        SwingLabel instructionLabel = new SwingLabel(config.getString("INSTRUCTION_LABEL_TEXT"), null, instructionLabelBorder);
 
         ParameterPanel volumePanel = createVolumePanel();
 
@@ -94,12 +64,12 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
 
     private ParameterPanel createVolumePanel() {
         SwingSlider volumeSlider = new SwingSlider(
-                VOLUME_SLIDER_DIRECTION,
-                VOLUME_SLIDER_MIN,
-                VOLUME_SLIDER_MAX,
-                VOLUME_SLIDER_VALUE,
-                VOLUME_SLIDER_TICK_SPACING,
-                VOLUME_SLIDER_SHOW_LABELS
+                config.getInt("VOLUME_SLIDER_DIRECTION"),
+                config.getInt("VOLUME_SLIDER_MIN"),
+                config.getInt("VOLUME_SLIDER_MAX"),
+                config.getInt("VOLUME_SLIDER_VALUE"),
+                config.getInt("VOLUME_SLIDER_TICK_SPACING"),
+                config.getBoolean("VOLUME_SLIDER_SHOW_LABELS")
         );
 
         String labelText = "Volume: " + volumeSlider.getValue();
@@ -110,12 +80,12 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
 
     private ParameterPanel createOctavePanel() {
         SwingSlider octaveSlider = new SwingSlider(
-                OCTAVE_SLIDER_DIRECTION,
-                OCTAVE_SLIDER_MIN,
-                OCTAVE_SLIDER_MAX,
-                OCTAVE_SLIDER_VALUE,
-                OCTAVE_SLIDER_TICK_SPACING,
-                OCTAVE_SLIDER_SHOW_LABELS
+                config.getInt("OCTAVE_SLIDER_DIRECTION"),
+                config.getInt("OCTAVE_SLIDER_MIN"),
+                config.getInt("OCTAVE_SLIDER_MAX"),
+                config.getInt("OCTAVE_SLIDER_VALUE"),
+                config.getInt("OCTAVE_SLIDER_TICK_SPACING"),
+                config.getBoolean("OCTAVE_SLIDER_SHOW_LABELS")
         );
 
         String labelText = "Octave: " + octaveSlider.getValue();
@@ -126,12 +96,12 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
 
     private ParameterPanel createInstrumentPanel() {
         SwingSlider instrumentSlider = new SwingSlider(
-                INSTRUMENT_SLIDER_DIRECTION,
-                INSTRUMENT_SLIDER_MIN,
-                INSTRUMENT_SLIDER_MAX,
-                INSTRUMENT_SLIDER_VALUE,
-                INSTRUMENT_SLIDER_TICK_SPACING,
-                INSTRUMENT_SLIDER_SHOW_LABELS
+                config.getInt("INSTRUMENT_SLIDER_DIRECTION"),
+                config.getInt("INSTRUMENT_SLIDER_MIN"),
+                config.getInt("INSTRUMENT_SLIDER_MAX"),
+                config.getInt("INSTRUMENT_SLIDER_VALUE"),
+                config.getInt("INSTRUMENT_SLIDER_TICK_SPACING"),
+                config.getBoolean("INSTRUMENT_SLIDER_SHOW_LABELS")
         );
 
         String labelText = "Instrument: " + instrumentSlider.getValue();
@@ -142,12 +112,12 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
 
     private ParameterPanel createBpmPanel() {
         SwingSlider bpmSlider = new SwingSlider(
-                BPM_SLIDER_DIRECTION,
-                BPM_SLIDER_MIN,
-                BPM_SLIDER_MAX,
-                BPM_SLIDER_VALUE,
-                BPM_SLIDER_TICK_SPACING,
-                BPM_SLIDER_SHOW_LABELS
+                config.getInt("BPM_SLIDER_DIRECTION"),
+                config.getInt("BPM_SLIDER_MIN"),
+                config.getInt("BPM_SLIDER_MAX"),
+                config.getInt("BPM_SLIDER_VALUE"),
+                config.getInt("BPM_SLIDER_TICK_SPACING"),
+                config.getBoolean("BPM_SLIDER_SHOW_LABELS")
         );
 
         String labelText = "BPM: " + bpmSlider.getValue();
