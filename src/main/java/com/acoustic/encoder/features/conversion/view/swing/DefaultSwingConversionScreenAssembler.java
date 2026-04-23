@@ -45,11 +45,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
             String title,
             int windowWidth,
             int windowHeight,
-            Runnable conversionAction,
-            Runnable volumeSliderAction,
-            Runnable instrumentSliderAction,
-            Runnable octaveSliderAction,
-            Runnable bpmSliderAction
+            SwingEventHandler handler
     ) {
 
         SwingFrame frame = new SwingFrame(title, windowWidth, windowHeight);
@@ -57,10 +53,13 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
-        setSliderToVolume(volumePanel, volumeSliderAction);
-        setSliderToOctave(octavePanel, octaveSliderAction);
-        setSliderToInstrument(instrumentPanel, instrumentSliderAction);
-        setSliderToBpm(bpmPanel, bpmSliderAction);
+        setSlidersToParameters(
+                handler,
+                volumePanel,
+                octavePanel,
+                instrumentPanel,
+                bpmPanel
+        );
 
         SwingPanel configPanel = new SwingPanel(new GridLayout(4, 1));
         configPanel.add(volumePanel);
@@ -79,11 +78,10 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         converterButton.addActionListener(event -> {
             if (event.getSource() != converterButton) return;
 
-            
             try {
                 
                 if (getInputText().isEmpty()) throw new IllegalArgumentException();
-                else conversionAction.run();
+                else handler.onConvert();
 
             } catch (IllegalArgumentException e) {
 
@@ -94,7 +92,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
 
             // WORK IN PROGRESS
             // ----------------------------------------------------------------------------------
-            JOptionPane.showMessageDialog(frame, "Maybe im converting your text to sound!");
+            // JOptionPane.showMessageDialog(frame, "Maybe im converting your text to sound!");
             // ----------------------------------------------------------------------------------
         });
 
@@ -113,40 +111,55 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
     @Override
     public int getBpmSliderValue() { return bpmPanel.getSlider().getValue(); }
 
-    private void setSliderToVolume(ParameterPanel panel, Runnable volumeSliderAction) {
-        SwingSlider slider = panel.getSlider();
+    private void setSlidersToParameters(
+            SwingEventHandler handler,
+            ParameterPanel volumePanel,
+            ParameterPanel octavePanel,
+            ParameterPanel instrumentPanel,
+            ParameterPanel bpmPanel
+            ) {
 
-        slider.addChangeListener(e -> {
-            panel.getLabel().setText("Volume: " + slider.getValue());
-            volumeSliderAction.run();
-        });
+        setSliderToVolume(volumePanel, handler);
+        setSliderToOctave(octavePanel, handler);
+        setSliderToInstrument(instrumentPanel, handler);
+        setSliderToBpm(bpmPanel, handler);
+
     }
 
-    private void setSliderToOctave(ParameterPanel panel, Runnable octaveSliderAction) {
-        SwingSlider slider = panel.getSlider();
+    private void setSliderToVolume(ParameterPanel panel, SwingEventHandler handler) {
 
-        slider.addChangeListener(e -> {
-            panel.getLabel().setText("Octave: " + slider.getValue());
-            octaveSliderAction.run();
+        panel.getSlider().addChangeListener(e -> {
+            panel.getLabel().setText("Volume: " + panel.getSlider().getValue());
+            handler.onVolumeChange();
         });
+
     }
 
-    private void setSliderToInstrument(ParameterPanel panel, Runnable instrumentSliderAction) {
-        SwingSlider slider = panel.getSlider();
+    private void setSliderToOctave(ParameterPanel panel, SwingEventHandler handler) {
 
-        slider.addChangeListener(e -> {
-            panel.getLabel().setText("Instrument: " + slider.getValue());
-            instrumentSliderAction.run();
+        panel.getSlider().addChangeListener(e -> {
+            panel.getLabel().setText("Octave: " + panel.getSlider().getValue());
+            handler.onOctaveChange();
         });
+
     }
 
-    private void setSliderToBpm(ParameterPanel panel, Runnable bpmSliderAction) {
-        SwingSlider slider = panel.getSlider();
+    private void setSliderToInstrument(ParameterPanel panel, SwingEventHandler handler) {
 
-        slider.addChangeListener(e -> {
-            panel.getLabel().setText("BPM: " + slider.getValue());
-            bpmSliderAction.run();
+        panel.getSlider().addChangeListener(e -> {
+            panel.getLabel().setText("Instrument: " + panel.getSlider().getValue());
+            handler.onInstrumentChange();
         });
+
+    }
+
+    private void setSliderToBpm(ParameterPanel panel, SwingEventHandler handler) {
+
+        panel.getSlider().addChangeListener(e -> {
+            panel.getLabel().setText("BPM: " + panel.getSlider().getValue());
+            handler.onBpmChange();
+        });
+
     }
 }
 

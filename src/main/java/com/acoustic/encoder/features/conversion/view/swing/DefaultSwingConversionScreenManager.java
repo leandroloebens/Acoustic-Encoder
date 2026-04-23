@@ -30,15 +30,11 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
 
     @Override
     public void startFrame(ConversionController controller) {
-        frame = (SwingFrame) assembler.assemble(
+        frame = assembler.assemble(
             WINDOW_TITLE,
             WINDOW_WIDTH,
             WINDOW_HEIGHT,
-            conversionAction(controller),
-            () -> defaultVolume = assembler.getVolumeSliderValue(),
-            () -> defaultInstrument = assembler.getInstrumentSliderValue(),
-            () -> defaultOctave = assembler.getOctaveSliderValue(),
-            () -> defaultBpm = assembler.getBpmSliderValue()
+            new EventHandler(controller)
         );
     }
 
@@ -58,19 +54,44 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
         this.defaultBpm = parameters.bpm();
     }
 
-    private Runnable conversionAction(ConversionController controller) {
-        Runnable action = () -> {
+    private class EventHandler implements SwingEventHandler {
+        private final ConversionController controller;
+
+        public EventHandler(ConversionController controller) {
+            this.controller = controller;
+        }
+
+        @Override
+        public void onConvert() {
             controller.handleConvertAction(
                     new UserConversionInput(
-                            this.assembler.getInputText(),
+                            assembler.getInputText(),
                             defaultInstrument,
                             defaultBpm,
                             defaultOctave,
                             defaultVolume
-                    )
-            );};
+                    ));
+        }
 
-        return action;
+        @Override
+        public void onVolumeChange() {
+            defaultVolume = assembler.getVolumeSliderValue();
+        }
+
+        @Override
+        public void onOctaveChange() {
+            defaultOctave = assembler.getOctaveSliderValue();
+        }
+
+        @Override
+        public void onBpmChange() {
+            defaultBpm = assembler.getBpmSliderValue();
+        }
+
+        @Override
+        public void onInstrumentChange() {
+            defaultInstrument = assembler.getInstrumentSliderValue();
+        }
     }
 
 }

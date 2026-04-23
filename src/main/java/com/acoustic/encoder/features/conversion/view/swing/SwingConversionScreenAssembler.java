@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
+import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.shared.view.swing.SwingFrame;
 
 public interface SwingConversionScreenAssembler {
@@ -8,11 +9,7 @@ public interface SwingConversionScreenAssembler {
             String title,
             int windowWidth,
             int windowHeight,
-            Runnable conversionAction,
-            Runnable volumeSliderAction,
-            Runnable instrumentSliderAction,
-            Runnable octaveSliderAction,
-            Runnable bpmSliderAction
+            SwingEventHandler handler
     );
 
     String getInputText();
