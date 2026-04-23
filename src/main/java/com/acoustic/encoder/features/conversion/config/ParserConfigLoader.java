@@ -9,19 +9,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class ConfigLoader {
+public class ParserConfigLoader {
 
     public final static String CONFIG_FILE_NAME = "encoderMapping.properties";
 
     private final String fileName;
 
-    public ConfigLoader(String fileName) {
+    public ParserConfigLoader(String fileName) {
         this.fileName = fileName;
     }
 
     public Map<String, MusicalInstruction> loadConfigMap() throws FileNotFoundException {
 
-        InputStream stream = ConfigLoader.class
+        InputStream stream = ParserConfigLoader.class
                 .getClassLoader()
                 .getResourceAsStream(this.fileName);
 

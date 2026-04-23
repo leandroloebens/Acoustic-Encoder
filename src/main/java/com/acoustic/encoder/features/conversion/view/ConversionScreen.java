@@ -4,5 +4,7 @@ public interface ConversionScreen {
 
     void startFrame();
 
+    void showFrame();
+
     void closeFrame();
 }

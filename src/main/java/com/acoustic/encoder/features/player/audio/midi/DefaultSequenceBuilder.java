@@ -28,15 +28,11 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
 
     private void initializeTrack(Track track, MusicConfig config) throws InvalidMidiDataException {
 
-        track.add(new MidiEvent(
-                MidiUtils.createInstrumentChange(config.defaultMidiInstrument(), DEFAULT_CHANNEL),
-                0
-        ));
+        track.add(MidiUtils.createTempoChangeEvent(config.bpm(), 0));
 
-        track.add(new MidiEvent(
-                MidiUtils.createVolumeChange(config.defaultVolume(), DEFAULT_CHANNEL),
-                0
-        ));
+        track.add(MidiUtils.createInstrumentChangeEvent(config.defaultMidiInstrument(), DEFAULT_CHANNEL, 0));
+
+        track.add(MidiUtils.createVolumeChangeEvent(config.defaultVolume(), DEFAULT_CHANNEL, 0));
     }
 
     private void processInstructionsToTrack(
@@ -70,19 +66,13 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
             int parameter
     ) throws InvalidMidiDataException {
 
-        MusicalNote note = createNote(parameter, context.octave());
+        MusicalNote note = new MusicalNote(parameter, context.octave(), NOTE_VELOCITY);
 
         // Note ON
-        track.add(new MidiEvent(
-                MidiUtils.createNoteOn(note, DEFAULT_CHANNEL),
-                context.tick())
-        );
+        track.add(MidiUtils.createNoteOnEvent(note, DEFAULT_CHANNEL, context.tick()));
 
         // Note OFF
-        track.add(new MidiEvent(
-                MidiUtils.createNoteOff(note, DEFAULT_CHANNEL),
-                context.tick() + NOTE_TICK_DURATION)
-        );
+        track.add(MidiUtils.createNoteOffEvent(note, DEFAULT_CHANNEL, context.tick() + NOTE_TICK_DURATION));
 
         return context.withTick(context.tick() + NOTE_TICK_DURATION);
     }
@@ -96,10 +86,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
 
         TrackContext newContext = context.doubleVolume();
 
-        track.add(new MidiEvent(
-                MidiUtils.createVolumeChange(newContext.volume(), DEFAULT_CHANNEL),
-                newContext.tick()
-        ));
+        track.add(MidiUtils.createVolumeChangeEvent(newContext.volume(), DEFAULT_CHANNEL, newContext.tick()));
 
         return newContext;
     }
@@ -112,10 +99,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
 
         TrackContext newContext = context.withInstrument(newInstrument);
 
-        track.add(new MidiEvent(
-                MidiUtils.createInstrumentChange(newContext.instrument(), DEFAULT_CHANNEL),
-                newContext.tick()
-        ));
+        track.add(MidiUtils.createInstrumentChangeEvent(newContext.instrument(), DEFAULT_CHANNEL, newContext.tick()));
 
         return newContext;
     }
@@ -128,10 +112,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
 
         TrackContext newContext = context.incrementInstrument(incVal);
 
-        track.add(new MidiEvent(
-                MidiUtils.createInstrumentChange(newContext.instrument(), DEFAULT_CHANNEL),
-                newContext.tick()
-        ));
+        track.add(MidiUtils.createInstrumentChangeEvent(newContext.instrument(), DEFAULT_CHANNEL, newContext.tick()));
 
         return newContext;
     }
@@ -159,11 +140,6 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
 
         if (currentIndex == 0) return false;
         return musicalInstructions.get(currentIndex - 1).command() == MusicalCommand.PLAY_NOTE;
-    }
-
-    private MusicalNote createNote(int pitch, int octave) {
-
-        return new MusicalNote(Pitch.fromValue(pitch), octave, NOTE_VELOCITY);
     }
 
 }

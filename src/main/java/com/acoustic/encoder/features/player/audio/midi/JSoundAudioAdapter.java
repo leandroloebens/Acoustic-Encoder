@@ -21,8 +21,6 @@ public class JSoundAudioAdapter implements AudioPlayer {
 
         Sequence sequence = this.builder.buildSequence(musicModel);
         this.sequencePlayer.loadSequence(sequence);
-        this.sequencePlayer.setBpm(musicModel.config().bpm());
-
     }
 
     public void play() {
