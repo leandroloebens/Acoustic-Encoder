@@ -3,11 +3,8 @@ package com.acoustic.encoder;
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
-import com.acoustic.encoder.features.conversion.view.swing.SwingConversionScreenAssembler;
-import com.acoustic.encoder.features.conversion.view.ConversionScreenManager;
 import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionScreenAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionScreenManager;
-import com.acoustic.encoder.features.conversion.view.swing.components.factory.ConversionScreenComponentsFactory;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.SwingConversionScreenComponentsFactory;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
@@ -33,9 +30,10 @@ public class Main {
 
         var conversionService = new DefaultConversionService(instructionParser, eventBus);
 
-        ConversionScreenComponentsFactory conversionScreenComponentsFactory = new SwingConversionScreenComponentsFactory();
-        SwingConversionScreenAssembler conversionScreenAssembler = new DefaultSwingConversionScreenAssembler(conversionScreenComponentsFactory.createComponents());
-        ConversionScreenManager conversionScreenManager = new DefaultSwingConversionScreenManager(conversionScreenAssembler);
+        // Conversion View
+        var conversionScreenComponentsFactory = new SwingConversionScreenComponentsFactory();
+        var conversionScreenAssembler = new DefaultSwingConversionScreenAssembler(conversionScreenComponentsFactory.createComponents());
+        var conversionScreenManager = new DefaultSwingConversionScreenManager(conversionScreenAssembler);
 
         // Audio Player Service
         var sequenceBuilder = new DefaultSequenceBuilder();
@@ -45,6 +43,8 @@ public class Main {
         var musicExporter = new MidiFileExporter(sequencePlayer);
 
         var audioPlayerService = new DefaultAudioPlayerService(audioPlayer, musicExporter);
+
+        // Player View
 
         // Navigation
         var screenFactory = new DefaultScreenFactory(

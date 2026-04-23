@@ -19,7 +19,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     private final AudioPlayerService audioPlayerService;
 
-    // private final PlayerScreenComponentsFactory playerComponentsFactory;
+    // private final PlayerScreenManager playerScreenManager;
 
 
     public DefaultScreenFactory(
