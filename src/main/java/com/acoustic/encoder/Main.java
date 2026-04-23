@@ -33,7 +33,7 @@ public class Main {
         // Conversion View
         var conversionScreenComponentsFactory = new SwingConversionScreenComponentsFactory();
         var conversionScreenAssembler = new DefaultSwingConversionScreenAssembler(conversionScreenComponentsFactory.createComponents());
-        var conversionScreenManager = new DefaultSwingConversionScreenManager(conversionScreenAssembler);
+        var conversionScreenManager = new DefaultSwingConversionScreenManager(conversionScreenAssembler, eventBus);
 
         // Audio Player Service
         var sequenceBuilder = new DefaultSequenceBuilder();
@@ -48,11 +48,12 @@ public class Main {
 
         // Navigation
         var screenFactory = new DefaultScreenFactory(
+                eventBus,
                 conversionService,
                 conversionScreenManager,
                 audioPlayerService
         );
-        var appNavigator = new DefaultAppNavigator(screenFactory);
+        var appNavigator = new DefaultAppNavigator(screenFactory, eventBus);
 
         // subscribes listeners to their events
         eventBus.subscribe(

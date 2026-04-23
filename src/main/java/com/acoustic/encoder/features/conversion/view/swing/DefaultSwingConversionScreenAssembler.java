@@ -41,16 +41,16 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
     }
 
     @Override
-    public SwingFrame assemble(
+    public SwingFrame assembleFrame(
             String title,
             int windowWidth,
             int windowHeight,
+            int frameExitOperation,
             SwingEventHandler handler
     ) {
 
-        SwingFrame frame = new SwingFrame(title, windowWidth, windowHeight);
+        SwingFrame frame = new SwingFrame(title, windowWidth, windowHeight, frameExitOperation);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
         setSlidersToParameters(

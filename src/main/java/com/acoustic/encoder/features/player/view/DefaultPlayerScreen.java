@@ -1,11 +1,15 @@
 package com.acoustic.encoder.features.player.view;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
+import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
+import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 public class DefaultPlayerScreen implements PlayerScreen {
@@ -31,10 +35,14 @@ public class DefaultPlayerScreen implements PlayerScreen {
 
     private final AudioPlayerController playerController;
 
-    public DefaultPlayerScreen(AudioPlayerController playerController) {
+    private final EventBus eventBus;
+
+    public DefaultPlayerScreen(AudioPlayerController playerController, EventBus eventBus) {
 
         if (playerController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.playerController = playerController;
+
+        this.eventBus = eventBus;
 
         this.frame = new JFrame(WINDOW_TITLE);
         this.initializeFrame();
@@ -58,6 +66,13 @@ public class DefaultPlayerScreen implements PlayerScreen {
 
         // Centering the frame
         frame.setLocationRelativeTo(null);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventBus.publish(new PlayerClosedEvent());
+            }
+        });
 
     }
 

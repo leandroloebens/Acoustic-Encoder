@@ -4,10 +4,11 @@ import com.acoustic.encoder.shared.view.swing.SwingFrame;
 
 public interface SwingConversionScreenAssembler {
 
-    SwingFrame assemble(
+    SwingFrame assembleFrame(
             String title,
             int windowWidth,
             int windowHeight,
+            int frameExitOperation,
             SwingEventHandler handler
     );
 

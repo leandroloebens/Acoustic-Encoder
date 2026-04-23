@@ -6,5 +6,4 @@ public interface EventBus {
 
     <T> void publish(T event);
 
-
 }
