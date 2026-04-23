@@ -1,6 +1,9 @@
 package com.acoustic.encoder.features.player.controller;
 
+import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.shared.model.MusicModel;
+
+import java.io.File;
 
 public interface AudioPlayerController {
 
@@ -11,4 +14,6 @@ public interface AudioPlayerController {
     void handlePauseAction();
 
     void handleRewindAction();
+
+    void handleSaveAction(File destination) throws MusicExportException;
 }
