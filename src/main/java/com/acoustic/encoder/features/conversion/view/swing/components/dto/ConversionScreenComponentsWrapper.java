@@ -7,6 +7,8 @@ import com.acoustic.encoder.shared.view.swing.SwingVerticalScrollPane;
 
 public record ConversionScreenComponentsWrapper(
         SwingButton converterButton,
+        SwingButton saveTextButton,
+        SwingButton loadTextButton,
         SwingVerticalScrollPane scrollPane,
         SwingLabel instructionLabel,
         ParameterPanel volumePanel,

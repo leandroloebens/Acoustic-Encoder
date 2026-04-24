@@ -4,14 +4,16 @@ import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.event.ConversionClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionScreenManager;
-import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicConfig;
 import com.acoustic.encoder.shared.view.swing.SwingFrame;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class DefaultSwingConversionScreenManager implements ConversionScreenManager {
 
@@ -42,13 +44,13 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
     }
 
     @Override
-    public void startFrame(ConversionController controller) {
+    public void startFrame(ConversionController conversionController) {
         frame = assembler.assembleFrame(
             WINDOW_TITLE,
             WINDOW_WIDTH,
             WINDOW_HEIGHT,
             FRAME_EXIT_OPERATION,
-            new EventHandler(controller)
+            new EventHandler(conversionController)
         );
 
         frame.addWindowListener(new WindowAdapter() {
@@ -67,7 +69,8 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
     @Override
     public void hideFrame() { frame.setVisible(false); }
 
-    // void destroyFrame();
+    @Override
+    public void disposeFrame() { frame.dispose(); }
 
     @Override
     public void setInitialDefaultParameters(MusicConfig parameters) {
@@ -94,7 +97,52 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
                         defaultOctave,
                         defaultVolume
                     ));
+
             hideFrame();
+        }
+
+        @Override
+        public void onLoad() {
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files (*.txt)", "txt");
+            fileChooser.setFileFilter(filter);
+            fileChooser.setDialogTitle("Open");
+
+            int userSelection = fileChooser.showOpenDialog(frame);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToLoad = fileChooser.getSelectedFile();
+
+                try {
+                    String text = controller.handleLoadTextAction(fileToLoad);
+                    assembler.setInputText(text);
+                }
+                catch (IOException ex) {
+                    JOptionPane.showMessageDialog(frame, "Error loading file: " + ex.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        @Override
+        public void onSave() {
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files (*.txt)", "txt");
+            fileChooser.setFileFilter(filter);
+            fileChooser.setDialogTitle("Save as");
+
+            int userSelection = fileChooser.showSaveDialog(frame);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+
+                try {
+                    controller.handleSaveTextAction(assembler.getInputText(), fileToSave);
+                    JOptionPane.showMessageDialog(frame, "Saved!");
+                }
+                catch (IOException ex) {
+                    JOptionPane.showMessageDialog(frame, "Error saving file: " + ex.getMessage());
+                }
+            }
         }
 
         @Override

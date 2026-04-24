@@ -14,6 +14,8 @@ public interface SwingConversionScreenAssembler {
 
     String getInputText();
 
+    void setInputText(String text);
+
     int getVolumeSliderValue();
 
     int getInstrumentSliderValue();

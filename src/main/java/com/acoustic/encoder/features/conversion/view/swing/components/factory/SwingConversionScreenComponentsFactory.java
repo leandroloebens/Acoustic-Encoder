@@ -26,6 +26,12 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
         SwingButton conversionButton =
                 new SwingButton(config.getString("CONVERTER_BUTTON_TEXT"), null, null);
 
+        SwingButton saveTextButton =
+                new SwingButton(config.getString("SAVE_TEXT_BUTTON_TEXT"), null, null);
+
+        SwingButton loadTextButton =
+                new SwingButton(config.getString("LOAD_TEXT_BUTTON_TEXT"), null, null);
+
         SwingTextArea textArea = new SwingTextArea(null, null);
         Border scrollPaneBorder = BorderFactory.createEmptyBorder(
                 config.getInt("MAIN_SCROLL_TEXTAREA_TGAP"),
@@ -41,7 +47,8 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
                 config.getInt("INSTRUCTION_LABEL_BGAP"),
                 config.getInt("INSTRUCTION_LABEL_RGAP")
         );
-        SwingLabel instructionLabel = new SwingLabel(config.getString("INSTRUCTION_LABEL_TEXT"), null, instructionLabelBorder);
+        SwingLabel instructionLabel =
+                new SwingLabel(config.getString("INSTRUCTION_LABEL_TEXT"), null, instructionLabelBorder);
 
         ParameterPanel volumePanel = createVolumePanel();
 
@@ -53,6 +60,8 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
 
         return new ConversionScreenComponentsWrapper(
                 conversionButton,
+                saveTextButton,
+                loadTextButton,
                 scrollPane,
                 instructionLabel,
                 volumePanel,
