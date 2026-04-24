@@ -36,7 +36,9 @@ public class Main {
 
 
         // Audio Player Service
-        var sequenceBuilder = new DefaultSequenceBuilder();
+
+        var trackWriter = new DefaultTrackWriter();
+        var sequenceBuilder = new DefaultSequenceBuilder(trackWriter);
         var sequencePlayer = new DefaultSequencePlayer(MidiSystem.getSequencer());
 
         var audioPlayer = new JSoundAudioAdapter(sequenceBuilder, sequencePlayer);
