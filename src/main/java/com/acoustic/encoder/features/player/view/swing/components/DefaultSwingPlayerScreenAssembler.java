@@ -6,7 +6,7 @@ import com.acoustic.encoder.features.player.view.PlayerControlsComponent;
 import com.acoustic.encoder.features.player.view.PlayerFooterComponent;
 import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
 import com.acoustic.encoder.features.player.view.swing.components.dto.PlayerScreenComponentsWrapper;
-import com.acoustic.encoder.shared.view.swing.*;
+import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +35,7 @@ public class DefaultSwingPlayerScreenAssembler implements SwingPlayerScreenAssem
             SwingPlayerActionHandler handler
     ) {
 
-        SwingFrame frame = new SwingFrame(title, windowWidth, windowHeight, frameExitOperation);
+        SwingFrame frame = new SwingFrame(title, new Dimension(windowWidth, windowHeight), frameExitOperation);
 
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
