@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
-public interface SwingConversionEventHandler {
+public interface SwingConversionActionHandler {
 
     void onConvert();
 

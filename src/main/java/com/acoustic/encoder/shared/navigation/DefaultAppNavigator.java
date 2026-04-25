@@ -33,12 +33,14 @@ public class DefaultAppNavigator implements AppNavigator {
     @Override
     public void startApp() {
 
-        this.conversionScreen.startFrame();
+        this.displayConversionScreen();
 
     }
 
     @Override
     public void closeApp() {
+
+        // close sequencer (publish close sequencer)
 
         System.exit(SYSTEM_OUT_ONCLOSE_STATUS);
 
@@ -47,7 +49,7 @@ public class DefaultAppNavigator implements AppNavigator {
     @Override
     public void displayConversionScreen() {
 
-        this.conversionScreen.showFrame();
+        this.conversionScreen.showWindow();
 
     }
 

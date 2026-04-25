@@ -2,11 +2,9 @@ package com.acoustic.encoder.features.conversion.view;
 
 public interface ConversionScreen {
 
-    void startFrame();
+    void showWindow();
 
-    void showFrame();
+    void hideWindow();
 
-    void hideFrame();
-
-    void closeFrame();
+    void closeWindow();
 }

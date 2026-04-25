@@ -58,7 +58,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
             WINDOW_TITLE,
             windowInitialSize,
             FRAME_EXIT_OPERATION,
-            new EventHandler(conversionController)
+            new ActionHandler(conversionController)
         );
 
         frame.addWindowListener(new WindowAdapter() {
@@ -68,7 +68,6 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
             }
         });
 
-        showFrame();
     }
 
     @Override
@@ -88,7 +87,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
         this.defaultBpm = parameters.bpm();
     }
 
-    private class EventHandler implements SwingConversionEventHandler {
+    private class ActionHandler implements SwingConversionActionHandler {
         private static final String ONLOAD_FILE_EXTENSION_FILTER = "txt";
         private static final String ONLOAD_FILTER_DESCRIPTION = "Text Files (*.txt)";
         private static final String ONLOAD_DIALOG_TITLE = "Open";
@@ -99,7 +98,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
 
         private final ConversionController controller;
 
-        public EventHandler(ConversionController controller) {
+        public ActionHandler(ConversionController controller) {
             this.controller = controller;
         }
 

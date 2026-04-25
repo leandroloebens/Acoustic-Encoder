@@ -10,7 +10,7 @@ public interface SwingConversionScreenAssembler {
             String title,
             Dimension windowInitialSize,
             int frameExitOperation,
-            SwingConversionEventHandler handler
+            SwingConversionActionHandler handler
     );
 
     String getInputText();
