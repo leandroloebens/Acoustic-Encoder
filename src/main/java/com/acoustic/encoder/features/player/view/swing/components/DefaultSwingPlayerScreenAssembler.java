@@ -37,6 +37,7 @@ public class DefaultSwingPlayerScreenAssembler implements SwingPlayerScreenAssem
 
         SwingFrame frame = new SwingFrame(title, new Dimension(windowWidth, windowHeight), frameExitOperation);
 
+        frame.setMinimumSize(new Dimension(windowWidth, windowHeight));
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
         JPanel centerPanel = new JPanel(new GridBagLayout());

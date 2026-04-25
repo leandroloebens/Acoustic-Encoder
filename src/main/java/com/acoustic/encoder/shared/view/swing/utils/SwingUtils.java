@@ -70,4 +70,11 @@ public class SwingUtils {
         return (float)(screenSize.getWidth() / DEFAULT_SCREEN_WIDTH);
     }
 
+    public static void setHandCursor(AbstractButton... buttons) {
+        Cursor hand = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        for (AbstractButton b : buttons) {
+            b.setCursor(hand);
+        }
+    }
+
 }

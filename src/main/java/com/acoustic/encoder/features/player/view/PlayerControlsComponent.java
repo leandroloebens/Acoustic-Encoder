@@ -1,6 +1,7 @@
 package com.acoustic.encoder.features.player.view;
 
 import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +30,7 @@ public class PlayerControlsComponent extends JPanel {
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        Utils.setHandCursor(playButton, pauseButton, rewindButton);
+        SwingUtils.setHandCursor(playButton, pauseButton, rewindButton);
 
         //setBackground(Color.RED);
         setBackground(Color.darkGray);

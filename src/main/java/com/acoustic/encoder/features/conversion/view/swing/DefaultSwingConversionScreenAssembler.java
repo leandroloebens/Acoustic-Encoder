@@ -3,6 +3,7 @@ package com.acoustic.encoder.features.conversion.view.swing;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionScreenComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,6 +58,8 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
 
         SwingPanel buttonsPanel = createButtonsPanel(frame, handler);
         SwingPanel textAreaPanel = createTextAreaPanel();
+
+        SwingUtils.setHandCursor(converterButton, saveButton, loadButton);
 
         SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
         conversionPanel.add(textAreaPanel, BorderLayout.CENTER);

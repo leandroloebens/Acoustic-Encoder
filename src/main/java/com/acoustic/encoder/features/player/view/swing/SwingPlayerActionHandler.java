@@ -10,5 +10,5 @@ public interface SwingPlayerActionHandler {
 
     void onRewind();
 
-    void onSave(File file);
+    void onSave();
 }

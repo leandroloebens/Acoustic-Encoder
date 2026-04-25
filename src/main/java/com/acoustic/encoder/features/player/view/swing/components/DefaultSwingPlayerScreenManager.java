@@ -7,11 +7,13 @@ import com.acoustic.encoder.features.player.view.PlayerScreenManager;
 import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 
 public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
 
@@ -65,6 +67,11 @@ public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
     // void destroyFrame();
 
     private class PlayerActionHandler implements SwingPlayerActionHandler {
+
+        private static final String ONSAVE_FILE_EXTENSION_FILTER = "mid";
+        private static final String ONSAVE_FILTER_DESCRIPTION = "MID Files (*.mid)";
+        private static final String ONSAVE_DIALOG_TITLE = "Save as";
+
         private final AudioPlayerController controller;
 
         public PlayerActionHandler(AudioPlayerController controller) {
@@ -87,12 +94,25 @@ public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
         }
 
         @Override
-        public void onSave(File file) {
-            try {
-                controller.handleSaveAction(file);
-            } catch (MusicExportException ex) {
+        public void onSave() {
+            File fileToSave = SwingUtils.getFileFromChooser(
+                    SwingUtils.SAVE_FILE_OPERATION,
+                    frame,
+                    ONSAVE_FILE_EXTENSION_FILTER,
+                    ONSAVE_FILTER_DESCRIPTION,
+                    ONSAVE_DIALOG_TITLE
+            );
+
+            if (fileToSave != null) {
+
+                try {
+                    controller.handleSaveAction(fileToSave);
+                } catch (MusicExportException ex) {
                     throw new RuntimeException(ex);
+                }
+
             }
+
         }
     }
 }

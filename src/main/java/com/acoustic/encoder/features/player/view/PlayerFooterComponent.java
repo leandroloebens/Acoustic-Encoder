@@ -3,6 +3,7 @@ package com.acoustic.encoder.features.player.view;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +30,7 @@ public class PlayerFooterComponent extends JPanel {
         setLayout(new BorderLayout(10, 0));
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        Utils.setHandCursor(saveButton);
+        SwingUtils.setHandCursor(saveButton);
 
         //setBackground(Color.BLUE);
         setBackground(Color.darkGray);
@@ -47,16 +48,7 @@ public class PlayerFooterComponent extends JPanel {
     }
 
     private void registerListeners(SwingPlayerActionHandler handler) {
-        saveButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            int option = fileChooser.showSaveDialog(this);
-
-            if (option == JFileChooser.APPROVE_OPTION) {
-                File fileToSave = fileChooser.getSelectedFile();
-
-                handler.onSave(fileToSave);
-            }
-        });
+        saveButton.addActionListener(e -> handler.onSave());
     }
 
     public void updateProgress(int value) {
