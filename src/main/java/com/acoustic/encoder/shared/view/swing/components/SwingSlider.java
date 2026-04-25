@@ -9,6 +9,8 @@ import javax.swing.*;
 
 public class SwingSlider extends JSlider {
 
+    private static final int MAX_SLIDER_FONT_SIZE = 13;
+
     private int minToShow;
     private int maxToShow;
 
@@ -34,6 +36,10 @@ public class SwingSlider extends JSlider {
         this.setPaintTicks(true);
         this.setPaintLabels(true);
 
+        if (sliderFontSize > MAX_SLIDER_FONT_SIZE) {
+            sliderFontSize = MAX_SLIDER_FONT_SIZE;
+        }
+
         if (minToShow < min) {
             throw new IllegalArgumentException("minToShow must be greater than or equal to min");
         }
@@ -43,6 +49,7 @@ public class SwingSlider extends JSlider {
 
         this.minToShow = minToShow;
         this.maxToShow = maxToShow;
+
         Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
 
         labelTable.put(min, new JLabel(String.valueOf(minToShow)));
