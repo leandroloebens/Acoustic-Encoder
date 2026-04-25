@@ -1,9 +1,12 @@
 package com.acoustic.encoder.features.player.view;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
+import com.acoustic.encoder.features.player.exception.MusicExportException;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerEventHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class PlayerFooterComponent extends JPanel {
 
@@ -12,12 +15,13 @@ public class PlayerFooterComponent extends JPanel {
     private final JProgressBar progressBar;
     private final JButton saveButton;
 
-    public PlayerFooterComponent(AudioPlayerController controller) {
+    private SwingPlayerEventHandler handler;
+
+    public PlayerFooterComponent() {
         this.saveButton = new JButton(SAVE_BUTTON_TEXT);
         this.progressBar = new JProgressBar();
 
         initializeComponent();
-        registerListeners(controller);
     }
 
     private void initializeComponent() {
@@ -25,9 +29,10 @@ public class PlayerFooterComponent extends JPanel {
         setLayout(new BorderLayout(10, 0));
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        Utils.setHandCursor(saveButton);
 
-        saveButton.setCursor(handCursor);
+        //setBackground(Color.BLUE);
+        setBackground(Color.darkGray);
 
         add(progressBar, BorderLayout.CENTER);
         add(saveButton, BorderLayout.EAST);
@@ -35,8 +40,27 @@ public class PlayerFooterComponent extends JPanel {
         updateProgress(10);
     }
 
-    private void registerListeners(AudioPlayerController controller) {
-        //saveButton.addActionListener(e -> controller.handlePlayAction());
+    public void setEventHandler(SwingPlayerEventHandler handler) {
+        this.handler = handler;
+
+        registerListeners(handler);
+    }
+
+    private void registerListeners(SwingPlayerEventHandler handler) {
+        saveButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int option = fileChooser.showSaveDialog(this);
+
+            if (option == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+
+//                try {
+//                    //handler.onSave(fileToSave);
+//                } catch (MusicExportException ex) {
+//                    throw new RuntimeException(ex);
+//                }
+            }
+        });
     }
 
     public void updateProgress(int value) {

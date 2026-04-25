@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.player.view;
 
-import com.acoustic.encoder.features.player.controller.AudioPlayerController;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerEventHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,34 +15,39 @@ public class PlayerControlsComponent extends JPanel {
     private final JButton pauseButton;
     private final JButton rewindButton;
 
-    public PlayerControlsComponent(AudioPlayerController controller) {
+    private SwingPlayerEventHandler handler;
 
+    public PlayerControlsComponent() {
         this.playButton = new JButton(PLAY_BUTTON_TEXT);
         this.pauseButton = new JButton(PAUSE_BUTTON_TEXT);
         this.rewindButton = new JButton(REWIND_BUTTON_TEXT);
 
         initializeComponent();
-        registerListeners(controller);
     }
 
     private void initializeComponent() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        Utils.setHandCursor(playButton, pauseButton, rewindButton);
 
-        playButton.setCursor(handCursor);
-        pauseButton.setCursor(handCursor);
-        rewindButton.setCursor(handCursor);
+        //setBackground(Color.RED);
+        setBackground(Color.darkGray);
 
         add(playButton);
         add(pauseButton);
         add(rewindButton);
     }
 
-    private void registerListeners(AudioPlayerController controller) {
-        playButton.addActionListener(e -> controller.handlePlayAction());
-        pauseButton.addActionListener(e -> controller.handlePauseAction());
-        rewindButton.addActionListener(e -> controller.handleRewindAction());
+    public void setEventHandler(SwingPlayerEventHandler handler) {
+        this.handler = handler;
+
+        registerListeners(handler);
+    }
+
+    private void registerListeners(SwingPlayerEventHandler handler) {
+        playButton.addActionListener(e -> handler.onPlay());
+        pauseButton.addActionListener(e -> handler.onPause());
+        rewindButton.addActionListener(e -> handler.onRewind());
     }
 }

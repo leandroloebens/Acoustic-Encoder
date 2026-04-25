@@ -9,7 +9,7 @@ public interface SwingConversionScreenAssembler {
             int windowWidth,
             int windowHeight,
             int frameExitOperation,
-            SwingEventHandler handler
+            SwingConversionEventHandler handler
     );
 
     String getInputText();

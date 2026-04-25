@@ -7,6 +7,7 @@ import java.util.Properties;
 
 public class ScreenConfigLoader {
     public final static String CONVERSION_SCREEN_CONFIG_FILE = "conversionScreenMapping.properties";
+    public final static String PLAYER_SCREEN_CONFIG_FILE = "playerScreenMapping.properties";
 
     private final String fileName;
 

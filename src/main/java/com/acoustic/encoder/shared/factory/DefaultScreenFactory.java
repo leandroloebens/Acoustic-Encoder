@@ -10,6 +10,7 @@ import com.acoustic.encoder.features.player.service.AudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
 import com.acoustic.encoder.features.player.view.DefaultPlayerScreen;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
+import com.acoustic.encoder.features.player.view.PlayerScreenManager;
 import com.acoustic.encoder.shared.event.EventBus;
 
 public class DefaultScreenFactory implements ScreenFactory  {
@@ -22,19 +23,21 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     private final AudioPlayerService audioPlayerService;
 
-    // private final PlayerScreenManager playerScreenManager;
+    private final PlayerScreenManager playerScreenManager;
 
 
     public DefaultScreenFactory(
             EventBus eventBus,
             ConversionService conversionService,
             ConversionScreenManager conversionScreenManager,
-            AudioPlayerService audioPlayerService
+            AudioPlayerService audioPlayerService,
+            PlayerScreenManager playerScreenManager
     ) {
 
         this.conversionService = conversionService;
         this.conversionScreenManager = conversionScreenManager;
         this.audioPlayerService = audioPlayerService;
+        this.playerScreenManager = playerScreenManager;
         this.eventBus = eventBus;
 
     }
@@ -50,6 +53,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
     public PlayerScreen createPlayerScreen() {
         return new DefaultPlayerScreen(
                 new DefaultAudioPlayerController(this.audioPlayerService),
+                playerScreenManager,
                 eventBus
         );
     }

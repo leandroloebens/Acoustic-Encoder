@@ -4,7 +4,6 @@ import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.event.ConversionClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionScreenManager;
-import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicConfig;
 import com.acoustic.encoder.shared.view.swing.SwingFrame;
@@ -59,6 +58,8 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
         });
 
         showFrame();
+
+        System.out.println("Abrindo Player...");
     }
 
     @Override
@@ -77,7 +78,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
         this.defaultBpm = parameters.bpm();
     }
 
-    private class EventHandler implements SwingEventHandler {
+    private class EventHandler implements SwingConversionEventHandler {
         private final ConversionController controller;
 
         public EventHandler(ConversionController controller) {

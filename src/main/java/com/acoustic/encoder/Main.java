@@ -8,6 +8,9 @@ import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversio
 import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionScreenManager;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.SwingConversionScreenComponentsFactory;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
+import com.acoustic.encoder.features.player.view.swing.components.DefaultSwingPlayerScreenAssembler;
+import com.acoustic.encoder.features.player.view.swing.components.DefaultSwingPlayerScreenManager;
+import com.acoustic.encoder.features.player.view.swing.components.factory.SwingPlayerScreenComponentsFactory;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
 import com.acoustic.encoder.shared.navigation.DefaultAppNavigator;
 import com.acoustic.encoder.features.conversion.config.ParserConfigLoader;
@@ -53,14 +56,18 @@ public class Main {
 
 
         // Player View
-
+        var playerScreenConfigLoader = new ScreenConfigLoader(ScreenConfigLoader.PLAYER_SCREEN_CONFIG_FILE);
+        var playerScreenComponentsFactory = new SwingPlayerScreenComponentsFactory(playerScreenConfigLoader.loadConfigMap());
+        var playerScreenAssembler = new DefaultSwingPlayerScreenAssembler(playerScreenComponentsFactory.createComponents());
+        var playerScreenManager = new DefaultSwingPlayerScreenManager(playerScreenAssembler, eventBus);
 
         // Navigation
         var screenFactory = new DefaultScreenFactory(
                 eventBus,
                 conversionService,
                 conversionScreenManager,
-                audioPlayerService
+                audioPlayerService,
+                playerScreenManager
         );
         var appNavigator = new DefaultAppNavigator(screenFactory, eventBus);
 

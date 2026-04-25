@@ -1,10 +1,14 @@
 package com.acoustic.encoder.features.player.view;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
+import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
+import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class DefaultPlayerScreen implements PlayerScreen {
 
@@ -15,10 +19,6 @@ public class DefaultPlayerScreen implements PlayerScreen {
     private final static int BORDERLAYOUT_HGAP = 10;
     private final static int BORDERLAYOUT_WGAP = 10;
 
-    private final static String PLAY_BUTTON_TEXT = "Play";
-    private final static String PAUSE_BUTTON_TEXT = "Pause";
-    private final static String REWIND_BUTTON_TEXT = "Rewind";
-
     private final static int BUTTON_PANEL_TGAP = 10;
     private final static int BUTTON_PANEL_LGAP = 10;
     private final static int BUTTON_PANEL_BGAP = 10;
@@ -28,10 +28,19 @@ public class DefaultPlayerScreen implements PlayerScreen {
 
     private final AudioPlayerController playerController;
 
-    public DefaultPlayerScreen(AudioPlayerController playerController) {
+    private final PlayerScreenManager manager;
+
+    private final EventBus eventBus;
+
+    public DefaultPlayerScreen(AudioPlayerController playerController, PlayerScreenManager manager, EventBus eventBus) {
 
         if (playerController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.playerController = playerController;
+
+        if (manager == null) throw new IllegalArgumentException("Manager cannot be null!");
+        this.manager = manager;
+
+        this.eventBus = eventBus;
 
         this.frame = new JFrame(WINDOW_TITLE);
         this.initializeFrame();
@@ -44,95 +53,60 @@ public class DefaultPlayerScreen implements PlayerScreen {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        frame.setMinimumSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 
         // Divides the window in NORTH, SOUTH, EAST, WEST and CENTER.
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
-
-        JPanel buttonPanel = createButtonPanel();
+        //frame.setLayout(new GridBagLayout());
 
         // Adding components to the frame
-        frame.add(buttonPanel, BorderLayout.CENTER);
+//        JPanel centerPanel = new JPanel(new GridBagLayout());
+//
+//        JPanel mainContainer = new JPanel();
+//        mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
+//        mainContainer.setMaximumSize(new Dimension(1000, 1000));
+//
+//        PlayerControlsComponent controlsComponent = new PlayerControlsComponent(playerController);
+//        PlayerFooterComponent footerComponent = new PlayerFooterComponent(playerController);
+//
+//        controlsComponent.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        footerComponent.setAlignmentX(Component.CENTER_ALIGNMENT);
+//
+//        mainContainer.add(controlsComponent);
+//        mainContainer.add(Box.createVerticalStrut(8));
+//        mainContainer.add(footerComponent);
+//
+//        mainContainer.setBackground(Color.darkGray);
+//
+//        centerPanel.add(mainContainer);
+//        frame.add(centerPanel, BorderLayout.CENTER);
 
         // Centering the frame
-        frame.setLocationRelativeTo(null);
+//        frame.setLocationRelativeTo(null);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventBus.publish(new PlayerClosedEvent());
+            }
+        });
 
     }
 
+    @Override
     public void startFrame() {
-        this.frame.setVisible(true);
+        //this.frame.setVisible(true);
+        this.manager.startFrame(this.playerController);
     }
 
+    @Override
     public void closeFrame() {
-        this.frame.setVisible(false);
+        //this.frame.setVisible(false);
+        this.manager.hideFrame();
     }
 
+    @Override
     public void loadMusic(MusicModel musicModel) {
-
         this.playerController.handleLoadAction(musicModel);
-    }
-
-    private JPanel createButtonPanel() {
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-
-        panel.setBorder(BorderFactory.createEmptyBorder(
-                BUTTON_PANEL_TGAP,
-                BUTTON_PANEL_LGAP,
-                BUTTON_PANEL_BGAP,
-                BUTTON_PANEL_RGAP
-        ));
-
-        JButton playButton = createPlayButton();
-        JButton pauseButton = createPauseButton();
-        JButton rewindButton = createRewindButton();
-
-        panel.add(playButton);
-        panel.add(pauseButton);
-        panel.add(rewindButton);
-
-        return panel;
-    }
-
-    private JButton createPlayButton() {
-
-        JButton playButton = new JButton(PLAY_BUTTON_TEXT);
-
-        playButton.addActionListener(event -> {
-
-            if (event.getSource() != playButton) return;
-
-            this.playerController.handlePlayAction();
-        });
-
-        return playButton;
-    }
-
-    private JButton createPauseButton() {
-
-        JButton pauseButton = new JButton(PAUSE_BUTTON_TEXT);
-
-        pauseButton.addActionListener(event -> {
-
-            if (event.getSource() != pauseButton) return;
-
-            this.playerController.handlePauseAction();
-        });
-
-        return pauseButton;
-    }
-
-    private JButton createRewindButton() {
-
-        JButton rewindButton = new JButton(REWIND_BUTTON_TEXT);
-
-        rewindButton.addActionListener(event -> {
-
-            if (event.getSource() != rewindButton) return;
-
-            this.playerController.handleRewindAction();
-        });
-
-        return rewindButton;
     }
 }
