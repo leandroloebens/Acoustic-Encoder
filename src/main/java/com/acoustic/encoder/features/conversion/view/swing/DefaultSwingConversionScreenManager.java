@@ -19,8 +19,8 @@ import java.io.IOException;
 public class DefaultSwingConversionScreenManager implements ConversionScreenManager {
 
     private final static String WINDOW_TITLE = "Conversor: Texto para Som";
-    private final static int WINDOW_MIN_HEIGHT = 700;
-    private final static int WINDOW_MIN_WIDTH = 1000;
+    private final static int WINDOW_MIN_HEIGHT = 650;
+    private final static int WINDOW_MIN_WIDTH = 850;
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
     private final SwingConversionScreenAssembler assembler;
