@@ -47,14 +47,14 @@ public class DefaultConversionController implements ConversionController {
     @Override
     public void handleSaveTextAction(String textInput, File file) throws IOException {
 
-        this.fileService.saveTextToFile(textInput, file);
+        this.fileService.saveToTextFile(textInput, file);
 
     }
 
     @Override
     public String handleLoadTextAction(File file) throws IOException {
 
-        return this.fileService.loadTextFromFile(file);
+        return this.fileService.loadFromTextFile(file);
 
     }
 

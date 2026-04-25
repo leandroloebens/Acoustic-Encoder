@@ -2,14 +2,15 @@ package com.acoustic.encoder.features.conversion.view.swing;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
-import com.acoustic.encoder.features.conversion.event.ConversionClosedEvent;
+import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionScreenManager;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicConfig;
-import com.acoustic.encoder.shared.view.swing.SwingFrame;
+import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -18,8 +19,8 @@ import java.io.IOException;
 public class DefaultSwingConversionScreenManager implements ConversionScreenManager {
 
     private final static String WINDOW_TITLE = "Conversor: Texto para Som";
-    private final static int WINDOW_HEIGHT = 400;
-    private final static int WINDOW_WIDTH = 500;
+    private final static int WINDOW_MIN_HEIGHT = 700;
+    private final static int WINDOW_MIN_WIDTH = 1000;
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
     private final SwingConversionScreenAssembler assembler;
@@ -45,10 +46,17 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
 
     @Override
     public void startFrame(ConversionController conversionController) {
+        Dimension windowInitialSize =
+            new Dimension(
+                (int)(WINDOW_MIN_WIDTH * SwingUtils.getScreenScaleRatio()),
+                (int)(WINDOW_MIN_HEIGHT * SwingUtils.getScreenScaleRatio())
+            );
+
+        System.out.println("Starting conversion screen with initial size: " + windowInitialSize);
+
         frame = assembler.assembleFrame(
             WINDOW_TITLE,
-            WINDOW_WIDTH,
-            WINDOW_HEIGHT,
+            windowInitialSize,
             FRAME_EXIT_OPERATION,
             new EventHandler(conversionController)
         );
@@ -56,7 +64,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                eventBus.publish(new ConversionClosedEvent());
+                eventBus.publish(new ConversionScreenClosedEvent());
             }
         });
 
@@ -80,7 +88,15 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
         this.defaultBpm = parameters.bpm();
     }
 
-    private class EventHandler implements SwingEventHandler {
+    private class EventHandler implements SwingConversionEventHandler {
+        private static final String ONLOAD_FILE_EXTENSION_FILTER = "txt";
+        private static final String ONLOAD_FILTER_DESCRIPTION = "Text Files (*.txt)";
+        private static final String ONLOAD_DIALOG_TITLE = "Open";
+
+        private static final String ONSAVE_FILE_EXTENSION_FILTER = "txt";
+        private static final String ONSAVE_FILTER_DESCRIPTION = "Text Files (*.txt)";
+        private static final String ONSAVE_DIALOG_TITLE = "Save as";
+
         private final ConversionController controller;
 
         public EventHandler(ConversionController controller) {
@@ -103,15 +119,15 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
 
         @Override
         public void onLoad() {
-            JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files (*.txt)", "txt");
-            fileChooser.setFileFilter(filter);
-            fileChooser.setDialogTitle("Open");
+            File fileToLoad = SwingUtils.getFileFromChooser(
+                    SwingUtils.LOAD_FILE_OPERATION,
+                    frame,
+                    ONLOAD_FILE_EXTENSION_FILTER,
+                    ONLOAD_FILTER_DESCRIPTION,
+                    ONLOAD_DIALOG_TITLE
+            );
 
-            int userSelection = fileChooser.showOpenDialog(frame);
-
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                File fileToLoad = fileChooser.getSelectedFile();
+            if (fileToLoad != null) {
 
                 try {
                     String text = controller.handleLoadTextAction(fileToLoad);
@@ -120,20 +136,21 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
                 catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame, "Error loading file: " + ex.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
                 }
+
             }
         }
 
         @Override
         public void onSave() {
-            JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files (*.txt)", "txt");
-            fileChooser.setFileFilter(filter);
-            fileChooser.setDialogTitle("Save as");
+            File fileToSave = SwingUtils.getFileFromChooser(
+                    SwingUtils.SAVE_FILE_OPERATION,
+                    frame,
+                    ONSAVE_FILE_EXTENSION_FILTER,
+                    ONSAVE_FILTER_DESCRIPTION,
+                    ONSAVE_DIALOG_TITLE
+            );
 
-            int userSelection = fileChooser.showSaveDialog(frame);
-
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                File fileToSave = fileChooser.getSelectedFile();
+            if (fileToSave != null) {
 
                 try {
                     controller.handleSaveTextAction(assembler.getInputText(), fileToSave);
@@ -142,6 +159,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
                 catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame, "Error saving file: " + ex.getMessage());
                 }
+
             }
         }
 

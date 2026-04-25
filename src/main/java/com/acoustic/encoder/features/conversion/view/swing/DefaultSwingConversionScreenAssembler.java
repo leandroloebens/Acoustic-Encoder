@@ -2,11 +2,10 @@ package com.acoustic.encoder.features.conversion.view.swing;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionScreenComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
-import com.acoustic.encoder.shared.view.swing.*;
+import com.acoustic.encoder.shared.view.swing.components.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class DefaultSwingConversionScreenAssembler implements SwingConversionScreenAssembler {
 
@@ -40,41 +39,35 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
     @Override
     public SwingFrame assembleFrame(
             String title,
-            int windowWidth,
-            int windowHeight,
+            Dimension windowInitialSize,
             int frameExitOperation,
-            SwingEventHandler handler
+            SwingConversionEventHandler handler
     ) {
 
-        SwingFrame frame = new SwingFrame(title, windowWidth, windowHeight, frameExitOperation);
+        SwingFrame frame = new SwingFrame(title, windowInitialSize, frameExitOperation);
+
+        frame.setMinimumSize(windowInitialSize);
 
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
-        setSlidersToParameters(
-                handler,
-                volumePanel,
-                octavePanel,
-                instrumentPanel,
-                bpmPanel
-        );
+        SwingPanel buttonsPanel = createButtonsPanel(frame, handler);
+        SwingPanel textAreaPanel = createTextAreaPanel();
 
-        SwingPanel configPanel = new SwingPanel(new GridLayout(4, 1));
-        configPanel.add(volumePanel);
-        configPanel.add(octavePanel);
-        configPanel.add(instrumentPanel);
-        configPanel.add(bpmPanel);
+        SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
+        conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
+        conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        // frame.add(instructionLabel, BorderLayout.NORTH);
-        frame.add(scrollPane, BorderLayout.CENTER);
-        frame.add(converterButton, BorderLayout.SOUTH);
-        frame.add(saveButton, BorderLayout.WEST);
-        frame.add(loadButton, BorderLayout.NORTH);
+        linkSlidersToParameters(handler);
+
+        SwingPanel configPanel = createConfigPanel(buttonsPanel.getHeight());
+        configPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        configPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        frame.add(conversionPanel, BorderLayout.CENTER);
         frame.add(configPanel, BorderLayout.EAST);
 
         // Centering the frame
         frame.setLocationRelativeTo(null);
-
-        setButtonsActions(handler, frame);
 
         return frame;
     }
@@ -85,6 +78,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         SwingTextArea textArea = (SwingTextArea) this.scrollPane.getComponent();
 
         return textArea.getText();
+
     }
 
     @Override
@@ -94,18 +88,64 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
     }
 
     @Override
-    public int getVolumeSliderValue() { return volumePanel.getSlider().getValue(); }
+    public int getVolumeSliderValue() {
+        return volumePanel.getSlider().getValue();
+    }
 
     @Override
-    public int getInstrumentSliderValue() { return instrumentPanel.getSlider().getValue(); }
+    public int getInstrumentSliderValue() {
+        return instrumentPanel.getSlider().getValue();
+    }
 
     @Override
-    public int getOctaveSliderValue() { return octavePanel.getSlider().getValue(); }
+    public int getOctaveSliderValue() {
+        return octavePanel.getSlider().getValue();
+    }
 
     @Override
-    public int getBpmSliderValue() { return bpmPanel.getSlider().getValue(); }
+    public int getBpmSliderValue() {
+        return bpmPanel.getSlider().getValue();
+    }
 
-    private void setButtonsActions(SwingEventHandler handler, SwingFrame frame) {
+    private SwingPanel createTextAreaPanel() {
+        SwingPanel textAreaPanel = new SwingPanel();
+        textAreaPanel.setLayout(new BoxLayout(textAreaPanel, BoxLayout.Y_AXIS));
+
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        textAreaPanel.add(instructionLabel);
+        textAreaPanel.add(Box.createVerticalStrut(10));
+        textAreaPanel.add(scrollPane);
+
+        return textAreaPanel;
+    }
+
+    private SwingPanel createButtonsPanel(SwingFrame frame, SwingConversionEventHandler handler) {
+        setButtonsActions(handler, frame);
+
+        SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        fileButtonsPanel.add(loadButton);
+        fileButtonsPanel.add(saveButton);
+
+        fileButtonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        converterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        SwingPanel buttonsPanel = new SwingPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+
+        buttonsPanel.add(fileButtonsPanel);
+
+        buttonsPanel.add(Box.createVerticalStrut(10));
+
+        buttonsPanel.add(converterButton);
+
+        buttonsPanel.add(Box.createVerticalStrut(10));
+
+        return buttonsPanel;
+    }
+
+    private void setButtonsActions(SwingConversionEventHandler handler, SwingFrame frame) {
         converterButton.addActionListener(event -> {
             if (event.getSource() != converterButton) return;
 
@@ -127,7 +167,6 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         });
 
 
-
         saveButton.addActionListener(event -> {
             if (event.getSource() != saveButton) return;
 
@@ -143,55 +182,59 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         });
     }
 
-    private void setSlidersToParameters(
-            SwingEventHandler handler,
-            ParameterPanel volumePanel,
-            ParameterPanel octavePanel,
-            ParameterPanel instrumentPanel,
-            ParameterPanel bpmPanel
-            ) {
+    private SwingPanel createConfigPanel(int bottomPadding) {
+        SwingPanel configPanel = new SwingPanel();
 
-        setSliderToVolume(volumePanel, handler);
-        setSliderToOctave(octavePanel, handler);
-        setSliderToInstrument(instrumentPanel, handler);
-        setSliderToBpm(bpmPanel, handler);
+        configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.Y_AXIS));
+
+        configPanel.add(Box.createVerticalGlue());
+        configPanel.add(volumePanel);
+        configPanel.add(Box.createVerticalStrut(55));
+        configPanel.add(octavePanel);
+        configPanel.add(Box.createVerticalStrut(55));
+        configPanel.add(bpmPanel);
+        configPanel.add(Box.createVerticalStrut(55));
+        configPanel.add(instrumentPanel);
+        configPanel.add(Box.createVerticalStrut(bottomPadding));
+        configPanel.add(Box.createVerticalGlue());
+
+        int padding = 20;
+        configPanel.setBorder(
+                BorderFactory.createEmptyBorder(padding, padding, padding, padding + BORDERLAYOUT_HGAP)
+        );
+
+        // Create a wrapper panel with GridBagLayout for centering
+        SwingPanel wrapper = new SwingPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        wrapper.add(configPanel, gbc);
+
+        return wrapper;
+    }
+
+    private void linkSlidersToParameters(SwingConversionEventHandler handler) {
+
+        setSliderAction(volumePanel, handler::onVolumeChange);
+        setSliderAction(octavePanel, handler::onOctaveChange);
+        setSliderAction(instrumentPanel, handler::onInstrumentChange);
+        setSliderAction(bpmPanel, handler::onBpmChange);
 
     }
 
-    private void setSliderToVolume(ParameterPanel panel, SwingEventHandler handler) {
-
+    private void setSliderAction(ParameterPanel panel, Runnable action) {
         panel.getSlider().addChangeListener(e -> {
-            panel.getLabel().setText("Volume: " + panel.getSlider().getValue());
-            handler.onVolumeChange();
+
+            int value = panel.getSlider().getValue();
+            SwingSlider slider = panel.getSlider();
+
+            if (value < slider.getMinToShow()) slider.setValue(slider.getMinToShow());
+            else if (value > slider.getMaxToShow()) slider.setValue(slider.getMaxToShow());
+
+            panel.updateLabel();
+            action.run();
+
         });
-
-    }
-
-    private void setSliderToOctave(ParameterPanel panel, SwingEventHandler handler) {
-
-        panel.getSlider().addChangeListener(e -> {
-            panel.getLabel().setText("Octave: " + panel.getSlider().getValue());
-            handler.onOctaveChange();
-        });
-
-    }
-
-    private void setSliderToInstrument(ParameterPanel panel, SwingEventHandler handler) {
-
-        panel.getSlider().addChangeListener(e -> {
-            panel.getLabel().setText("Instrument: " + panel.getSlider().getValue());
-            handler.onInstrumentChange();
-        });
-
-    }
-
-    private void setSliderToBpm(ParameterPanel panel, SwingEventHandler handler) {
-
-        panel.getSlider().addChangeListener(e -> {
-            panel.getLabel().setText("BPM: " + panel.getSlider().getValue());
-            handler.onBpmChange();
-        });
-
     }
 }
-

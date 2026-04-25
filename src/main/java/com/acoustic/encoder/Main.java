@@ -2,7 +2,6 @@ package com.acoustic.encoder;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.service.DefaultFIleService;
-import com.acoustic.encoder.features.conversion.view.swing.components.config.SwingConversionConfig;
 import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
 import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionScreenAssembler;
@@ -20,7 +19,6 @@ import com.acoustic.encoder.shared.navigation.listener.NavigationConversionCompl
 import com.acoustic.encoder.shared.view.ScreenConfigLoader;
 
 import javax.sound.midi.MidiSystem;
-import javax.swing.*;
 
 public class Main {
 

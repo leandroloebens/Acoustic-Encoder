@@ -1,7 +1,6 @@
 package com.acoustic.encoder.features.player.audio.midi;
 
 import com.acoustic.encoder.features.player.model.MusicalNote;
-import com.acoustic.encoder.features.player.model.Pitch;
 import com.acoustic.encoder.shared.model.*;
 
 import javax.sound.midi.*;

@@ -5,8 +5,8 @@ import java.io.IOException;
 
 public interface FileService {
 
-    void saveTextToFile(String text, File file) throws IOException;
+    void saveToTextFile(String text, File file) throws IOException;
 
-    String loadTextFromFile(File file) throws IOException;
+    String loadFromTextFile(File file) throws IOException;
 
 }

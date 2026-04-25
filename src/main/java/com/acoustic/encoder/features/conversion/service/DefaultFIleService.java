@@ -1,6 +1,5 @@
 package com.acoustic.encoder.features.conversion.service;
 
-import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +12,7 @@ public class DefaultFIleService implements FileService {
     public DefaultFIleService() {}
 
     @Override
-    public void saveTextToFile(String text, File file) throws IOException {
+    public void saveToTextFile(String text, File file) throws IOException {
 
         if (!file.getName().toLowerCase().endsWith(".txt")) {
             file = new File(file.getParentFile(), file.getName() + ".txt");
@@ -26,9 +25,13 @@ public class DefaultFIleService implements FileService {
     }
 
     @Override
-    public String loadTextFromFile(File file) throws IOException {
+    public String loadFromTextFile(File file) throws IOException {
 
-        return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+        if (!file.getName().toLowerCase().endsWith(".txt")) {
+            file = new File(file.getParentFile(), file.getName() + ".txt");
+        }
+
+        return Files.readString(file.toPath());
 
     }
 
