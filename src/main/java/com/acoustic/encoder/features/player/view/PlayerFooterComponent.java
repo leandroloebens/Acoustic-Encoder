@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.player.view;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerEventHandler;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class PlayerFooterComponent extends JPanel {
     private final JProgressBar progressBar;
     private final JButton saveButton;
 
-    private SwingPlayerEventHandler handler;
+    private SwingPlayerActionHandler handler;
 
     public PlayerFooterComponent() {
         this.saveButton = new JButton(SAVE_BUTTON_TEXT);
@@ -40,13 +40,13 @@ public class PlayerFooterComponent extends JPanel {
         updateProgress(10);
     }
 
-    public void setEventHandler(SwingPlayerEventHandler handler) {
+    public void setEventHandler(SwingPlayerActionHandler handler) {
         this.handler = handler;
 
         registerListeners(handler);
     }
 
-    private void registerListeners(SwingPlayerEventHandler handler) {
+    private void registerListeners(SwingPlayerActionHandler handler) {
         saveButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             int option = fileChooser.showSaveDialog(this);
@@ -54,11 +54,7 @@ public class PlayerFooterComponent extends JPanel {
             if (option == JFileChooser.APPROVE_OPTION) {
                 File fileToSave = fileChooser.getSelectedFile();
 
-//                try {
-//                    //handler.onSave(fileToSave);
-//                } catch (MusicExportException ex) {
-//                    throw new RuntimeException(ex);
-//                }
+                handler.onSave(fileToSave);
             }
         });
     }

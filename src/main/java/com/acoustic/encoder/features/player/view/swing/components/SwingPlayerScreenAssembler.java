@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.player.view.swing.components;
 
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerEventHandler;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
 import com.acoustic.encoder.shared.view.swing.SwingFrame;
 
 public interface SwingPlayerScreenAssembler {
@@ -9,6 +9,6 @@ public interface SwingPlayerScreenAssembler {
             int windowWidth,
             int windowHeight,
             int frameExitOperation,
-            SwingPlayerEventHandler handler
+            SwingPlayerActionHandler handler
     );
 }

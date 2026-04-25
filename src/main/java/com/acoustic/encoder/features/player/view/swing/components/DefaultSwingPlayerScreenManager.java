@@ -2,14 +2,16 @@ package com.acoustic.encoder.features.player.view.swing.components;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
+import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.view.PlayerScreenManager;
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerEventHandler;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.SwingFrame;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
 
@@ -41,7 +43,7 @@ public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
                 WINDOW_WIDTH,
                 WINDOW_HEIGHT,
                 FRAME_EXIT_OPERATION,
-                new EventHandler(controller)
+                new PlayerActionHandler(controller)
         );
 
         frame.addWindowListener(new WindowAdapter() {
@@ -62,10 +64,10 @@ public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
 
     // void destroyFrame();
 
-    private class EventHandler implements SwingPlayerEventHandler {
+    private class PlayerActionHandler implements SwingPlayerActionHandler {
         private final AudioPlayerController controller;
 
-        public EventHandler(AudioPlayerController controller) {
+        public PlayerActionHandler(AudioPlayerController controller) {
             this.controller = controller;
         }
 
@@ -85,8 +87,12 @@ public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
         }
 
         @Override
-        public void onSave() {
-            controller.handleSaveAction();
+        public void onSave(File file) {
+            try {
+                controller.handleSaveAction(file);
+            } catch (MusicExportException ex) {
+                    throw new RuntimeException(ex);
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.view.PlayerControlsComponent;
 import com.acoustic.encoder.features.player.view.PlayerFooterComponent;
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerEventHandler;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
 import com.acoustic.encoder.features.player.view.swing.components.dto.PlayerScreenComponentsWrapper;
 import com.acoustic.encoder.shared.view.swing.*;
 
@@ -32,7 +32,7 @@ public class DefaultSwingPlayerScreenAssembler implements SwingPlayerScreenAssem
             int windowWidth,
             int windowHeight,
             int frameExitOperation,
-            SwingPlayerEventHandler handler
+            SwingPlayerActionHandler handler
     ) {
 
         SwingFrame frame = new SwingFrame(title, windowWidth, windowHeight, frameExitOperation);

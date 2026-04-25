@@ -1,6 +1,8 @@
 package com.acoustic.encoder.features.player.view.swing;
 
-public interface SwingPlayerEventHandler {
+import java.io.File;
+
+public interface SwingPlayerActionHandler {
 
     void onPlay();
 
@@ -8,5 +10,5 @@ public interface SwingPlayerEventHandler {
 
     void onRewind();
 
-    void onSave();
+    void onSave(File file);
 }

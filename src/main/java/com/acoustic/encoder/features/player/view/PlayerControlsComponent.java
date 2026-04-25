@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.player.view;
 
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
 import com.acoustic.encoder.features.player.view.swing.SwingPlayerEventHandler;
 
 import javax.swing.*;
@@ -39,7 +40,7 @@ public class PlayerControlsComponent extends JPanel {
         add(rewindButton);
     }
 
-    public void setEventHandler(SwingPlayerEventHandler handler) {
+    public void setEventHandler(SwingPlayerActionHandler handler) {
         this.handler = handler;
 
         registerListeners(handler);
