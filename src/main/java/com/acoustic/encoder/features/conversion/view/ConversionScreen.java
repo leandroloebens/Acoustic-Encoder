@@ -6,5 +6,7 @@ public interface ConversionScreen {
 
     void showFrame();
 
+    void hideFrame();
+
     void closeFrame();
 }

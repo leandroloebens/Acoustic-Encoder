@@ -1,6 +1,6 @@
 package com.acoustic.encoder.shared.navigation;
 
-import com.acoustic.encoder.features.conversion.event.ConversionClosedEvent;
+import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
@@ -27,7 +27,7 @@ public class DefaultAppNavigator implements AppNavigator {
         this.eventBus = eventBus;
 
         eventBus.subscribe(PlayerClosedEvent.class, event -> displayConversionScreen());
-        eventBus.subscribe(ConversionClosedEvent.class, event -> closeApp());
+        eventBus.subscribe(ConversionScreenClosedEvent.class, event -> closeApp());
     }
 
     @Override

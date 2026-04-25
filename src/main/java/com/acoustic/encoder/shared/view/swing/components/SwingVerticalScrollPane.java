@@ -1,4 +1,4 @@
-package com.acoustic.encoder.shared.view.swing;
+package com.acoustic.encoder.shared.view.swing.components;
 
 import javax.swing.*;
 import javax.swing.border.Border;

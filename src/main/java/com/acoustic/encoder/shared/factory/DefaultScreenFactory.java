@@ -1,5 +1,6 @@
 package com.acoustic.encoder.shared.factory;
 
+import com.acoustic.encoder.features.conversion.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.conversion.view.ConversionScreenManager;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
@@ -19,6 +20,8 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     private final ConversionService conversionService;
 
+    private final FileService fileService;
+
     private final ConversionScreenManager conversionScreenManager;
 
     private final AudioPlayerService audioPlayerService;
@@ -29,12 +32,14 @@ public class DefaultScreenFactory implements ScreenFactory  {
     public DefaultScreenFactory(
             EventBus eventBus,
             ConversionService conversionService,
+            FileService fileService,
             ConversionScreenManager conversionScreenManager,
             AudioPlayerService audioPlayerService,
             PlayerScreenManager playerScreenManager
     ) {
 
         this.conversionService = conversionService;
+        this.fileService = fileService;
         this.conversionScreenManager = conversionScreenManager;
         this.audioPlayerService = audioPlayerService;
         this.playerScreenManager = playerScreenManager;
@@ -45,7 +50,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
     public ConversionScreen createConversionScreen() {
 
         return new DefaultConversionScreen(
-                new DefaultConversionController(this.conversionService),
+                new DefaultConversionController(this.conversionService, this.fileService),
                 conversionScreenManager
         );
     }

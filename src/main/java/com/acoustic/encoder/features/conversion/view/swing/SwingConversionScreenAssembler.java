@@ -1,18 +1,21 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
-import com.acoustic.encoder.shared.view.swing.SwingFrame;
+import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
+
+import java.awt.*;
 
 public interface SwingConversionScreenAssembler {
 
     SwingFrame assembleFrame(
             String title,
-            int windowWidth,
-            int windowHeight,
+            Dimension windowInitialSize,
             int frameExitOperation,
             SwingConversionEventHandler handler
     );
 
     String getInputText();
+
+    void setInputText(String text);
 
     int getVolumeSliderValue();
 

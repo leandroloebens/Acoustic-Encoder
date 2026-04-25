@@ -1,5 +1,7 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.config;
 
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
+
 import java.util.HashMap;
 
 public class SwingConversionConfig {
@@ -25,6 +27,10 @@ public class SwingConversionConfig {
         return Integer.parseInt(configMap.get(key));
     }
 
+    public int getScaledInt(String key) {
+        return (int)(getFloat(key) * SwingUtils.getScreenScaleRatio());
+    }
+
     public boolean getBoolean(String key) {
         if (key == null) throw new IllegalArgumentException("Key cannot be null!");
         if (!configMap.containsKey(key)) throw new IllegalArgumentException("Key not found!");
@@ -35,6 +41,10 @@ public class SwingConversionConfig {
         if (key == null) throw new IllegalArgumentException("Key cannot be null!");
         if (!configMap.containsKey(key)) throw new IllegalArgumentException("Key not found!");
         return Float.parseFloat(configMap.get(key));
+    }
+
+    public float getTweakedFloat(String key) {
+        return getFloat(key) * SwingUtils.getScreenScaleRatio();
     }
 
 }

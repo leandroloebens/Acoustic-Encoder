@@ -59,7 +59,6 @@ public class ParserConfigLoader {
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to load properties");
-
         }
 
         return configMap;

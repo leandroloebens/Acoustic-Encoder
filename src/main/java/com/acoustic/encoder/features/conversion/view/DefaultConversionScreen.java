@@ -46,9 +46,16 @@ public class DefaultConversionScreen implements ConversionScreen {
     }
 
     @Override
-    public void closeFrame() {
+    public void hideFrame() {
 
         this.manager.hideFrame();
+
+    }
+
+    @Override
+    public void closeFrame() {
+
+        this.manager.disposeFrame();
 
     }
 }

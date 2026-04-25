@@ -1,7 +1,7 @@
 package com.acoustic.encoder;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
-import com.acoustic.encoder.features.conversion.view.swing.components.config.SwingConversionConfig;
+import com.acoustic.encoder.features.conversion.service.DefaultFIleService;
 import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
 import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionScreenAssembler;
@@ -38,6 +38,10 @@ public class Main {
         var conversionService = new DefaultConversionService(instructionParser, eventBus);
 
 
+        // File Service
+        var fileService = new DefaultFIleService();
+
+
         // Conversion View
         var screenConfigLoader = new ScreenConfigLoader(ScreenConfigLoader.CONVERSION_SCREEN_CONFIG_FILE);
         var conversionScreenComponentsFactory = new SwingConversionScreenComponentsFactory(screenConfigLoader.loadConfigMap());
@@ -65,6 +69,7 @@ public class Main {
         var screenFactory = new DefaultScreenFactory(
                 eventBus,
                 conversionService,
+                fileService,
                 conversionScreenManager,
                 audioPlayerService,
                 playerScreenManager

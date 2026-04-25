@@ -4,6 +4,10 @@ public interface SwingConversionEventHandler {
 
     void onConvert();
 
+    void onSave();
+
+    void onLoad();
+
     void onVolumeChange();
 
     void onOctaveChange();

@@ -11,8 +11,8 @@ public interface ConversionScreenManager {
 
     void hideFrame();
 
-    void setInitialDefaultParameters(MusicConfig parameters);
+    void disposeFrame();
 
-    // void destroyFrame();
+    void setInitialDefaultParameters(MusicConfig parameters);
 
 }
