@@ -12,6 +12,11 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
     private final static int BORDERLAYOUT_HGAP = 10;
     private final static int BORDERLAYOUT_WGAP = 10;
 
+    private final static int BUTTONS_VGAP = 10;
+
+    private final static int PARAMETERS_VGAP = 55;
+    private final static int PARAMETERS_BORDER_PADDING = 20;
+
     private final static String EMPTY_INPUT_WARNING = "Please enter some text first!";
 
     private final SwingButton converterButton;
@@ -136,11 +141,11 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
 
         buttonsPanel.add(fileButtonsPanel);
 
-        buttonsPanel.add(Box.createVerticalStrut(10));
+        buttonsPanel.add(Box.createVerticalStrut(BUTTONS_VGAP));
 
         buttonsPanel.add(converterButton);
 
-        buttonsPanel.add(Box.createVerticalStrut(10));
+        buttonsPanel.add(Box.createVerticalStrut(BUTTONS_VGAP));
 
         return buttonsPanel;
     }
@@ -189,18 +194,21 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
 
         configPanel.add(Box.createVerticalGlue());
         configPanel.add(volumePanel);
-        configPanel.add(Box.createVerticalStrut(55));
+        configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
         configPanel.add(octavePanel);
-        configPanel.add(Box.createVerticalStrut(55));
+        configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
         configPanel.add(bpmPanel);
-        configPanel.add(Box.createVerticalStrut(55));
+        configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
         configPanel.add(instrumentPanel);
         configPanel.add(Box.createVerticalStrut(bottomPadding));
         configPanel.add(Box.createVerticalGlue());
 
-        int padding = 20;
         configPanel.setBorder(
-                BorderFactory.createEmptyBorder(padding, padding, padding, padding + BORDERLAYOUT_HGAP)
+                BorderFactory.createEmptyBorder(
+                        PARAMETERS_BORDER_PADDING,
+                        PARAMETERS_BORDER_PADDING,
+                        PARAMETERS_BORDER_PADDING,
+                        PARAMETERS_BORDER_PADDING + BORDERLAYOUT_HGAP)
         );
 
         // Create a wrapper panel with GridBagLayout for centering

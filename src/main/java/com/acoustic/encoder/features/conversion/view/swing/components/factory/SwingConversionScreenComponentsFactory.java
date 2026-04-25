@@ -31,7 +31,7 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
         SwingButton loadTextButton = createLoadButton();
 
         SwingTextArea textArea =
-                new SwingTextArea(null, config.getTweakedInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"), null);
+                new SwingTextArea(null, config.getScaledInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"), null);
         Border scrollPaneBorder = BorderFactory.createEmptyBorder(
                 config.getInt("MAIN_SCROLL_TEXTAREA_TGAP"),
                 config.getInt("MAIN_SCROLL_TEXTAREA_LGAP"),
@@ -49,7 +49,7 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
         SwingLabel instructionLabel = new SwingLabel(
                 config.getString("INSTRUCTION_LABEL_TEXT"),
                 null,
-                config.getTweakedInt("INSTRUCTION_LABEL_FONT_SIZE"),
+                config.getScaledInt("INSTRUCTION_LABEL_FONT_SIZE"),
                 instructionLabelBorder
         );
 
@@ -83,7 +83,7 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
         SwingButton conversionButton = new SwingButton(
                 config.getString("CONVERSION_BUTTON_TEXT"),
                 null,
-                config.getTweakedInt("CONVERSION_BUTTON_FONT_SIZE"),
+                config.getScaledInt("CONVERSION_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
@@ -100,7 +100,7 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
         SwingButton saveButton = new SwingButton(
                 config.getString("SAVE_TEXT_BUTTON_TEXT"),
                 null,
-                config.getTweakedInt("SAVE_TEXT_BUTTON_FONT_SIZE"),
+                config.getScaledInt("SAVE_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
@@ -117,7 +117,7 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
         SwingButton loadButton = new SwingButton(
                 config.getString("LOAD_TEXT_BUTTON_TEXT"),
                 null,
-                config.getTweakedInt("LOAD_TEXT_BUTTON_FONT_SIZE"),
+                config.getScaledInt("LOAD_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
@@ -134,10 +134,10 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
                 config.getInt("VOLUME_SLIDER_MAX_TO_SHOW"),
                 config.getInt("VOLUME_SLIDER_VALUE"),
                 config.getInt("VOLUME_SLIDER_TICK_SPACING"),
-                config.getTweakedInt("VOLUME_SLIDER_LABEL_FONT_SIZE")
+                config.getScaledInt("VOLUME_SLIDER_LABEL_FONT_SIZE")
         );
 
-        SwingLabel volumeLabel = new SwingLabel(config.getTweakedInt("VOLUME_LABEL_FONT_SIZE"));
+        SwingLabel volumeLabel = new SwingLabel(config.getScaledInt("VOLUME_LABEL_FONT_SIZE"));
 
         return new ParameterPanel(volumeSlider, volumeLabel, config.getString("VOLUME_LABEL_TEXT"));
     }
@@ -151,10 +151,10 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
                 config.getInt("OCTAVE_SLIDER_MAX_TO_SHOW"),
                 config.getInt("OCTAVE_SLIDER_VALUE"),
                 config.getInt("OCTAVE_SLIDER_TICK_SPACING"),
-                config.getTweakedInt("OCTAVE_SLIDER_LABEL_FONT_SIZE")
+                config.getScaledInt("OCTAVE_SLIDER_LABEL_FONT_SIZE")
         );
 
-        SwingLabel octaveLabel = new SwingLabel(config.getTweakedInt("OCTAVE_LABEL_FONT_SIZE"));
+        SwingLabel octaveLabel = new SwingLabel(config.getScaledInt("OCTAVE_LABEL_FONT_SIZE"));
 
         return new ParameterPanel(octaveSlider, octaveLabel, config.getString("OCTAVE_LABEL_TEXT"));
     }
@@ -168,10 +168,10 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
                 config.getInt("INSTRUMENT_SLIDER_MAX_TO_SHOW"),
                 config.getInt("INSTRUMENT_SLIDER_VALUE"),
                 config.getInt("INSTRUMENT_SLIDER_TICK_SPACING"),
-                config.getTweakedInt("INSTRUMENT_SLIDER_LABEL_FONT_SIZE")
+                config.getScaledInt("INSTRUMENT_SLIDER_LABEL_FONT_SIZE")
         );
 
-        SwingLabel instrumentLabel = new SwingLabel(config.getTweakedInt("INSTRUMENT_LABEL_FONT_SIZE"));
+        SwingLabel instrumentLabel = new SwingLabel(config.getScaledInt("INSTRUMENT_LABEL_FONT_SIZE"));
 
         return new ParameterPanel(instrumentSlider, instrumentLabel, config.getString("INSTRUMENT_LABEL_TEXT"));
     }
@@ -185,10 +185,10 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
                 config.getInt("BPM_SLIDER_MAX_TO_SHOW"),
                 config.getInt("BPM_SLIDER_VALUE"),
                 config.getInt("BPM_SLIDER_TICK_SPACING"),
-                config.getTweakedInt("BPM_SLIDER_LABEL_FONT_SIZE")
+                config.getScaledInt("BPM_SLIDER_LABEL_FONT_SIZE")
         );
 
-        SwingLabel bpmLabel = new SwingLabel(config.getTweakedInt("BPM_LABEL_FONT_SIZE"));
+        SwingLabel bpmLabel = new SwingLabel(config.getScaledInt("BPM_LABEL_FONT_SIZE"));
 
         return new ParameterPanel(bpmSlider, bpmLabel, config.getString("BPM_LABEL_TEXT"));
     }
