@@ -43,10 +43,14 @@ public class Main {
 
 
         // Conversion View
-        var screenConfigLoader = new ScreenConfigLoader(ScreenConfigLoader.CONVERSION_SCREEN_CONFIG_FILE);
-        var conversionScreenComponentsFactory = new SwingConversionScreenComponentsFactory(screenConfigLoader.loadConfigMap());
-        var conversionScreenAssembler = new DefaultSwingConversionScreenAssembler(conversionScreenComponentsFactory.createComponents());
-        var conversionScreenManager = new DefaultSwingConversionScreenManager(conversionScreenAssembler, eventBus);
+        var screenConfigLoader =
+                new ScreenConfigLoader(ScreenConfigLoader.CONVERSION_SCREEN_CONFIG_FILE);
+        var conversionScreenComponentsFactory =
+                new SwingConversionScreenComponentsFactory(screenConfigLoader.loadConfigMap());
+        var conversionScreenAssembler =
+                new DefaultSwingConversionScreenAssembler(conversionScreenComponentsFactory.createComponents());
+        var conversionScreenManager =
+                new DefaultSwingConversionScreenManager(conversionScreenAssembler, eventBus);
 
 
         // Audio Player Service

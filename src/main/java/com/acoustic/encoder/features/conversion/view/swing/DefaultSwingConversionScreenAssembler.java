@@ -47,7 +47,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
             String title,
             Dimension windowInitialSize,
             int frameExitOperation,
-            SwingConversionEventHandler handler
+            SwingConversionActionHandler handler
     ) {
 
         SwingFrame frame = new SwingFrame(title, windowInitialSize, frameExitOperation);
@@ -129,7 +129,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         return textAreaPanel;
     }
 
-    private SwingPanel createButtonsPanel(SwingFrame frame, SwingConversionEventHandler handler) {
+    private SwingPanel createButtonsPanel(SwingFrame frame, SwingConversionActionHandler handler) {
         setButtonsActions(handler, frame);
 
         SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -153,7 +153,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         return buttonsPanel;
     }
 
-    private void setButtonsActions(SwingConversionEventHandler handler, SwingFrame frame) {
+    private void setButtonsActions(SwingConversionActionHandler handler, SwingFrame frame) {
         converterButton.addActionListener(event -> {
             if (event.getSource() != converterButton) return;
 
@@ -225,7 +225,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         return wrapper;
     }
 
-    private void linkSlidersToParameters(SwingConversionEventHandler handler) {
+    private void linkSlidersToParameters(SwingConversionActionHandler handler) {
 
         setSliderAction(volumePanel, handler::onVolumeChange);
         setSliderAction(octavePanel, handler::onOctaveChange);

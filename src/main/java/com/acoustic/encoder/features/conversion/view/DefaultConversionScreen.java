@@ -28,34 +28,37 @@ public class DefaultConversionScreen implements ConversionScreen {
                         INITIAL_BPM,
                         INITIAL_OCTAVE,
                         INITIAL_VOLUME
-                ));
-    }
+                )
+        );
 
-    @Override
-    public void startFrame() {
-
-        this.manager.startFrame(this.conversionController);
+        startWindow();
 
     }
 
     @Override
-    public void showFrame() {
+    public void showWindow() {
 
         this.manager.showFrame();
 
     }
 
     @Override
-    public void hideFrame() {
+    public void hideWindow() {
 
         this.manager.hideFrame();
 
     }
 
     @Override
-    public void closeFrame() {
+    public void closeWindow() {
 
         this.manager.disposeFrame();
+
+    }
+
+    private void startWindow() {
+
+        this.manager.startFrame(this.conversionController);
 
     }
 }
