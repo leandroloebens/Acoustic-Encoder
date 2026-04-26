@@ -50,8 +50,17 @@ public class SwingUtils {
         else
             throw new IllegalArgumentException("Operation must be either SAVE_FILE_OPERATION or LOAD_FILE_OPERATION!");
 
-        if (userSelection == JFileChooser.APPROVE_OPTION)
-            return fileChooser.getSelectedFile();
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            if (extensionFilter != null) {
+                File file = fileChooser.getSelectedFile();
+                if (!file.getName().toLowerCase().endsWith(extensionFilter)) {
+                    file = new File(file.getParentFile(), file.getName() + "." + extensionFilter);
+                }
+
+                return file;
+            }
+            else return fileChooser.getSelectedFile();
+        }
         else
             return null;
     }
