@@ -1,5 +1,7 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
+import com.acoustic.encoder.features.conversion.model.TrackParameters;
+import com.acoustic.encoder.features.conversion.dto.MusicParameters;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
@@ -47,6 +49,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
             String title,
             Dimension windowInitialSize,
             int frameExitOperation,
+            MusicParameters initialParameters,
             SwingConversionViewActionHandler handler
     ) {
 
@@ -65,7 +68,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        linkSlidersToParameters(handler);
+        linkSlidersToParameters(handler, initialParameters);
 
         SwingPanel configPanel = createConfigPanel(buttonsPanel.getHeight());
         configPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -225,7 +228,18 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         return wrapper;
     }
 
-    private void linkSlidersToParameters(SwingConversionViewActionHandler handler) {
+    private void linkSlidersToParameters(SwingConversionViewActionHandler handler, MusicParameters initialParameters) {
+
+        TrackParameters trackParameters = initialParameters.trackParameters().getFirst();
+
+        volumePanel.getSlider().setValue(trackParameters.getVolume());
+        volumePanel.updateLabel();
+        octavePanel.getSlider().setValue(trackParameters.getOctave());
+        octavePanel.updateLabel();
+        instrumentPanel.getSlider().setValue(trackParameters.getInstrument());
+        instrumentPanel.updateLabel();
+        bpmPanel.getSlider().setValue(initialParameters.bpm());
+        bpmPanel.updateLabel();
 
         setSliderAction(volumePanel, handler::onVolumeChange);
         setSliderAction(octavePanel, handler::onOctaveChange);
@@ -237,8 +251,8 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private void setSliderAction(ParameterPanel panel, Runnable action) {
         panel.getSlider().addChangeListener(e -> {
 
-            int value = panel.getSlider().getValue();
             SwingSlider slider = panel.getSlider();
+            int value = slider.getValue();
 
             if (value < slider.getMinToShow()) slider.setValue(slider.getMinToShow());
             else if (value > slider.getMaxToShow()) slider.setValue(slider.getMaxToShow());

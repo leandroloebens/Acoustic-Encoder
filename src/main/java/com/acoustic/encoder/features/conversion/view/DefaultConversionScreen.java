@@ -22,15 +22,6 @@ public class DefaultConversionScreen implements ConversionScreen {
         if (manager == null) throw new IllegalArgumentException("Manager cannot be null!");
         this.manager = manager;
 
-        this.manager.setInitialDefaultParameters(
-                new MusicConfig(
-                        INITIAL_INSTRUMENT,
-                        INITIAL_BPM,
-                        INITIAL_OCTAVE,
-                        INITIAL_VOLUME
-                )
-        );
-
         startWindow();
 
     }

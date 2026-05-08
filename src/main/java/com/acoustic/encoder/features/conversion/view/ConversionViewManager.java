@@ -13,6 +13,4 @@ public interface ConversionViewManager {
 
     void disposeFrame();
 
-    void setInitialDefaultParameters(MusicConfig parameters);
-
 }

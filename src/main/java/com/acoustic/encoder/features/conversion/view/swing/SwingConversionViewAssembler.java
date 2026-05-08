@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
+import com.acoustic.encoder.features.conversion.dto.MusicParameters;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 
 import java.awt.*;
@@ -10,6 +11,7 @@ public interface SwingConversionViewAssembler {
             String title,
             Dimension windowInitialSize,
             int frameExitOperation,
+            MusicParameters initialParameters,
             SwingConversionViewActionHandler handler
     );
 

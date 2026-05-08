@@ -1,11 +1,12 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
+import com.acoustic.encoder.features.conversion.dto.MusicParameters;
+import com.acoustic.encoder.features.conversion.model.TrackParameters;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.shared.event.EventBus;
-import com.acoustic.encoder.shared.model.MusicConfig;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
@@ -15,6 +16,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class DefaultSwingConversionViewManager implements ConversionViewManager {
 
@@ -22,6 +24,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     private final static int WINDOW_MIN_HEIGHT = 650;
     private final static int WINDOW_MIN_WIDTH = 850;
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
+    private final static int INITIAL_TRACK_INDEX = 0;
 
     private final SwingConversionViewAssembler assembler;
 
@@ -29,18 +32,27 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
     private SwingFrame frame;
 
-    private int defaultVolume;
-    private int defaultOctave;
-    private int defaultInstrument;
     private int defaultBpm;
+    private List<TrackParameters> defaultTrackParameters;
+    private int currentTrack;
 
-    public DefaultSwingConversionViewManager(SwingConversionViewAssembler assembler, EventBus eventBus) {
+    public DefaultSwingConversionViewManager(
+            SwingConversionViewAssembler assembler,
+            MusicParameters defaultTrackParameters,
+            EventBus eventBus
+    ) {
 
         if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
         this.assembler = assembler;
 
         if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
         this.eventBus = eventBus;
+
+        if (defaultTrackParameters == null) throw new IllegalArgumentException("Default parameters cannot be null!");
+        this.defaultBpm = defaultTrackParameters.bpm();
+        this.defaultTrackParameters = defaultTrackParameters.trackParameters();
+
+        this.currentTrack = INITIAL_TRACK_INDEX;
 
     }
 
@@ -58,6 +70,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
             WINDOW_TITLE,
             windowInitialSize,
             FRAME_EXIT_OPERATION,
+            new MusicParameters(defaultBpm, defaultTrackParameters),
             new ActionHandler(conversionController)
         );
 
@@ -79,14 +92,6 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     @Override
     public void disposeFrame() { frame.dispose(); }
 
-    @Override
-    public void setInitialDefaultParameters(MusicConfig parameters) {
-        this.defaultVolume = parameters.defaultVolume();
-        this.defaultOctave = parameters.defaultOctave();
-        this.defaultInstrument = parameters.defaultMidiInstrument();
-        this.defaultBpm = parameters.bpm();
-    }
-
     private class ActionHandler implements SwingConversionViewActionHandler {
         private static final String ONLOAD_FILE_EXTENSION_FILTER = "txt";
         private static final String ONLOAD_FILTER_DESCRIPTION = "Text Files (*.txt)";
@@ -104,13 +109,15 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
         @Override
         public void onConvert() {
+            TrackParameters trackZero = defaultTrackParameters.getFirst();
+
             controller.handleConvertAction(
                     new UserConversionInput(
                         assembler.getInputText(),
-                        defaultInstrument,
+                        trackZero.getInstrument(),
                         defaultBpm,
-                        defaultOctave,
-                        defaultVolume
+                        trackZero.getOctave(),
+                        trackZero.getVolume()
                     ));
 
             hideFrame();
@@ -133,7 +140,10 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
                     assembler.setInputText(text);
                 }
                 catch (IOException ex) {
-                    JOptionPane.showMessageDialog(frame, "Error loading file: " + ex.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                            frame,
+                            "Error loading file: " + ex.getMessage(),
+                            "Load Error", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
@@ -164,12 +174,12 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
         @Override
         public void onVolumeChange() {
-            defaultVolume = assembler.getVolumeSliderValue();
+            defaultTrackParameters.getFirst().setVolume(assembler.getVolumeSliderValue());
         }
 
         @Override
         public void onOctaveChange() {
-            defaultOctave = assembler.getOctaveSliderValue();
+            defaultTrackParameters.getFirst().setOctave(assembler.getOctaveSliderValue());
         }
 
         @Override
@@ -179,7 +189,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
         @Override
         public void onInstrumentChange() {
-            defaultInstrument = assembler.getInstrumentSliderValue();
+            defaultTrackParameters.getFirst().setInstrument(assembler.getInstrumentSliderValue());
         }
     }
 

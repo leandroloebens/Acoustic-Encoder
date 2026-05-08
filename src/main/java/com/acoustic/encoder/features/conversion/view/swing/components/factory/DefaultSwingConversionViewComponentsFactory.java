@@ -132,7 +132,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("VOLUME_SLIDER_MIN_TO_SHOW"),
                 config.getInt("VOLUME_SLIDER_MAX"),
                 config.getInt("VOLUME_SLIDER_MAX_TO_SHOW"),
-                config.getInt("VOLUME_SLIDER_VALUE"),
+                config.getInt("VOLUME_SLIDER_MAX_TO_SHOW")/2,
                 config.getInt("VOLUME_SLIDER_TICK_SPACING"),
                 config.getScaledInt("VOLUME_SLIDER_LABEL_FONT_SIZE")
         );
@@ -149,7 +149,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("OCTAVE_SLIDER_MIN_TO_SHOW"),
                 config.getInt("OCTAVE_SLIDER_MAX"),
                 config.getInt("OCTAVE_SLIDER_MAX_TO_SHOW"),
-                config.getInt("OCTAVE_SLIDER_VALUE"),
+                config.getInt("OCTAVE_SLIDER_MAX_TO_SHOW")/2,
                 config.getInt("OCTAVE_SLIDER_TICK_SPACING"),
                 config.getScaledInt("OCTAVE_SLIDER_LABEL_FONT_SIZE")
         );
@@ -166,7 +166,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("INSTRUMENT_SLIDER_MIN_TO_SHOW"),
                 config.getInt("INSTRUMENT_SLIDER_MAX"),
                 config.getInt("INSTRUMENT_SLIDER_MAX_TO_SHOW"),
-                config.getInt("INSTRUMENT_SLIDER_VALUE"),
+                config.getInt("INSTRUMENT_SLIDER_MAX_TO_SHOW")/2,
                 config.getInt("INSTRUMENT_SLIDER_TICK_SPACING"),
                 config.getScaledInt("INSTRUMENT_SLIDER_LABEL_FONT_SIZE")
         );
@@ -183,7 +183,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("BPM_SLIDER_MIN_TO_SHOW"),
                 config.getInt("BPM_SLIDER_MAX"),
                 config.getInt("BPM_SLIDER_MAX_TO_SHOW"),
-                config.getInt("BPM_SLIDER_VALUE"),
+                config.getInt("BPM_SLIDER_MAX_TO_SHOW")/2,
                 config.getInt("BPM_SLIDER_TICK_SPACING"),
                 config.getScaledInt("BPM_SLIDER_LABEL_FONT_SIZE")
         );
