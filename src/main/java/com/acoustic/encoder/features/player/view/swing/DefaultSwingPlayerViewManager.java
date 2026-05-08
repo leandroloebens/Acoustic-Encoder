@@ -1,10 +1,9 @@
-package com.acoustic.encoder.features.player.view.swing.components;
+package com.acoustic.encoder.features.player.view.swing;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
-import com.acoustic.encoder.features.player.view.PlayerScreenManager;
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
+import com.acoustic.encoder.features.player.view.PlayerViewManager;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
@@ -13,22 +12,21 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 
-public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
+public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
     private final static String WINDOW_TITLE = "Music Player";
     private final static int WINDOW_HEIGHT = 200;
     private final static int WINDOW_WIDTH = 400;
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
-    private final SwingPlayerScreenAssembler assembler;
+    private final SwingPlayerViewAssembler assembler;
 
     private final EventBus eventBus;
 
     private SwingFrame frame;
 
-    public DefaultSwingPlayerScreenManager(SwingPlayerScreenAssembler assembler, EventBus eventBus) {
+    public DefaultSwingPlayerViewManager(SwingPlayerViewAssembler assembler, EventBus eventBus) {
 
         if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
         this.assembler = assembler;
@@ -66,7 +64,7 @@ public class DefaultSwingPlayerScreenManager implements PlayerScreenManager {
 
     // void destroyFrame();
 
-    private class PlayerActionHandler implements SwingPlayerActionHandler {
+    private class PlayerActionHandler implements SwingPlayerViewActionHandler {
 
         private static final String ONSAVE_FILE_EXTENSION_FILTER = "mid";
         private static final String ONSAVE_FILTER_DESCRIPTION = "MID Files (*.mid)";

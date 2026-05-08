@@ -1,14 +1,14 @@
-package com.acoustic.encoder.features.conversion.view.swing.components.config;
+package com.acoustic.encoder.shared.view.swing;
 
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import java.util.HashMap;
 
-public class SwingConversionConfig {
+public class SwingViewConfigWrapper {
 
     private final HashMap<String, String> configMap;
 
-    public SwingConversionConfig(HashMap<String, String> configMap) {
+    public SwingViewConfigWrapper(HashMap<String, String> configMap) {
 
         if (configMap == null) throw new IllegalArgumentException("Config map cannot be null!");
         this.configMap = configMap;

@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.conversion.view;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.shared.model.MusicConfig;
 
-public interface ConversionScreenManager {
+public interface ConversionViewManager {
 
     void startFrame(ConversionController controller);
 

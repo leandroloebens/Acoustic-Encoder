@@ -28,11 +28,11 @@ public class DefaultPlayerScreen implements PlayerScreen {
 
     private final AudioPlayerController playerController;
 
-    private final PlayerScreenManager manager;
+    private final PlayerViewManager manager;
 
     private final EventBus eventBus;
 
-    public DefaultPlayerScreen(AudioPlayerController playerController, PlayerScreenManager manager, EventBus eventBus) {
+    public DefaultPlayerScreen(AudioPlayerController playerController, PlayerViewManager manager, EventBus eventBus) {
 
         if (playerController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.playerController = playerController;

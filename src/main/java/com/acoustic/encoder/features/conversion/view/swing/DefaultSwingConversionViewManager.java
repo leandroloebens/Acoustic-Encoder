@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.conversion.view.swing;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
-import com.acoustic.encoder.features.conversion.view.ConversionScreenManager;
+import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicConfig;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
@@ -16,14 +16,14 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class DefaultSwingConversionScreenManager implements ConversionScreenManager {
+public class DefaultSwingConversionViewManager implements ConversionViewManager {
 
     private final static String WINDOW_TITLE = "Conversor: Texto para Som";
     private final static int WINDOW_MIN_HEIGHT = 650;
     private final static int WINDOW_MIN_WIDTH = 850;
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
-    private final SwingConversionScreenAssembler assembler;
+    private final SwingConversionViewAssembler assembler;
 
     private final EventBus eventBus;
 
@@ -34,7 +34,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
     private int defaultInstrument;
     private int defaultBpm;
 
-    public DefaultSwingConversionScreenManager(SwingConversionScreenAssembler assembler, EventBus eventBus) {
+    public DefaultSwingConversionViewManager(SwingConversionViewAssembler assembler, EventBus eventBus) {
 
         if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
         this.assembler = assembler;
@@ -87,7 +87,7 @@ public class DefaultSwingConversionScreenManager implements ConversionScreenMana
         this.defaultBpm = parameters.bpm();
     }
 
-    private class ActionHandler implements SwingConversionActionHandler {
+    private class ActionHandler implements SwingConversionViewActionHandler {
         private static final String ONLOAD_FILE_EXTENSION_FILTER = "txt";
         private static final String ONLOAD_FILTER_DESCRIPTION = "Text Files (*.txt)";
         private static final String ONLOAD_DIALOG_TITLE = "Open";

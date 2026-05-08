@@ -16,6 +16,21 @@ public class SwingUtils {
 
     private static final int DEFAULT_SCREEN_WIDTH = 1920;
 
+    private static final String INVALID_FILE_OPERATION_MSG =
+            "Operation must be either SAVE_FILE_OPERATION or LOAD_FILE_OPERATION!";
+
+    public static float getScreenScaleRatio() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        return (float)(screenSize.getWidth() / DEFAULT_SCREEN_WIDTH);
+    }
+
+    public static void setHandCursor(AbstractButton... buttons) {
+        Cursor hand = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        for (AbstractButton b : buttons) {
+            b.setCursor(hand);
+        }
+    }
+
     public static File getFileFromChooser(
             int operation,
             Component parent,
@@ -48,18 +63,11 @@ public class SwingUtils {
         else if (operation == LOAD_FILE_OPERATION)
             userSelection = fileChooser.showOpenDialog(parent);
         else
-            throw new IllegalArgumentException("Operation must be either SAVE_FILE_OPERATION or LOAD_FILE_OPERATION!");
+            throw new IllegalArgumentException(INVALID_FILE_OPERATION_MSG);
+
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            if (extensionFilter != null) {
-                File file = fileChooser.getSelectedFile();
-                if (!file.getName().toLowerCase().endsWith(extensionFilter)) {
-                    file = new File(file.getParentFile(), file.getName() + "." + extensionFilter);
-                }
-
-                return file;
-            }
-            else return fileChooser.getSelectedFile();
+            return getProcessedFile(fileChooser, extensionFilter);
         }
         else
             return null;
@@ -74,16 +82,16 @@ public class SwingUtils {
         }
     }
 
-    public static float getScreenScaleRatio() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        return (float)(screenSize.getWidth() / DEFAULT_SCREEN_WIDTH);
-    }
+    private static File getProcessedFile(JFileChooser fileChooser, String extensionFilter) {
+        if (extensionFilter != null) {
+            File file = fileChooser.getSelectedFile();
+            if (!file.getName().toLowerCase().endsWith(extensionFilter)) {
+                file = new File(file.getParentFile(), file.getName() + "." + extensionFilter);
+            }
 
-    public static void setHandCursor(AbstractButton... buttons) {
-        Cursor hand = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-        for (AbstractButton b : buttons) {
-            b.setCursor(hand);
+            return file;
         }
+        else return fileChooser.getSelectedFile();
     }
 
 }

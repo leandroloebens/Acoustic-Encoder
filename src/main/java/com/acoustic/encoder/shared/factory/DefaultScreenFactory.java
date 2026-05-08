@@ -2,17 +2,25 @@ package com.acoustic.encoder.shared.factory;
 
 import com.acoustic.encoder.features.conversion.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
-import com.acoustic.encoder.features.conversion.view.ConversionScreenManager;
+import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
+import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewManager;
+import com.acoustic.encoder.features.conversion.view.swing.SwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
 import com.acoustic.encoder.features.player.view.DefaultPlayerScreen;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
-import com.acoustic.encoder.features.player.view.PlayerScreenManager;
+import com.acoustic.encoder.features.player.view.PlayerViewManager;
+import com.acoustic.encoder.features.player.view.swing.DefaultSwingPlayerViewAssembler;
+import com.acoustic.encoder.features.player.view.swing.DefaultSwingPlayerViewManager;
+import com.acoustic.encoder.features.player.view.swing.components.factory.DefaultSwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.shared.event.EventBus;
+import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 public class DefaultScreenFactory implements ScreenFactory  {
 
@@ -22,27 +30,19 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     private final FileService fileService;
 
-    private final ConversionScreenManager conversionScreenManager;
-
     private final AudioPlayerService audioPlayerService;
-
-    private final PlayerScreenManager playerScreenManager;
 
 
     public DefaultScreenFactory(
             EventBus eventBus,
             ConversionService conversionService,
             FileService fileService,
-            ConversionScreenManager conversionScreenManager,
-            AudioPlayerService audioPlayerService,
-            PlayerScreenManager playerScreenManager
+            AudioPlayerService audioPlayerService
     ) {
 
         this.conversionService = conversionService;
         this.fileService = fileService;
-        this.conversionScreenManager = conversionScreenManager;
         this.audioPlayerService = audioPlayerService;
-        this.playerScreenManager = playerScreenManager;
         this.eventBus = eventBus;
 
     }
@@ -51,15 +51,36 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
         return new DefaultConversionScreen(
                 new DefaultConversionController(this.conversionService, this.fileService),
-                conversionScreenManager
+                getConversionViewManager()
         );
     }
 
     public PlayerScreen createPlayerScreen() {
         return new DefaultPlayerScreen(
                 new DefaultAudioPlayerController(this.audioPlayerService),
-                playerScreenManager,
+                getPlayerViewManager(),
                 eventBus
         );
+    }
+
+    private ConversionViewManager getConversionViewManager() {
+        ViewConfigLoader conversionViewConfigLoader =
+                new ViewConfigLoader(ViewConfigLoader.CONVERSION_SCREEN_CONFIG_FILE);
+        DefaultSwingConversionViewComponentsFactory conversionViewComponentsFactory =
+                new DefaultSwingConversionViewComponentsFactory(conversionViewConfigLoader.loadConfigMap());
+        SwingConversionViewAssembler conversionViewAssembler =
+                new DefaultSwingConversionViewAssembler(conversionViewComponentsFactory.createComponents());
+
+        return new DefaultSwingConversionViewManager(conversionViewAssembler, eventBus);
+    }
+
+    private PlayerViewManager getPlayerViewManager() {
+        var playerViewConfigLoader = new ViewConfigLoader(ViewConfigLoader.PLAYER_SCREEN_CONFIG_FILE);
+        var playerViewComponentsFactory =
+                new DefaultSwingPlayerViewComponentsFactory(playerViewConfigLoader.loadConfigMap());
+        var playerScreenAssembler =
+                new DefaultSwingPlayerViewAssembler(playerViewComponentsFactory.createComponents());
+
+        return new DefaultSwingPlayerViewManager(playerScreenAssembler, eventBus);
     }
 }

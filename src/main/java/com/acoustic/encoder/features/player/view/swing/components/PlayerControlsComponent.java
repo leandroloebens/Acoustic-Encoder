@@ -1,6 +1,6 @@
-package com.acoustic.encoder.features.player.view;
+package com.acoustic.encoder.features.player.view.swing.components;
 
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerViewActionHandler;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class PlayerControlsComponent extends JPanel {
     private final JButton pauseButton;
     private final JButton rewindButton;
 
-    private SwingPlayerActionHandler handler;
+    private SwingPlayerViewActionHandler handler;
 
     public PlayerControlsComponent() {
         this.playButton = new JButton(PLAY_BUTTON_TEXT);
@@ -40,13 +40,13 @@ public class PlayerControlsComponent extends JPanel {
         add(rewindButton);
     }
 
-    public void setEventHandler(SwingPlayerActionHandler handler) {
+    public void setEventHandler(SwingPlayerViewActionHandler handler) {
         this.handler = handler;
 
         registerListeners(handler);
     }
 
-    private void registerListeners(SwingPlayerActionHandler handler) {
+    private void registerListeners(SwingPlayerViewActionHandler handler) {
         playButton.addActionListener(e -> handler.onPlay());
         pauseButton.addActionListener(e -> handler.onPause());
         rewindButton.addActionListener(e -> handler.onRewind());

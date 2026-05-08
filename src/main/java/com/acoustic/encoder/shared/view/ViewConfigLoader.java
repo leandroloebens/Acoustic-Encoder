@@ -5,13 +5,13 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
-public class ScreenConfigLoader {
-    public final static String CONVERSION_SCREEN_CONFIG_FILE = "conversionScreenMapping.properties";
-    public final static String PLAYER_SCREEN_CONFIG_FILE = "playerScreenMapping.properties";
+public class ViewConfigLoader {
+    public final static String CONVERSION_SCREEN_CONFIG_FILE = "conversionViewMapping.properties";
+    public final static String PLAYER_SCREEN_CONFIG_FILE = "playerViewMapping.properties";
 
     private final String fileName;
 
-    public ScreenConfigLoader(String fileName) {
+    public ViewConfigLoader(String fileName) {
 
         if (fileName == null) throw new IllegalArgumentException("File name cannot be null!");
         this.fileName = fileName;
@@ -22,7 +22,7 @@ public class ScreenConfigLoader {
         
         HashMap<String, String> constants = new HashMap<>();
         
-        try (InputStream input = ScreenConfigLoader.class.getResourceAsStream("/" + fileName)) {
+        try (InputStream input = ViewConfigLoader.class.getResourceAsStream("/" + fileName)) {
             if (input != null) {
                 Properties properties = new Properties();
                 properties.load(input);

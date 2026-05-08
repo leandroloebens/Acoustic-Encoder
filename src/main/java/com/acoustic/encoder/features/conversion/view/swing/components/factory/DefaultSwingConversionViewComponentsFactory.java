@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
-import com.acoustic.encoder.features.conversion.view.swing.components.config.SwingConversionConfig;
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionScreenComponentsWrapper;
+import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
 
@@ -10,19 +10,19 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.util.HashMap;
 
-public class SwingConversionScreenComponentsFactory implements ConversionScreenComponentsFactory {
+public class DefaultSwingConversionViewComponentsFactory implements SwingConversionViewComponentsFactory {
 
     private final static String ILLEGAL_CONFIG_ARGUMENT_MESSAGE = "Illegal config argument!";
 
-    private final SwingConversionConfig config;
+    private final SwingViewConfigWrapper config;
 
-    public SwingConversionScreenComponentsFactory(HashMap<String, String> configMap) {
+    public DefaultSwingConversionViewComponentsFactory(HashMap<String, String> configMap) {
         if (configMap == null) throw new IllegalArgumentException(ILLEGAL_CONFIG_ARGUMENT_MESSAGE);
-        this.config = new SwingConversionConfig(configMap);
+        this.config = new SwingViewConfigWrapper(configMap);
     }
 
     @Override
-    public ConversionScreenComponentsWrapper createComponents() {
+    public ConversionViewComponentsWrapper createComponents() {
 
         SwingButton conversionButton = createConverterButton();
 
@@ -61,7 +61,7 @@ public class SwingConversionScreenComponentsFactory implements ConversionScreenC
 
         ParameterPanel bpmPanel = createBpmPanel();
 
-        return new ConversionScreenComponentsWrapper(
+        return new ConversionViewComponentsWrapper(
                 conversionButton,
                 saveTextButton,
                 loadTextButton,

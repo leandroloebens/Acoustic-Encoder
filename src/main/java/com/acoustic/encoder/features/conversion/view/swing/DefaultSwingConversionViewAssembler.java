@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionScreenComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
@@ -8,7 +8,7 @@ import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 import javax.swing.*;
 import java.awt.*;
 
-public class DefaultSwingConversionScreenAssembler implements SwingConversionScreenAssembler {
+public class DefaultSwingConversionViewAssembler implements SwingConversionViewAssembler {
 
     private final static int BORDERLAYOUT_HGAP = 10;
     private final static int BORDERLAYOUT_WGAP = 10;
@@ -30,7 +30,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
     private final ParameterPanel instrumentPanel;
     private final ParameterPanel bpmPanel;
 
-    public DefaultSwingConversionScreenAssembler(ConversionScreenComponentsWrapper components) {
+    public DefaultSwingConversionViewAssembler(ConversionViewComponentsWrapper components) {
         this.converterButton = components.converterButton();
         this.saveButton = components.saveTextButton();
         this.loadButton = components.loadTextButton();
@@ -47,7 +47,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
             String title,
             Dimension windowInitialSize,
             int frameExitOperation,
-            SwingConversionActionHandler handler
+            SwingConversionViewActionHandler handler
     ) {
 
         SwingFrame frame = new SwingFrame(title, windowInitialSize, frameExitOperation);
@@ -129,7 +129,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         return textAreaPanel;
     }
 
-    private SwingPanel createButtonsPanel(SwingFrame frame, SwingConversionActionHandler handler) {
+    private SwingPanel createButtonsPanel(SwingFrame frame, SwingConversionViewActionHandler handler) {
         setButtonsActions(handler, frame);
 
         SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -153,7 +153,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         return buttonsPanel;
     }
 
-    private void setButtonsActions(SwingConversionActionHandler handler, SwingFrame frame) {
+    private void setButtonsActions(SwingConversionViewActionHandler handler, SwingFrame frame) {
         converterButton.addActionListener(event -> {
             if (event.getSource() != converterButton) return;
 
@@ -225,7 +225,7 @@ public class DefaultSwingConversionScreenAssembler implements SwingConversionScr
         return wrapper;
     }
 
-    private void linkSlidersToParameters(SwingConversionActionHandler handler) {
+    private void linkSlidersToParameters(SwingConversionViewActionHandler handler) {
 
         setSliderAction(volumePanel, handler::onVolumeChange);
         setSliderAction(octavePanel, handler::onOctaveChange);

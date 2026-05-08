@@ -12,9 +12,9 @@ public class DefaultConversionScreen implements ConversionScreen {
 
     private final ConversionController conversionController;
 
-    private final ConversionScreenManager manager;
+    private final ConversionViewManager manager;
 
-    public DefaultConversionScreen(ConversionController conversionController, ConversionScreenManager manager) {
+    public DefaultConversionScreen(ConversionController conversionController, ConversionViewManager manager) {
 
         if (conversionController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.conversionController = conversionController;

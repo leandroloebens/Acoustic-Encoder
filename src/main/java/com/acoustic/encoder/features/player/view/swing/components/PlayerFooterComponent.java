@@ -1,13 +1,10 @@
-package com.acoustic.encoder.features.player.view;
+package com.acoustic.encoder.features.player.view.swing.components;
 
-import com.acoustic.encoder.features.player.controller.AudioPlayerController;
-import com.acoustic.encoder.features.player.exception.MusicExportException;
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerActionHandler;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerViewActionHandler;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class PlayerFooterComponent extends JPanel {
 
@@ -16,7 +13,7 @@ public class PlayerFooterComponent extends JPanel {
     private final JProgressBar progressBar;
     private final JButton saveButton;
 
-    private SwingPlayerActionHandler handler;
+    private SwingPlayerViewActionHandler handler;
 
     public PlayerFooterComponent() {
         this.saveButton = new JButton(SAVE_BUTTON_TEXT);
@@ -41,13 +38,13 @@ public class PlayerFooterComponent extends JPanel {
         updateProgress(10);
     }
 
-    public void setEventHandler(SwingPlayerActionHandler handler) {
+    public void setEventHandler(SwingPlayerViewActionHandler handler) {
         this.handler = handler;
 
         registerListeners(handler);
     }
 
-    private void registerListeners(SwingPlayerActionHandler handler) {
+    private void registerListeners(SwingPlayerViewActionHandler handler) {
         saveButton.addActionListener(e -> handler.onSave());
     }
 
