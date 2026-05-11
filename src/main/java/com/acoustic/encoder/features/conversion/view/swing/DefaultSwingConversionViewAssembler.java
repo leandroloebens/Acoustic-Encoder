@@ -21,7 +21,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final static int PARAMETERS_VGAP = 55;
     private final static int PARAMETERS_BORDER_PADDING = 20;
 
-    private final static String EMPTY_INPUT_WARNING = "Please enter some text first";
+    private final static String EMPTY_TEXT_INPUT_WARNING = "Please enter some text first";
 
     private final static String INVALID_INSTRUMENT_INPUT_WARNING = "Invalid instrument - Last valid instrument set";
 
@@ -92,11 +92,9 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
     @Override
     public String getInputText() {
-
         SwingTextArea textArea = (SwingTextArea) this.scrollPane.getComponent();
 
         return textArea.getText();
-
     }
 
     @Override
@@ -165,39 +163,18 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
     private void setButtonsActions(SwingConversionViewActionHandler handler, SwingFrame frame) {
         converterButton.addActionListener(event -> {
-            if (event.getSource() != converterButton) return;
-
             try {
-
                 if (getInputText().isEmpty()) throw new IllegalArgumentException();
-                else handler.onConvert();
-
+                else if (validateInstrumentInput(frame))
+                    handler.onConvert();
             } catch (IllegalArgumentException e) {
-
-                JOptionPane.showMessageDialog(frame, EMPTY_INPUT_WARNING);
-
+                JOptionPane.showMessageDialog(frame, EMPTY_TEXT_INPUT_WARNING);
             }
-
-            // WORK IN PROGRESS
-            // ----------------------------------------------------------------------------------
-            // JOptionPane.showMessageDialog(frame, "Maybe im converting your text to sound!");
-            // ----------------------------------------------------------------------------------
         });
 
+        saveButton.addActionListener(event -> {handler.onSave();});
 
-        saveButton.addActionListener(event -> {
-            if (event.getSource() != saveButton) return;
-
-            handler.onSave();
-
-        });
-
-        loadButton.addActionListener(event -> {
-            if (event.getSource() != loadButton) return;
-
-            handler.onLoad();
-
-        });
+        loadButton.addActionListener(event -> {handler.onLoad();});
     }
 
     private SwingPanel createConfigPanel(int bottomPadding) {
@@ -254,19 +231,19 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         octavePanel.updateLabel();
 
         instrumentPanel.getComboBox().setSelectedOriginalIndex(trackParameters.getInstrument());
-        instrumentPanel.getComboBox().setInitialItem(instrumentPanel.getComboBox().getSelectedItem());
+        instrumentPanel.getComboBox().setInitialItem(
+                (Integer) instrumentPanel.getComboBox().getSelectedItem()
+        );
 
         bpmPanel.getSlider().setValue(initialParameters.bpm());
         bpmPanel.updateLabel();
     }
 
     private void linkPanelsToParameters(SwingConversionViewActionHandler handler, SwingFrame frame) {
-
         setSliderAction(volumePanel, handler::onVolumeChange);
         setSliderAction(octavePanel, handler::onOctaveChange);
         setBoxAction(instrumentPanel, handler::onInstrumentChange, frame);
         setSliderAction(bpmPanel, handler::onBpmChange);
-
     }
 
     private void setSliderAction(ParameterSliderPanel panel, Runnable action) {
@@ -285,13 +262,27 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     }
 
     private void setBoxAction(ParameterComboBoxPanel<Integer> panel, Runnable action, SwingFrame frame) {
-        panel.getComboBox().addActionListener(e -> {
-            if (frame.isVisible()) {
-                if (panel.getComboBox().validateEditorInput(frame))
-                    action.run();
-                else
-                    JOptionPane.showMessageDialog(frame, INVALID_INSTRUMENT_INPUT_WARNING);
-            }
+        JTextField editor = (JTextField) panel.getComboBox().getEditor().getEditorComponent();
+
+        // For Enter key press
+        editor.addActionListener(e -> {
+            if (frame.isVisible() && instrumentPanel.getComboBox().finishEditing())
+                action.run();
+            else
+                JOptionPane.showMessageDialog(frame, INVALID_INSTRUMENT_INPUT_WARNING);
         });
+    }
+
+    private boolean validateInstrumentInput(SwingFrame frame) {
+        if (instrumentPanel.getComboBox().finishEditing()) {
+            JTextField editor = (JTextField) instrumentPanel.getComboBox().getEditor().getEditorComponent();
+            editor.postActionEvent(); // Manually fires the event to update the instrument value
+
+            return true;
+        }
+        else {
+            JOptionPane.showMessageDialog(frame, INVALID_INSTRUMENT_INPUT_WARNING);
+            return false;
+        }
     }
 }

@@ -177,6 +177,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("INSTRUMENT_COMBOBOX_INITIAL_INDEX"),
                 config.getBoolean("INSTRUMENT_COMBOBOX_IS_EDITABLE")
         );
+        instrumentComboBox.enableFiltering();
 
         SwingLabel instrumentLabel = new SwingLabel(
                 config.getString("INSTRUMENT_LABEL_TEXT"),

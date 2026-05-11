@@ -190,6 +190,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
         @Override
         public void onInstrumentChange() {
             defaultTrackParameters.getFirst().setInstrument(assembler.getInstrumentValue());
+            System.out.println(assembler.getInstrumentValue());
         }
     }
 

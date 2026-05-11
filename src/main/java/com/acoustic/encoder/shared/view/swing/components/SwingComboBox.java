@@ -2,171 +2,326 @@ package com.acoustic.encoder.shared.view.swing.components;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SwingComboBox<T> extends JComboBox<T> {
 
-    private final static String ILLEGAL_ITEM_TYPE_FOR_SORTING_MSG =
+    private static final String ILLEGAL_ITEM_TYPE_FOR_SORTING_MSG =
             "ClassCastException: unsupported type of items in ComboBox";
-    private final static int ITEM_NOT_FOUND_INDEX = -1;
-    private final static String ITEM_NOT_IN_COMBOBOX_MSG = "Current item not found in ComboBox";
-    private final static String ITEMS_LIST_IS_NULL_OR_EMPTY_MSG = "ComboBox items list is null or empty";
-    private final static String NO_ITEM_IS_CURRENTLY_SELECTED_IN_COMBOBOX_MSG =
-            "No item is currently selected in ComboBox";
 
-    private static final int BOX_PADDING = 40;
+    private static final int ITEM_NOT_FOUND_INDEX = -1;
 
-    private List<T> items;
+    private static final String ITEM_NOT_IN_COMBOBOX_MSG =
+            "Current item not found in ComboBox";
+
+    private static final String ITEMS_LIST_IS_NULL_OR_EMPTY_MSG =
+            "ComboBox items list is null or empty";
+
+    public enum SortOrder {
+        NONE,
+        ASCENDING,
+        DESCENDING
+    }
+
+    private final List<T> originalItems;
+
+    private boolean updatingModel;
+
+    private SortOrder currentSortOrder = SortOrder.NONE;
 
     private T lastValidItem;
 
     private T initialItem;
 
-    public SwingComboBox(List<T> items, Font font, float fontSize, Border border, int initialIndex, boolean editable) {
+    public SwingComboBox(
+            List<T> items,
+            Font font,
+            float fontSize,
+            Border border,
+            int initialIndex,
+            boolean isEditable
+    ) {
+
+        this.originalItems = new ArrayList<>();
 
         if (items != null) {
-            this.items = items;
+
+            this.originalItems.addAll(items);
 
             for (T item : items)
                 this.addItem(item);
 
             if (initialIndex >= 0 && initialIndex < items.size()) {
+
                 this.initialItem = items.get(initialIndex);
+
                 this.setSelectedItem(this.initialItem);
-                lastValidItem = this.initialItem;
+
+                this.lastValidItem = this.initialItem;
             }
-            else
+            else if (!items.isEmpty()) {
+
                 this.setSelectedIndex(0);
+
+                this.lastValidItem = items.getFirst();
+            }
         }
 
         if (font != null) {
+
             this.setFont(font);
 
             if (fontSize > 0)
-                this.setFont(font.deriveFont((fontSize)));
+                this.setFont(font.deriveFont(fontSize));
         }
 
-        if (border != null) this.setBorder(border);
+        if (border != null)
+            this.setBorder(border);
 
-        if (editable) this.setEditable(true);
+        this.setEditable(isEditable);
+    }
 
+    public void enableFiltering() {
 
-//        this.cropBox();
+        if (!this.isEditable())
+            this.setEditable(true);
 
+        JTextField editor =
+                (JTextField) this.getEditor().getEditorComponent();
+
+        editor.getDocument().addDocumentListener(new DocumentListener() {
+
+            private void filter() {
+
+                if (updatingModel)
+                    return;
+
+                SwingUtilities.invokeLater(() ->
+                        applyFilter(editor.getText()));
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filter();
+            }
+        });
     }
 
     public void sortItemsAscending() {
-        List<T> items = this.items;
 
-        try {
-            items.sort(null);
+        this.currentSortOrder = SortOrder.ASCENDING;
 
-            this.removeAllItems();
-
-            for (T item : items)
-                this.addItem(item);
-
-            if (this.initialItem != null)
-                this.setSelectedItem(this.initialItem);
-        }
-        catch (ClassCastException e) {
-            e.printStackTrace();
-            System.out.println(ILLEGAL_ITEM_TYPE_FOR_SORTING_MSG);
-        }
+        applyFilter(getEditorText());
     }
 
     public void sortItemsDescending() {
-        List<T> items = this.items;
 
-        try {
-            items.sort(null);
+        this.currentSortOrder = SortOrder.DESCENDING;
 
-            this.removeAllItems();
-
-            for (int i = items.size() - 1; i >= 0; i--)
-                this.addItem(items.get(i));
-
-            if (this.initialItem != null)
-                this.setSelectedItem(this.initialItem);
-        }
-        catch (ClassCastException e) {
-            e.printStackTrace();
-            System.out.println(ILLEGAL_ITEM_TYPE_FOR_SORTING_MSG);
-        }
+        applyFilter(getEditorText());
     }
 
     public void resetItems() {
-        this.removeAllItems();
 
-        for (T item : this.items)
-            this.addItem(item);
+        this.currentSortOrder = SortOrder.NONE;
 
-        if (this.initialItem != null)
-            this.setSelectedItem(this.initialItem);
+        applyFilter(initialItem.toString());
     }
 
-    @SuppressWarnings("unchecked")
-    public int getSelectedOriginalIndex() {
+    private String getEditorText() {
 
-        if (this.items == null || this.items.isEmpty()) {
+        if (!this.isEditable())
+            return "";
+
+        JTextField editor =
+                (JTextField) this.getEditor().getEditorComponent();
+
+        return editor.getText().trim();
+    }
+
+    public int getSelectedOriginalIndex() {
+        if (originalItems.isEmpty()) {
             System.out.println(ITEMS_LIST_IS_NULL_OR_EMPTY_MSG);
             return ITEM_NOT_FOUND_INDEX;
         }
 
-        T currentItem = (T) this.getSelectedItem();
+        Object selected = this.getSelectedItem();
 
-        if (items.contains(currentItem))
-            return this.items.indexOf(currentItem);
-        else {
-            System.out.println(ITEM_NOT_IN_COMBOBOX_MSG);
+        if (selected == null)
             return ITEM_NOT_FOUND_INDEX;
+
+        for (int i = 0; i < originalItems.size(); i++) {
+            T item = originalItems.get(i);
+
+            if (item.equals(selected))
+                return i;
         }
+
+        System.out.println(ITEM_NOT_IN_COMBOBOX_MSG);
+
+        return ITEM_NOT_FOUND_INDEX;
     }
 
     public void setSelectedOriginalIndex(int index) {
-        if (index >= 0 && index < this.items.size()) {
-            T item = this.items.get(index);
+
+        if (index >= 0 && index < this.originalItems.size()) {
+            T item = this.originalItems.get(index);
+
             this.setSelectedItem(item);
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void setInitialItem(Object item) {
-        if (item != null && items.contains((T) item)) {
-            this.initialItem = (T) item;
+    public void setInitialItem(T item) {
+
+        if (item != null && originalItems.contains(item)) {
+            this.initialItem = item;
+
             this.setSelectedItem(item);
         }
     }
 
-    public boolean validateEditorInput(SwingFrame frame) {
-        JTextField editor = (JTextField) this.getEditor().getEditorComponent();
-        String text = editor.getText();
+    public boolean isEditorInputValid() {
 
-        for (T item : items) {
-            if (item.toString().equals(text)) {
-                this.setSelectedItem(item);
-                this.lastValidItem = item;
+        String text = getEditorText();
+
+        for (T item : originalItems) {
+            if (item.toString().equals(text))
                 return true;
-            }
         }
 
-        this.setSelectedItem(this.lastValidItem);
-        editor.setText(this.lastValidItem.toString());
         return false;
     }
 
-//    private void cropBox() {
-//        int maxWidth = 0;
-//        FontMetrics fm = this.getFontMetrics(this.getFont());
-//        for (int i = 0; i < this.getItemCount(); i++) {
-//            Object item = this.getItemAt(i);
-//            int width = fm.stringWidth(item.toString());
-//            if (width > maxWidth) maxWidth = width;
-//        }
-//        this.setPreferredSize(new Dimension(maxWidth + BOX_PADDING, this.getPreferredSize().height));
-//    }
+    public void commitEditorInput() {
 
+        String text = getEditorText();
 
+        for (T item : originalItems) {
 
+            if (item.toString().equals(text)) {
+
+                this.setSelectedItem(item);
+
+                this.lastValidItem = item;
+
+                return;
+            }
+        }
+    }
+
+    public void restoreLastValidInput() {
+        updatingModel = true;
+
+        JTextField editor =
+                (JTextField) this.getEditor().getEditorComponent();
+
+        this.setSelectedItem(this.lastValidItem);
+
+        if (this.lastValidItem != null)
+            editor.setText(this.lastValidItem.toString());
+
+        updatingModel = false;
+    }
+
+    public boolean finishEditing() {
+
+        if (isEditorInputValid()) {
+
+            commitEditorInput();
+
+            return true;
+        }
+
+        restoreLastValidInput();
+
+        return false;
+    }
+
+    private void applyFilter(String text) {
+
+        List<T> filteredItems = new ArrayList<>();
+
+        for (T item : originalItems) {
+
+            if (item.toString().toLowerCase().contains(text.toLowerCase()))
+                filteredItems.add(item);
+        }
+
+        filteredItems = sortItems(filteredItems);
+
+        JTextField editor = (JTextField) this.getEditor().getEditorComponent();
+
+        int caret = editor.getCaretPosition();
+
+        rebuildModel(filteredItems, text, caret);
+    }
+
+    private List<T> sortItems(List<T> source) {
+
+        List<T> sortedItems = new ArrayList<>(source);
+
+        try {
+            switch (currentSortOrder) {
+
+                case ASCENDING -> sortedItems.sort(null);
+
+                case DESCENDING -> {
+                    sortedItems.sort(null);
+                    Collections.reverse(sortedItems);
+                }
+            }
+        }
+        catch (ClassCastException e) {
+
+            e.printStackTrace();
+
+            System.out.println(ILLEGAL_ITEM_TYPE_FOR_SORTING_MSG);
+        }
+
+        return sortedItems;
+    }
+
+    private void rebuildModel(List<T> items, String editorText, int caret) {
+        updatingModel = true;
+
+        this.hidePopup();
+
+        this.removeAllItems();
+
+        for (T item : items)
+            this.addItem(item);
+
+        JTextField editor =
+                (JTextField) this.getEditor().getEditorComponent();
+
+        this.setSelectedIndex(ITEM_NOT_FOUND_INDEX);
+
+        editor.setText(editorText);
+
+        if (caret <= editorText.length())
+            editor.setCaretPosition(caret);
+
+        if (this.getItemCount() > 0 && this.isDisplayable() && this.isShowing() && editor.hasFocus())
+            SwingUtilities.invokeLater(() -> {
+                if (!this.isPopupVisible())
+                    this.showPopup();
+            });
+
+        updatingModel = false;
+    }
 }
