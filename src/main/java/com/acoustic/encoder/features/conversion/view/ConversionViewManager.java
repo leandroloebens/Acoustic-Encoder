@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.shared.model.MusicConfig;
+import com.acoustic.encoder.shared.model.VoiceConfig;
 
 public interface ConversionViewManager {
 
@@ -13,6 +13,6 @@ public interface ConversionViewManager {
 
     void disposeFrame();
 
-    void setInitialDefaultParameters(MusicConfig parameters);
+    void setInitialDefaultParameters(VoiceConfig parameters);
 
 }

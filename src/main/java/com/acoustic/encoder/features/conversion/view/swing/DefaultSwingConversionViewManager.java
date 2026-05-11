@@ -5,7 +5,7 @@ import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.shared.event.EventBus;
-import com.acoustic.encoder.shared.model.MusicConfig;
+import com.acoustic.encoder.shared.model.VoiceConfig;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
@@ -80,11 +80,11 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     public void disposeFrame() { frame.dispose(); }
 
     @Override
-    public void setInitialDefaultParameters(MusicConfig parameters) {
+    public void setInitialDefaultParameters(VoiceConfig parameters) {
         this.defaultVolume = parameters.defaultVolume();
         this.defaultOctave = parameters.defaultOctave();
         this.defaultInstrument = parameters.defaultMidiInstrument();
-        this.defaultBpm = parameters.bpm();
+        this.defaultBpm = parameters.defaultBpm();
     }
 
     private class ActionHandler implements SwingConversionViewActionHandler {

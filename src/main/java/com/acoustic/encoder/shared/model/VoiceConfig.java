@@ -1,17 +1,17 @@
 package com.acoustic.encoder.shared.model;
 
-public record MusicConfig(
+public record VoiceConfig(
         int defaultMidiInstrument,
-        int bpm,
+        int defaultBpm,
         int defaultOctave,
         int defaultVolume
 ) {
 
     @Override
     public String toString() {
-        return "MusicConfig{" +
+        return "VoiceConfig{" +
                 "\ndefaultMidiInstrument=" + defaultMidiInstrument +
-                ", \nbpm=" + bpm +
+                ", \ndefaultBpm=" + defaultBpm +
                 ", \ndefaultOctave=" + defaultOctave +
                 ", \ndefaultVolume=" + defaultVolume +
                 "\n}";

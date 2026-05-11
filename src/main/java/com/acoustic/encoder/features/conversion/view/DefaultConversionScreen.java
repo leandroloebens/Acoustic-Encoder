@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.shared.model.MusicConfig;
+import com.acoustic.encoder.shared.model.VoiceConfig;
 
 public class DefaultConversionScreen implements ConversionScreen {
 
@@ -23,7 +23,7 @@ public class DefaultConversionScreen implements ConversionScreen {
         this.manager = manager;
 
         this.manager.setInitialDefaultParameters(
-                new MusicConfig(
+                new VoiceConfig(
                         INITIAL_INSTRUMENT,
                         INITIAL_BPM,
                         INITIAL_OCTAVE,

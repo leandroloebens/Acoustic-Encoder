@@ -1,7 +1,10 @@
-package com.acoustic.encoder.features.player.audio.midi;
+package com.acoustic.encoder.features.player.audio.midi.track;
 
+import com.acoustic.encoder.features.player.audio.midi.MidiUtils;
+import com.acoustic.encoder.features.player.audio.midi.track.TrackContext;
 import com.acoustic.encoder.features.player.model.MusicalNote;
-import com.acoustic.encoder.shared.model.MusicConfig;
+import com.acoustic.encoder.shared.model.Voice;
+import com.acoustic.encoder.shared.model.VoiceConfig;
 import com.acoustic.encoder.shared.model.MusicalCommand;
 import com.acoustic.encoder.shared.model.MusicalInstruction;
 
@@ -14,19 +17,17 @@ public class DefaultTrackWriter implements TrackWriter {
 
     public void writeTrack(
             Track track,
-            List<MusicalInstruction> musicalInstructions,
-            MusicConfig config,
+            Voice voice,
             int channel,
             int ppqResolution
     ) {
 
-        initializeTrack(track, config, channel);
+        initializeTrack(track, voice.config(), channel);
 
         int noteTickDuration = (int) ((1.0f/2.0f)*ppqResolution);
 
-        processInstructionsToTrack(track, musicalInstructions, config, channel, noteTickDuration);
-
-
+        processInstructionsToTrack(track, voice, channel, noteTickDuration);
+        
     }
 
     public void writeInitTempoTrack(Track track, int bpm) {
@@ -34,7 +35,7 @@ public class DefaultTrackWriter implements TrackWriter {
         track.add(MidiUtils.createTempoChangeEvent(bpm, 0));
     }
 
-    private void initializeTrack(Track track, MusicConfig config, int channel)  {
+    private void initializeTrack(Track track, VoiceConfig config, int channel)  {
 
         track.add(MidiUtils.createInstrumentChangeEvent(config.defaultMidiInstrument(), channel, 0));
 
@@ -43,17 +44,16 @@ public class DefaultTrackWriter implements TrackWriter {
 
     private void processInstructionsToTrack(
             Track track,
-            List<MusicalInstruction> musicalInstructions,
-            MusicConfig config,
+            Voice voice,
             int channel,
             int noteTickDuration
     ) {
 
-        TrackContext trackContext = TrackContext.initialContext(config);
+        TrackContext trackContext = TrackContext.initialContext(voice.config(),noteTickDuration, channel);
 
-        for (int i = 0; i < musicalInstructions.size(); i++) {
+        for (int i = 0; i < voice.musicalInstructions().size(); i++) {
 
-            MusicalInstruction instruction = musicalInstructions.get(i);
+            MusicalInstruction instruction = voice.musicalInstructions().get(i);
 
             trackContext = switch (instruction.command()) {
                 case PLAY_NOTE -> handlePlayNote(track, trackContext, instruction.parameter(), channel, noteTickDuration);
@@ -62,7 +62,7 @@ public class DefaultTrackWriter implements TrackWriter {
                 case CHANGE_INSTRUMENT -> handleChangeInstrument(track, trackContext, instruction.parameter(), channel);
                 case INCREMENT_INSTRUMENT -> handleIncrementInstrument(track, trackContext, instruction.parameter(), channel);
                 case INCREMENT_OCTAVE -> handleIncrementOctave(trackContext, instruction.parameter());
-                case PLAY_PREVIOUS -> handlePlayPreviousNote(track, trackContext, musicalInstructions, i, channel, noteTickDuration);
+                case PLAY_PREVIOUS -> handlePlayPreviousNote(track, trackContext, voice.musicalInstructions(), i, channel, noteTickDuration);
                 case NULL_COMMAND -> trackContext;
             };
         }
@@ -76,27 +76,27 @@ public class DefaultTrackWriter implements TrackWriter {
             int noteTickDuration
     ) {
 
-        MusicalNote note = new MusicalNote(parameter, context.octave(), NOTE_VELOCITY);
+        MusicalNote note = new MusicalNote(parameter, context.state().octave(), NOTE_VELOCITY);
 
         // Note ON
-        track.add(MidiUtils.createNoteOnEvent(note, channel, context.tick()));
+        track.add(MidiUtils.createNoteOnEvent(note, channel, context.state().tick()));
 
         // Note OFF
-        track.add(MidiUtils.createNoteOffEvent(note, channel, context.tick() + noteTickDuration));
+        track.add(MidiUtils.createNoteOffEvent(note, channel, context.state().tick() + noteTickDuration));
 
-        return context.withTick(context.tick() + noteTickDuration);
+        return context.withTick(context.state().tick() + noteTickDuration);
     }
 
     private TrackContext handleSilence(TrackContext context, int noteTickDuration) {
 
-        return context.withTick(context.tick() + noteTickDuration);
+        return context.withTick(context.state().tick() + noteTickDuration);
     }
 
     private TrackContext handleDoubleVolume(Track track, TrackContext context, int channel) {
 
         TrackContext newContext = context.doubleVolume();
 
-        track.add(MidiUtils.createVolumeChangeEvent(newContext.volume(), channel, newContext.tick()));
+        track.add(MidiUtils.createVolumeChangeEvent(newContext.state().volume(), channel, newContext.state().tick()));
 
         return newContext;
     }
@@ -110,7 +110,11 @@ public class DefaultTrackWriter implements TrackWriter {
 
         TrackContext newContext = context.withInstrument(newInstrument);
 
-        track.add(MidiUtils.createInstrumentChangeEvent(newContext.instrument(), channel, newContext.tick()));
+        track.add(
+                MidiUtils.createInstrumentChangeEvent(
+                        newContext.state().instrument(), channel, newContext.state().tick()
+                )
+        );
 
         return newContext;
     }
@@ -124,7 +128,7 @@ public class DefaultTrackWriter implements TrackWriter {
 
         TrackContext newContext = context.incrementInstrument(incVal);
 
-        track.add(MidiUtils.createInstrumentChangeEvent(newContext.instrument(), channel, newContext.tick()));
+        track.add(MidiUtils.createInstrumentChangeEvent(newContext.state().instrument(), channel, newContext.state().tick()));
 
         return newContext;
     }
