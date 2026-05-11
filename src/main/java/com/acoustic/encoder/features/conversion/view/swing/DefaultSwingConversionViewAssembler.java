@@ -2,8 +2,9 @@ package com.acoustic.encoder.features.conversion.view.swing;
 
 import com.acoustic.encoder.features.conversion.model.TrackParameters;
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
+import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
-import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
@@ -27,10 +28,10 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final SwingButton loadButton;
     private final SwingLabel instructionLabel;
     private final SwingVerticalScrollPane scrollPane;
-    private final ParameterPanel volumePanel;
-    private final ParameterPanel octavePanel;
-    private final ParameterPanel instrumentPanel;
-    private final ParameterPanel bpmPanel;
+    private final ParameterSliderPanel volumePanel;
+    private final ParameterSliderPanel octavePanel;
+    private final ParameterComboBoxPanel<Integer> instrumentPanel;
+    private final ParameterSliderPanel bpmPanel;
 
     public DefaultSwingConversionViewAssembler(ConversionViewComponentsWrapper components) {
         this.converterButton = components.converterButton();
@@ -68,7 +69,8 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        linkSlidersToParameters(handler, initialParameters);
+        setPanelsInitialValues(initialParameters);
+        linkPanelsToParameters(handler);
 
         SwingPanel configPanel = createConfigPanel(buttonsPanel.getHeight());
         configPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -79,6 +81,8 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
         // Centering the frame
         frame.setLocationRelativeTo(null);
+
+        frame.pack();
 
         return frame;
     }
@@ -99,22 +103,22 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     }
 
     @Override
-    public int getVolumeSliderValue() {
+    public int getVolumeValue() {
         return volumePanel.getSlider().getValue();
     }
 
     @Override
-    public int getInstrumentSliderValue() {
-        return instrumentPanel.getSlider().getValue();
+    public int getInstrumentValue() {
+        return instrumentPanel.getComboBox().getSelectedOriginalIndex();
     }
 
     @Override
-    public int getOctaveSliderValue() {
+    public int getOctaveValue() {
         return octavePanel.getSlider().getValue();
     }
 
     @Override
-    public int getBpmSliderValue() {
+    public int getBpmValue() {
         return bpmPanel.getSlider().getValue();
     }
 
@@ -199,13 +203,22 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.Y_AXIS));
 
         configPanel.add(Box.createVerticalGlue());
+
         configPanel.add(volumePanel);
+
         configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
+
         configPanel.add(octavePanel);
+
         configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
+
         configPanel.add(bpmPanel);
+
         configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
+
+        instrumentPanel.getComboBox().sortItemsAscending();
         configPanel.add(instrumentPanel);
+
         configPanel.add(Box.createVerticalStrut(bottomPadding));
         configPanel.add(Box.createVerticalGlue());
 
@@ -228,27 +241,32 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         return wrapper;
     }
 
-    private void linkSlidersToParameters(SwingConversionViewActionHandler handler, MusicParameters initialParameters) {
-
+    private void setPanelsInitialValues(MusicParameters initialParameters) {
         TrackParameters trackParameters = initialParameters.trackParameters().getFirst();
 
         volumePanel.getSlider().setValue(trackParameters.getVolume());
         volumePanel.updateLabel();
+
         octavePanel.getSlider().setValue(trackParameters.getOctave());
         octavePanel.updateLabel();
-        instrumentPanel.getSlider().setValue(trackParameters.getInstrument());
-        instrumentPanel.updateLabel();
+
+        instrumentPanel.getComboBox().setSelectedOriginalIndex(trackParameters.getInstrument());
+        instrumentPanel.getComboBox().setInitialItem(instrumentPanel.getComboBox().getSelectedItem());
+
         bpmPanel.getSlider().setValue(initialParameters.bpm());
         bpmPanel.updateLabel();
+    }
+
+    private void linkPanelsToParameters(SwingConversionViewActionHandler handler) {
 
         setSliderAction(volumePanel, handler::onVolumeChange);
         setSliderAction(octavePanel, handler::onOctaveChange);
-        setSliderAction(instrumentPanel, handler::onInstrumentChange);
+        setBoxAction(instrumentPanel, handler::onInstrumentChange);
         setSliderAction(bpmPanel, handler::onBpmChange);
 
     }
 
-    private void setSliderAction(ParameterPanel panel, Runnable action) {
+    private void setSliderAction(ParameterSliderPanel panel, Runnable action) {
         panel.getSlider().addChangeListener(e -> {
 
             SwingSlider slider = panel.getSlider();
@@ -260,6 +278,13 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
             panel.updateLabel();
             action.run();
 
+        });
+    }
+
+    private void setBoxAction(ParameterComboBoxPanel<Integer> panel, Runnable action) {
+        panel.getComboBox().addActionListener(e -> {
+            if (panel.getComboBox().getSelectedItem() != null)
+                action.run();
         });
     }
 }

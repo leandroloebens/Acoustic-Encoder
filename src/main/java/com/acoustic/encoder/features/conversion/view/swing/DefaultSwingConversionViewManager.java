@@ -174,22 +174,22 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
         @Override
         public void onVolumeChange() {
-            defaultTrackParameters.getFirst().setVolume(assembler.getVolumeSliderValue());
+            defaultTrackParameters.getFirst().setVolume(assembler.getVolumeValue());
         }
 
         @Override
         public void onOctaveChange() {
-            defaultTrackParameters.getFirst().setOctave(assembler.getOctaveSliderValue());
+            defaultTrackParameters.getFirst().setOctave(assembler.getOctaveValue());
         }
 
         @Override
         public void onBpmChange() {
-            defaultBpm = assembler.getBpmSliderValue();
+            defaultBpm = assembler.getBpmValue();
         }
 
         @Override
         public void onInstrumentChange() {
-            defaultTrackParameters.getFirst().setInstrument(assembler.getInstrumentSliderValue());
+            defaultTrackParameters.getFirst().setInstrument(assembler.getInstrumentValue());
         }
     }
 

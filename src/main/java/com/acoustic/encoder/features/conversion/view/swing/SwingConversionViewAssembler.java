@@ -19,12 +19,12 @@ public interface SwingConversionViewAssembler {
 
     void setInputText(String text);
 
-    int getVolumeSliderValue();
+    int getVolumeValue();
 
-    int getInstrumentSliderValue();
+    int getInstrumentValue();
 
-    int getOctaveSliderValue();
+    int getOctaveValue();
 
-    int getBpmSliderValue();
+    int getBpmValue();
 
 }

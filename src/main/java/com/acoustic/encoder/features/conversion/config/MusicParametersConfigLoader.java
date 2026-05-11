@@ -37,7 +37,6 @@ public class MusicParametersConfigLoader {
                 i++;
             }
 
-            System.out.println("Track " + i + ":");
             trackParameters.add(new TrackParameters(
                     map.get("TRACK_" + i + "_VOLUME"),
                     map.get("TRACK_" + i + "_OCTAVE"),
