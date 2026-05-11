@@ -19,9 +19,11 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
     private List<T> items;
 
+    private T lastValidItem;
+
     private T initialItem;
 
-    public SwingComboBox(List<T> items, Font font, float fontSize, Border border, int initialItemIndex) {
+    public SwingComboBox(List<T> items, Font font, float fontSize, Border border, int initialIndex, boolean editable) {
 
         if (items != null) {
             this.items = items;
@@ -29,9 +31,10 @@ public class SwingComboBox<T> extends JComboBox<T> {
             for (T item : items)
                 this.addItem(item);
 
-            if (initialItemIndex >= 0 && initialItemIndex < items.size()) {
-                this.initialItem = items.get(initialItemIndex);
+            if (initialIndex >= 0 && initialIndex < items.size()) {
+                this.initialItem = items.get(initialIndex);
                 this.setSelectedItem(this.initialItem);
+                lastValidItem = this.initialItem;
             }
             else
                 this.setSelectedIndex(0);
@@ -45,6 +48,9 @@ public class SwingComboBox<T> extends JComboBox<T> {
         }
 
         if (border != null) this.setBorder(border);
+
+        if (editable) this.setEditable(true);
+
 
 //        this.cropBox();
 
@@ -108,11 +114,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
             return ITEM_NOT_FOUND_INDEX;
         }
 
-        if (this.getSelectedItem() == null) {
-            System.out.println(NO_ITEM_IS_CURRENTLY_SELECTED_IN_COMBOBOX_MSG);
-            return ITEM_NOT_FOUND_INDEX;
-        }
-
         T currentItem = (T) this.getSelectedItem();
 
         if (items.contains(currentItem))
@@ -136,7 +137,23 @@ public class SwingComboBox<T> extends JComboBox<T> {
             this.initialItem = (T) item;
             this.setSelectedItem(item);
         }
+    }
 
+    public boolean validateEditorInput(SwingFrame frame) {
+        JTextField editor = (JTextField) this.getEditor().getEditorComponent();
+        String text = editor.getText();
+
+        for (T item : items) {
+            if (item.toString().equals(text)) {
+                this.setSelectedItem(item);
+                this.lastValidItem = item;
+                return true;
+            }
+        }
+
+        this.setSelectedItem(this.lastValidItem);
+        editor.setText(this.lastValidItem.toString());
+        return false;
     }
 
 //    private void cropBox() {
@@ -149,5 +166,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
 //        }
 //        this.setPreferredSize(new Dimension(maxWidth + BOX_PADDING, this.getPreferredSize().height));
 //    }
+
+
 
 }

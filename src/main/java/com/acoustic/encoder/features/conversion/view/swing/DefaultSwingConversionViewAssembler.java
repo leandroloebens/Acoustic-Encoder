@@ -21,7 +21,9 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final static int PARAMETERS_VGAP = 55;
     private final static int PARAMETERS_BORDER_PADDING = 20;
 
-    private final static String EMPTY_INPUT_WARNING = "Please enter some text first!";
+    private final static String EMPTY_INPUT_WARNING = "Please enter some text first";
+
+    private final static String INVALID_INSTRUMENT_INPUT_WARNING = "Invalid instrument - Last valid instrument set";
 
     private final SwingButton converterButton;
     private final SwingButton saveButton;
@@ -69,8 +71,9 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
+        System.out.println(instrumentPanel.getComboBox().getSelectedItem());
         setPanelsInitialValues(initialParameters);
-        linkPanelsToParameters(handler);
+        linkPanelsToParameters(handler, frame);
 
         SwingPanel configPanel = createConfigPanel(buttonsPanel.getHeight());
         configPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -257,11 +260,11 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         bpmPanel.updateLabel();
     }
 
-    private void linkPanelsToParameters(SwingConversionViewActionHandler handler) {
+    private void linkPanelsToParameters(SwingConversionViewActionHandler handler, SwingFrame frame) {
 
         setSliderAction(volumePanel, handler::onVolumeChange);
         setSliderAction(octavePanel, handler::onOctaveChange);
-        setBoxAction(instrumentPanel, handler::onInstrumentChange);
+        setBoxAction(instrumentPanel, handler::onInstrumentChange, frame);
         setSliderAction(bpmPanel, handler::onBpmChange);
 
     }
@@ -281,10 +284,14 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         });
     }
 
-    private void setBoxAction(ParameterComboBoxPanel<Integer> panel, Runnable action) {
+    private void setBoxAction(ParameterComboBoxPanel<Integer> panel, Runnable action, SwingFrame frame) {
         panel.getComboBox().addActionListener(e -> {
-            if (panel.getComboBox().getSelectedItem() != null)
-                action.run();
+            if (frame.isVisible()) {
+                if (panel.getComboBox().validateEditorInput(frame))
+                    action.run();
+                else
+                    JOptionPane.showMessageDialog(frame, INVALID_INSTRUMENT_INPUT_WARNING);
+            }
         });
     }
 }

@@ -174,7 +174,8 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 null,
                 config.getScaledFloat("INSTRUMENT_COMBOBOX_FONT_SIZE"),
                 null,
-                config.getInt("INSTRUMENT_COMBOBOX_INITIAL_INDEX")
+                config.getInt("INSTRUMENT_COMBOBOX_INITIAL_INDEX"),
+                config.getBoolean("INSTRUMENT_COMBOBOX_IS_EDITABLE")
         );
 
         SwingLabel instrumentLabel = new SwingLabel(
