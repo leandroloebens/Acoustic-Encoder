@@ -7,9 +7,7 @@ import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewManager;
-import com.acoustic.encoder.features.conversion.view.swing.SwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.*;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
@@ -87,7 +85,10 @@ public class DefaultScreenFactory implements ScreenFactory  {
                 new MusicParametersConfigLoader(DEFAULT_MUSIC_PARAMETERS_FILE);
         MusicParameters defaultMusicParameters = parametersLoader.loadDefaultMusicParameters();
 
-        return new DefaultSwingConversionViewManager(conversionViewAssembler, defaultMusicParameters, eventBus);
+        SwingConversionViewBinder conversionViewBinder =
+                new DefaultSwingConversionViewBinder(defaultMusicParameters);
+
+        return new DefaultSwingConversionViewManager(conversionViewAssembler, conversionViewBinder, eventBus);
     }
 
     private PlayerViewManager getPlayerViewManager() {

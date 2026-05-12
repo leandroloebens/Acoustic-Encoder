@@ -1,7 +1,5 @@
 package com.acoustic.encoder.features.conversion.view.swing;
 
-import com.acoustic.encoder.features.conversion.model.TrackParameters;
-import com.acoustic.encoder.features.conversion.dto.MusicParameters;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
@@ -20,10 +18,6 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
     private final static int PARAMETERS_VGAP = 55;
     private final static int PARAMETERS_BORDER_PADDING = 20;
-
-    private final static String EMPTY_TEXT_INPUT_WARNING = "Please enter some text first";
-
-    private final static String INVALID_INSTRUMENT_INPUT_WARNING = "Invalid instrument - Last valid instrument set";
 
     private final SwingButton converterButton;
     private final SwingButton saveButton;
@@ -51,9 +45,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     public SwingFrame assembleFrame(
             String title,
             Dimension windowInitialSize,
-            int frameExitOperation,
-            MusicParameters initialParameters,
-            SwingConversionViewActionHandler handler
+            int frameExitOperation
     ) {
 
         SwingFrame frame = new SwingFrame(title, windowInitialSize, frameExitOperation);
@@ -62,7 +54,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
-        SwingPanel buttonsPanel = createButtonsPanel(frame, handler);
+        SwingPanel buttonsPanel = createButtonsPanel();
         SwingPanel textAreaPanel = createTextAreaPanel();
 
         SwingUtils.setHandCursor(converterButton, saveButton, loadButton);
@@ -70,10 +62,6 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
         conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
-
-        System.out.println(instrumentPanel.getComboBox().getSelectedItem());
-        setPanelsInitialValues(initialParameters);
-        linkPanelsToParameters(handler, frame);
 
         SwingPanel configPanel = createConfigPanel(buttonsPanel.getHeight());
         configPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -91,36 +79,18 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     }
 
     @Override
-    public String getInputText() {
-        SwingTextArea textArea = (SwingTextArea) this.scrollPane.getComponent();
-
-        return textArea.getText();
-    }
-
-    @Override
-    public void setInputText(String text) {
-        SwingTextArea textArea = (SwingTextArea) this.scrollPane.getComponent();
-        textArea.setText(text);
-    }
-
-    @Override
-    public int getVolumeValue() {
-        return volumePanel.getSlider().getValue();
-    }
-
-    @Override
-    public int getInstrumentValue() {
-        return instrumentPanel.getComboBox().getSelectedOriginalIndex();
-    }
-
-    @Override
-    public int getOctaveValue() {
-        return octavePanel.getSlider().getValue();
-    }
-
-    @Override
-    public int getBpmValue() {
-        return bpmPanel.getSlider().getValue();
+    public ConversionViewComponentsWrapper getComponents() {
+        return new ConversionViewComponentsWrapper(
+                converterButton,
+                saveButton,
+                loadButton,
+                scrollPane,
+                instructionLabel,
+                volumePanel,
+                octavePanel,
+                instrumentPanel,
+                bpmPanel
+        );
     }
 
     private SwingPanel createTextAreaPanel() {
@@ -137,9 +107,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         return textAreaPanel;
     }
 
-    private SwingPanel createButtonsPanel(SwingFrame frame, SwingConversionViewActionHandler handler) {
-        setButtonsActions(handler, frame);
-
+    private SwingPanel createButtonsPanel() {
         SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         fileButtonsPanel.add(loadButton);
         fileButtonsPanel.add(saveButton);
@@ -159,22 +127,6 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         buttonsPanel.add(Box.createVerticalStrut(BUTTONS_VGAP));
 
         return buttonsPanel;
-    }
-
-    private void setButtonsActions(SwingConversionViewActionHandler handler, SwingFrame frame) {
-        converterButton.addActionListener(event -> {
-            try {
-                if (getInputText().isEmpty()) throw new IllegalArgumentException();
-                else if (validateInstrumentInput(frame))
-                    handler.onConvert();
-            } catch (IllegalArgumentException e) {
-                JOptionPane.showMessageDialog(frame, EMPTY_TEXT_INPUT_WARNING);
-            }
-        });
-
-        saveButton.addActionListener(event -> {handler.onSave();});
-
-        loadButton.addActionListener(event -> {handler.onLoad();});
     }
 
     private SwingPanel createConfigPanel(int bottomPadding) {
@@ -221,68 +173,4 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         return wrapper;
     }
 
-    private void setPanelsInitialValues(MusicParameters initialParameters) {
-        TrackParameters trackParameters = initialParameters.trackParameters().getFirst();
-
-        volumePanel.getSlider().setValue(trackParameters.getVolume());
-        volumePanel.updateLabel();
-
-        octavePanel.getSlider().setValue(trackParameters.getOctave());
-        octavePanel.updateLabel();
-
-        instrumentPanel.getComboBox().setSelectedOriginalIndex(trackParameters.getInstrument());
-        instrumentPanel.getComboBox().setInitialItem(
-                (Integer) instrumentPanel.getComboBox().getSelectedItem()
-        );
-
-        bpmPanel.getSlider().setValue(initialParameters.bpm());
-        bpmPanel.updateLabel();
-    }
-
-    private void linkPanelsToParameters(SwingConversionViewActionHandler handler, SwingFrame frame) {
-        setSliderAction(volumePanel, handler::onVolumeChange);
-        setSliderAction(octavePanel, handler::onOctaveChange);
-        setBoxAction(instrumentPanel, handler::onInstrumentChange, frame);
-        setSliderAction(bpmPanel, handler::onBpmChange);
-    }
-
-    private void setSliderAction(ParameterSliderPanel panel, Runnable action) {
-        panel.getSlider().addChangeListener(e -> {
-
-            SwingSlider slider = panel.getSlider();
-            int value = slider.getValue();
-
-            if (value < slider.getMinToShow()) slider.setValue(slider.getMinToShow());
-            else if (value > slider.getMaxToShow()) slider.setValue(slider.getMaxToShow());
-
-            panel.updateLabel();
-            action.run();
-
-        });
-    }
-
-    private void setBoxAction(ParameterComboBoxPanel<Integer> panel, Runnable action, SwingFrame frame) {
-        JTextField editor = (JTextField) panel.getComboBox().getEditor().getEditorComponent();
-
-        // For Enter key press
-        editor.addActionListener(e -> {
-            if (frame.isVisible() && instrumentPanel.getComboBox().finishEditing())
-                action.run();
-            else
-                JOptionPane.showMessageDialog(frame, INVALID_INSTRUMENT_INPUT_WARNING);
-        });
-    }
-
-    private boolean validateInstrumentInput(SwingFrame frame) {
-        if (instrumentPanel.getComboBox().finishEditing()) {
-            JTextField editor = (JTextField) instrumentPanel.getComboBox().getEditor().getEditorComponent();
-            editor.postActionEvent(); // Manually fires the event to update the instrument value
-
-            return true;
-        }
-        else {
-            JOptionPane.showMessageDialog(frame, INVALID_INSTRUMENT_INPUT_WARNING);
-            return false;
-        }
-    }
 }

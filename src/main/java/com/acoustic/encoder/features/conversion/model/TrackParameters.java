@@ -12,6 +12,12 @@ public class TrackParameters {
         this.instrument = instrument;
     }
 
+    public TrackParameters(TrackParameters other) {
+        this.volume = other.volume;
+        this.octave = other.octave;
+        this.instrument = other.instrument;
+    }
+
     public int getInstrument() {
         return instrument;
     }
@@ -38,6 +44,6 @@ public class TrackParameters {
 
     @Override
     public String toString() {
-        return "TrackParameters [instrument=" + instrument + ", volume=" + volume + ", octave=" + octave + "]";
+        return "instrument=" + instrument + ", volume=" + volume + ", octave=" + octave;
     }
 }

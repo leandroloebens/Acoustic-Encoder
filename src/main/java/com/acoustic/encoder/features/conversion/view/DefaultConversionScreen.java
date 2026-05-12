@@ -1,14 +1,8 @@
 package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.shared.model.MusicConfig;
 
 public class DefaultConversionScreen implements ConversionScreen {
-
-    private final static int INITIAL_VOLUME = 64;
-    private final static int INITIAL_INSTRUMENT = 0;
-    private final static int INITIAL_BPM = 120;
-    private final static int INITIAL_OCTAVE = 5;
 
     private final ConversionController conversionController;
 
