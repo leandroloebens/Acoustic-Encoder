@@ -9,8 +9,11 @@ import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversio
 import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.swing.SwingConversionViewAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
+import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
+import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
+import com.acoustic.encoder.features.player.listener.PlayerClosedListener;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
 import com.acoustic.encoder.features.player.view.DefaultPlayerScreen;
@@ -56,10 +59,13 @@ public class DefaultScreenFactory implements ScreenFactory  {
     }
 
     public PlayerScreen createPlayerScreen() {
+        AudioPlayerController playerController = new DefaultAudioPlayerController(this.audioPlayerService);
+
+        eventBus.subscribe(PlayerClosedEvent.class, new PlayerClosedListener(playerController));
+
         return new DefaultPlayerScreen(
-                new DefaultAudioPlayerController(this.audioPlayerService),
-                getPlayerViewManager(),
-                eventBus
+                playerController,
+                getPlayerViewManager()
         );
     }
 

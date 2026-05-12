@@ -1,6 +1,8 @@
 package com.acoustic.encoder.features.player.controller;
 
+import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
+import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.MusicModel;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
 
