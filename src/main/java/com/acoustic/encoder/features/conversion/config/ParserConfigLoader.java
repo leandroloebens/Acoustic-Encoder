@@ -58,6 +58,7 @@ public class ParserConfigLoader {
             });
 
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to load properties");
         }
 

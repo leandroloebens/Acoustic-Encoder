@@ -3,7 +3,8 @@ package com.acoustic.encoder.features.player.audio.midi.track;
 public record TrackSettings(
         int channel,
         int defaultInstrument,
-        int defaultOctave
+        int defaultOctave,
+        int noteVelocity
 ) {
 
     public TrackSettings {

@@ -1,17 +1,19 @@
 package com.acoustic.encoder.features.player.audio.midi.track;
 
 import com.acoustic.encoder.features.player.audio.midi.MidiUtils;
+import com.acoustic.encoder.shared.model.MusicalInstruction;
 import com.acoustic.encoder.shared.model.VoiceConfig;
 
-record TrackContext(
+public record TrackContext(
         TrackSettings settings,
         TrackState state
 ) {
 
-    static TrackContext initialContext(VoiceConfig config, int noteTickDuration, int channel) {
+    public static TrackContext initialContext(VoiceConfig config, int noteTickDuration, int channel, int noteVelocity) {
         return new TrackContext(
-                new TrackSettings(channel, config.defaultMidiInstrument(), config.defaultOctave()),
+                new TrackSettings(channel, config.defaultMidiInstrument(), config.defaultOctave(), noteVelocity),
                 new TrackState(
+                        null,
                         config.defaultBpm(),
                         noteTickDuration,
                         0,
@@ -22,35 +24,39 @@ record TrackContext(
         );
     }
 
-    TrackContext withTick(int newTick) {
+    public TrackContext withTick(int newTick) {
         return new TrackContext(settings, state.withTick(newTick));
     }
 
-    TrackContext withVolume(int newVolume) {
+    public TrackContext withVolume(int newVolume) {
         return new TrackContext(settings, state.withVolume(newVolume));
     }
 
-    TrackContext doubleVolume() {
-        int newVolume = 2*state.volume();
+    public TrackContext multiplyVolumeBy(int factor) {
+        int newVolume = factor*state.volume();
         return withVolume(Math.min(newVolume, MidiUtils.VOL_MAX));
     }
 
-    TrackContext withInstrument(int newInstrument) {
+    public TrackContext withInstrument(int newInstrument) {
         return new TrackContext(settings, state.withInstrument(newInstrument));
     }
 
-    TrackContext incrementInstrument(int val) {
+    public TrackContext incrementInstrument(int val) {
         int newInstrument = state.instrument() + val;
         return withInstrument(newInstrument > MidiUtils.INSTRUMENT_MAX ? settings.defaultInstrument() : newInstrument);
     }
 
-    TrackContext withOctave(int newOctave) {
+    public TrackContext withOctave(int newOctave) {
         return new TrackContext(settings, state.withOctave(newOctave));
     }
 
-    TrackContext incrementOctave(int val) {
+    public TrackContext incrementOctave(int val) {
         int newOctave = state.octave() + val;
         return withOctave(newOctave > MidiUtils.OCTAVE_MAX ? settings.defaultOctave() : newOctave);
+    }
+
+    public TrackContext withPreviousInstruction(MusicalInstruction newPreviousInstruction) {
+        return new TrackContext(settings, state.withPreviousInstruction(newPreviousInstruction));
     }
 
 }
