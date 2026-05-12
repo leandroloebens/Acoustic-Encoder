@@ -56,6 +56,8 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 instructionLabelBorder
         );
 
+        SwingRadioButtonGroup trackSelector = createTrackSelector();
+
         ParameterSliderPanel volumePanel = createVolumePanel();
 
         ParameterSliderPanel octavePanel = createOctavePanel();
@@ -70,6 +72,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 loadTextButton,
                 scrollPane,
                 instructionLabel,
+                trackSelector,
                 volumePanel,
                 octavePanel,
                 instrumentPanel,
@@ -83,15 +86,13 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("CONVERSION_BUTTON_HEIGHT")
         );
 
-        SwingButton conversionButton = new SwingButton(
+        return new SwingButton(
                 config.getString("CONVERSION_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("CONVERSION_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
-
-        return conversionButton;
     }
 
     private SwingButton createSaveButton() {
@@ -100,15 +101,13 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("SAVE_TEXT_BUTTON_HEIGHT")
         );
 
-        SwingButton saveButton = new SwingButton(
+        return new SwingButton(
                 config.getString("SAVE_TEXT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("SAVE_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
-
-        return saveButton;
     }
 
     private SwingButton createLoadButton() {
@@ -117,15 +116,32 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("LOAD_TEXT_BUTTON_HEIGHT")
         );
 
-        SwingButton loadButton = new SwingButton(
+        return new SwingButton(
                 config.getString("LOAD_TEXT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("LOAD_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
+    }
 
-        return loadButton;
+    private SwingRadioButtonGroup createTrackSelector() {
+        List<String> options = new ArrayList<>();
+        int i = 0;
+        while (config.getKeys().contains("TRACK_SELECTOR_OPTION_" + i)) {
+            options.add(config.getString("TRACK_SELECTOR_OPTION_" + i));
+            i++;
+        }
+
+        System.out.println(options);
+        System.out.println(config.getString("TRACK_SELECTOR_STARTING_OPTION"));
+        return new SwingRadioButtonGroup(
+                options,
+                config.getString("TRACK_SELECTOR_STARTING_OPTION"),
+                null,
+                config.getScaledInt("TRACK_SELECTOR_FONT_SIZE"),
+                null
+        );
     }
 
     private ParameterSliderPanel createVolumePanel() {
@@ -172,7 +188,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         SwingComboBox<Integer> instrumentComboBox = new SwingComboBox<>(
                 items,
                 null,
-                config.getScaledFloat("INSTRUMENT_COMBOBOX_FONT_SIZE"),
+                config.getScaledInt("INSTRUMENT_COMBOBOX_FONT_SIZE"),
                 null,
                 config.getInt("INSTRUMENT_COMBOBOX_INITIAL_INDEX"),
                 config.getBoolean("INSTRUMENT_COMBOBOX_IS_EDITABLE")

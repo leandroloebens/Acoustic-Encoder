@@ -1,8 +1,8 @@
-package com.acoustic.encoder.features.conversion.view.swing;
+package com.acoustic.encoder.features.conversion.view.swing.components.assembler;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
@@ -16,14 +16,15 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
     private final static int BUTTONS_VGAP = 10;
 
-    private final static int PARAMETERS_VGAP = 55;
-    private final static int PARAMETERS_BORDER_PADDING = 20;
+    private final static int PARAMETERS_VGAP = 50;
+    private final static int PARAMETERS_BORDER_PADDING = 10;
 
     private final SwingButton converterButton;
     private final SwingButton saveButton;
     private final SwingButton loadButton;
     private final SwingLabel instructionLabel;
     private final SwingVerticalScrollPane scrollPane;
+    private final SwingRadioButtonGroup trackSelector;
     private final ParameterSliderPanel volumePanel;
     private final ParameterSliderPanel octavePanel;
     private final ParameterComboBoxPanel<Integer> instrumentPanel;
@@ -35,6 +36,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         this.loadButton = components.loadTextButton();
         this.instructionLabel = components.instructionLabel();
         this.scrollPane = components.scrollPane();
+        this.trackSelector = components.trackSelector();
         this.volumePanel = components.volumePanel();
         this.octavePanel = components.octavePanel();
         this.instrumentPanel = components.instrumentPanel();
@@ -86,6 +88,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
                 loadButton,
                 scrollPane,
                 instructionLabel,
+                trackSelector,
                 volumePanel,
                 octavePanel,
                 instrumentPanel,
@@ -134,19 +137,21 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
         configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.Y_AXIS));
 
+        int heightGap = (int) (PARAMETERS_VGAP * SwingUtils.getScreenScaleRatio());
+
         configPanel.add(Box.createVerticalGlue());
 
         configPanel.add(volumePanel);
 
-        configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
+        configPanel.add(Box.createVerticalStrut(heightGap));
 
         configPanel.add(octavePanel);
 
-        configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
+        configPanel.add(Box.createVerticalStrut(heightGap));
 
         configPanel.add(bpmPanel);
 
-        configPanel.add(Box.createVerticalStrut(PARAMETERS_VGAP));
+        configPanel.add(Box.createVerticalStrut(heightGap));
 
         instrumentPanel.getComboBox().sortItemsAscending();
         configPanel.add(instrumentPanel);

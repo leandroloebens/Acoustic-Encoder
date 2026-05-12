@@ -8,6 +8,8 @@ import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
 import com.acoustic.encoder.features.conversion.view.swing.*;
+import com.acoustic.encoder.features.conversion.view.swing.components.assembler.DefaultSwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.components.assembler.SwingConversionViewAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;

@@ -33,7 +33,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
     private static final String ONSAVE_FILTER_DESCRIPTION = "Text Files (*.txt)";
     private static final String ONSAVE_DIALOG_TITLE = "Save as";
 
-    private MusicParametersState parameters;
+    private final MusicParametersState parameters;
 
     private boolean bound;
     private final List<Runnable> removers = new ArrayList<>();

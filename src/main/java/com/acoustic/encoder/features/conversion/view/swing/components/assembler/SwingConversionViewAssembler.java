@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.view.swing;
+package com.acoustic.encoder.features.conversion.view.swing.components.assembler;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;

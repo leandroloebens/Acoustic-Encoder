@@ -2,7 +2,9 @@ package com.acoustic.encoder.shared.view.swing;
 
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class SwingViewConfigWrapper {
 
@@ -17,6 +19,10 @@ public class SwingViewConfigWrapper {
         if (configMap == null) throw new IllegalArgumentException(CONFIG_MAP_NULL_ERROR_MSG);
         this.configMap = configMap;
 
+    }
+
+    public List<String> getKeys() {
+        return new ArrayList<>(configMap.keySet());
     }
 
     public String getString(String key) {

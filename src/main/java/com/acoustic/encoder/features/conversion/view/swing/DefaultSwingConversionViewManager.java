@@ -3,6 +3,7 @@ package com.acoustic.encoder.features.conversion.view.swing;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
+import com.acoustic.encoder.features.conversion.view.swing.components.assembler.SwingConversionViewAssembler;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
@@ -15,7 +16,7 @@ import java.awt.event.WindowEvent;
 public class DefaultSwingConversionViewManager implements ConversionViewManager {
 
     private final static String WINDOW_TITLE = "Conversor: Texto para Som";
-    private final static int WINDOW_MIN_HEIGHT = 650;
+    private final static int WINDOW_MIN_HEIGHT = 750;
     private final static int WINDOW_MIN_WIDTH = 850;
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 

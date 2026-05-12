@@ -41,7 +41,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
     public SwingComboBox(
             List<T> items,
             Font font,
-            float fontSize,
+            int fontSize,
             Border border,
             int initialIndex,
             boolean isEditable
@@ -72,13 +72,9 @@ public class SwingComboBox<T> extends JComboBox<T> {
             }
         }
 
-        if (font != null) {
+        if (font != null) this.setFont(font);
 
-            this.setFont(font);
-
-            if (fontSize > 0)
-                this.setFont(font.deriveFont(fontSize));
-        }
+        if (fontSize > 0) this.setFont(new Font(this.getFont().getName(), this.getFont().getStyle(), fontSize));
 
         if (border != null)
             this.setBorder(border);
