@@ -1,16 +1,14 @@
 package com.acoustic.encoder.shared.model;
 
-import java.util.List;
-
 public record MusicModel(
-        List<MusicalInstruction> musicalInstructions,
-        MusicConfig config
+        VoiceList voices,
+        int bpm
 ) {
     @Override
     public String toString() {
         return "MusicModel{" +
-                "\nmusicalInstructions=" + musicalInstructions +
-                "\n" + this.config.toString() +
+                "\nvoices=" + voices +
+                "\nbpm" + bpm +
                 "\n}";
     }
 }

@@ -2,9 +2,7 @@ package com.acoustic.encoder.features.conversion.service;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.shared.event.EventBus;
-import com.acoustic.encoder.shared.model.MusicConfig;
-import com.acoustic.encoder.shared.model.MusicModel;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.shared.model.*;
 import com.acoustic.encoder.features.conversion.parser.InstructionParser;
 
 import java.util.List;
@@ -21,11 +19,16 @@ public class DefaultConversionService implements ConversionService {
         this.eventBus = eventBus;
     }
 
-    public MusicModel textToMusic(String text, MusicConfig config) {
+    public MusicModel textToMusic(String text, VoiceConfig config) {
 
         List<MusicalInstruction> musicalInstructions = this.parser.parseText(text);
 
-        MusicModel music = new MusicModel(musicalInstructions, config);
+        Voice voice = new Voice(musicalInstructions, config);
+
+        VoiceList voiceList = new VoiceList();
+        voiceList.add(voice);
+
+        MusicModel music = new MusicModel(voiceList, config.defaultBpm());
 
         this.eventBus.publish(new ConversionCompletedEvent(music));
 

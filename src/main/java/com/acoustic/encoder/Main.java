@@ -3,6 +3,8 @@ package com.acoustic.encoder;
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.service.DefaultFIleService;
 import com.acoustic.encoder.features.player.audio.midi.*;
+import com.acoustic.encoder.features.player.audio.midi.command.DefaultMidiCommandRegistryFactory;
+import com.acoustic.encoder.features.player.audio.midi.track.DefaultTrackWriter;
 import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
@@ -36,7 +38,10 @@ public class Main {
 
 
         // Audio Player Service
-        var sequenceBuilder = new DefaultSequenceBuilder();
+        var commandRegistryFactory = new DefaultMidiCommandRegistryFactory();
+        var commandRegistry = commandRegistryFactory.create();
+        var trackWriter = new DefaultTrackWriter(commandRegistry);
+        var sequenceBuilder = new DefaultSequenceBuilder(trackWriter);
         var sequencePlayer = new DefaultSequencePlayer(MidiSystem.getSequencer());
 
         var audioPlayer = new JSoundAudioAdapter(sequenceBuilder, sequencePlayer);

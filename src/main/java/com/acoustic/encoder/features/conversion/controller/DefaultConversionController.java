@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.controller;
 
 import com.acoustic.encoder.features.conversion.service.FileService;
-import com.acoustic.encoder.shared.model.MusicConfig;
+import com.acoustic.encoder.shared.model.VoiceConfig;
 import com.acoustic.encoder.shared.model.MusicModel;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
@@ -31,7 +31,7 @@ public class DefaultConversionController implements ConversionController {
 
         MusicModel music = this.conversionService.textToMusic(
                 input.text(),
-                new MusicConfig(
+                new VoiceConfig(
                         input.defaultMidiInstrument(),
                         input.bpm(),
                         input.defaultOctave(),
