@@ -13,6 +13,6 @@ public interface ConversionViewManager {
 
     void disposeFrame();
 
-    void setInitialDefaultParameters(VoiceConfig parameters);
+    void setInitialDefaultParameters(VoiceConfig parameters, int bpm);
 
 }

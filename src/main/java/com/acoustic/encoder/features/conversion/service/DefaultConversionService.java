@@ -19,7 +19,8 @@ public class DefaultConversionService implements ConversionService {
         this.eventBus = eventBus;
     }
 
-    public MusicModel textToMusic(String text, VoiceConfig config) {
+    @Override
+    public MusicModel textToMusic(String text, int bpm, VoiceConfig config) {
 
         List<MusicalInstruction> musicalInstructions = this.parser.parseText(text);
 
@@ -28,7 +29,7 @@ public class DefaultConversionService implements ConversionService {
         VoiceList voiceList = new VoiceList();
         voiceList.add(voice);
 
-        MusicModel music = new MusicModel(voiceList, config.defaultBpm());
+        MusicModel music = new MusicModel(voiceList, bpm);
 
         this.eventBus.publish(new ConversionCompletedEvent(music));
 

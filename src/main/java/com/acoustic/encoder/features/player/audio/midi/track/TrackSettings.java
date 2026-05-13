@@ -5,11 +5,14 @@ public record TrackSettings(
         int ppqResolution,
         int defaultInstrument,
         int defaultOctave,
-        int noteVelocity
+        int noteVelocity,
+        int defaultBpm,
+        int baseNoteTickDuration
 ) {
 
     public TrackSettings {
 
+        // TODO validate OTHERS INPUTS
         validateChannel(channel);
         validateInstrument(defaultInstrument);
         validateOctave(defaultOctave);

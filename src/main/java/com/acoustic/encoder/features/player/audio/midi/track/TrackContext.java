@@ -9,12 +9,20 @@ public record TrackContext(
         TrackState state
 ) {
 
-    public static TrackContext initialContext(VoiceConfig config, int noteTickDuration, int channel, int ppqResolution, int noteVelocity) {
+    public static TrackContext initialContext(VoiceConfig config, int noteTickDuration, int channel, int ppqResolution, int noteVelocity, int initialBpm) {
         return new TrackContext(
-                new TrackSettings(channel, ppqResolution, config.defaultMidiInstrument(), config.defaultOctave(), noteVelocity),
+                new TrackSettings(
+                        channel,
+                        ppqResolution,
+                        config.defaultMidiInstrument(),
+                        config.defaultOctave(),
+                        noteVelocity,
+                        initialBpm,
+                        noteTickDuration
+                ),
                 new TrackState(
                         null,
-                        config.defaultBpm(),
+                        initialBpm,
                         noteTickDuration,
                         0,
                         config.defaultMidiInstrument(),
@@ -24,7 +32,11 @@ public record TrackContext(
         );
     }
 
-    public TrackContext withTick(int newTick) {
+    public TrackContext withNoteTickDuration(int newNoteTickDuration) {
+        return new TrackContext(settings, state.withNoteTickDuration(newNoteTickDuration));
+    }
+
+    public TrackContext withTick(long newTick) {
         return new TrackContext(settings, state.withTick(newTick));
     }
 
@@ -32,35 +44,20 @@ public record TrackContext(
         return new TrackContext(settings, state.withVolume(newVolume));
     }
 
-    public TrackContext multiplyVolumeBy(int factor) {
-        int newVolume = factor*state.volume();
-        return withVolume(Math.min(newVolume, MidiUtils.VOL_MAX));
-    }
-
     public TrackContext withInstrument(int newInstrument) {
         return new TrackContext(settings, state.withInstrument(newInstrument));
-    }
-
-    public TrackContext incrementInstrument(int val) {
-        int newInstrument = state.instrument() + val;
-        return withInstrument(newInstrument > MidiUtils.INSTRUMENT_MAX ? settings.defaultInstrument() : newInstrument);
     }
 
     public TrackContext withOctave(int newOctave) {
         return new TrackContext(settings, state.withOctave(newOctave));
     }
 
-    public TrackContext incrementOctave(int val) {
-        int newOctave = state.octave() + val;
-        return withOctave(newOctave > MidiUtils.OCTAVE_MAX ? settings.defaultOctave() : newOctave);
-    }
-
     public TrackContext withPreviousInstruction(MusicalInstruction newPreviousInstruction) {
         return new TrackContext(settings, state.withPreviousInstruction(newPreviousInstruction));
     }
 
-    public TrackContext withDelay(int tickDelay) {
-        return withTick(state.tick() + tickDelay);
+    public TrackContext withLocalBpm(int newLocalBpm) {
+        return new TrackContext(settings, state.withLocalBpm(newLocalBpm));
     }
 
 }

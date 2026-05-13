@@ -25,10 +25,10 @@ public class DefaultConversionScreen implements ConversionScreen {
         this.manager.setInitialDefaultParameters(
                 new VoiceConfig(
                         INITIAL_INSTRUMENT,
-                        INITIAL_BPM,
                         INITIAL_OCTAVE,
                         INITIAL_VOLUME
-                )
+                ),
+                INITIAL_BPM
         );
 
         startWindow();

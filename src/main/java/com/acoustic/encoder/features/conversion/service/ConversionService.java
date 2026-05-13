@@ -5,6 +5,6 @@ import com.acoustic.encoder.shared.model.MusicModel;
 
 public interface ConversionService {
 
-    MusicModel textToMusic(String text, VoiceConfig config);
+    MusicModel textToMusic(String text, int bpm, VoiceConfig config);
 
 }

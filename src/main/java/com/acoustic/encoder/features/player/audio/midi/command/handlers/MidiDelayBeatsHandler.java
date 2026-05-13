@@ -8,11 +8,16 @@ import javax.sound.midi.Track;
 
 public class MidiDelayBeatsHandler implements MidiCommandHandler {
 
+    @Override
     public TrackContext handle(Track track, TrackContext context, int beats) {
 
-        int tickDelay = beats*context.settings().ppqResolution();
+        if (beats < 0) throw new IllegalArgumentException("Beats value must be positive!");
 
-        return context.withDelay(tickDelay);
+        long tickDelay = (long) beats * context.settings().ppqResolution();
+
+        long finalTick = context.state().tick() + tickDelay;
+
+        return context.withTick(finalTick);
     }
 
 

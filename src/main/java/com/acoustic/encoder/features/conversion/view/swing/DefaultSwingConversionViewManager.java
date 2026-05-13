@@ -80,11 +80,11 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     public void disposeFrame() { frame.dispose(); }
 
     @Override
-    public void setInitialDefaultParameters(VoiceConfig parameters) {
+    public void setInitialDefaultParameters(VoiceConfig parameters, int bpm) {
         this.defaultVolume = parameters.defaultVolume();
         this.defaultOctave = parameters.defaultOctave();
         this.defaultInstrument = parameters.defaultMidiInstrument();
-        this.defaultBpm = parameters.defaultBpm();
+        this.defaultBpm = bpm;
     }
 
     private class ActionHandler implements SwingConversionViewActionHandler {

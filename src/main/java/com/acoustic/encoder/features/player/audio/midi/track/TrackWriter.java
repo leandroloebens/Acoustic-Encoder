@@ -9,6 +9,7 @@ public interface TrackWriter {
     public void writeTrack(
             Track track,
             Voice voice,
+            int initialBpm,
             int channel,
             int ppqResolution
     );

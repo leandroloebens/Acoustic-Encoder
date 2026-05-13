@@ -6,36 +6,41 @@ import com.acoustic.encoder.shared.model.MusicalInstruction;
 public record TrackState(
 
         MusicalInstruction previousInstruction,
-        int bpm,
+        int localBpm,
         int noteTickDuration,
-        int tick,
+        long tick,
         int instrument,
         int octave,
         int volume
 
 ) {
 
-    TrackState withTick(int newTick) {
-        return new TrackState(previousInstruction, bpm, noteTickDuration, newTick, instrument, octave, volume);
+    TrackState withNoteTickDuration(int newNoteTickDuration) {
+        return new TrackState(previousInstruction, localBpm, newNoteTickDuration, tick, instrument, octave, volume);
+    }
+
+    TrackState withTick(long newTick) {
+        return new TrackState(previousInstruction, localBpm, noteTickDuration, newTick, instrument, octave, volume);
     }
 
     TrackState withInstrument(int newInstrument) {
-        return new TrackState(previousInstruction, bpm, noteTickDuration, tick, newInstrument, octave, volume);
+        return new TrackState(previousInstruction, localBpm, noteTickDuration, tick, newInstrument, octave, volume);
     }
 
     TrackState withOctave(int newOctave) {
-        return new TrackState(previousInstruction, bpm, noteTickDuration, tick, instrument, newOctave, volume);
+        return new TrackState(previousInstruction, localBpm, noteTickDuration, tick, instrument, newOctave, volume);
     }
 
     TrackState withVolume(int newVolume) {
-        return new TrackState(previousInstruction, bpm, noteTickDuration, tick, instrument, octave, newVolume);
+        return new TrackState(previousInstruction, localBpm, noteTickDuration, tick, instrument, octave, newVolume);
     }
 
     TrackState withPreviousInstruction(MusicalInstruction newPreviousInstruction) {
-        return new TrackState(newPreviousInstruction, bpm, noteTickDuration, tick, instrument, octave, volume);
+        return new TrackState(newPreviousInstruction, localBpm, noteTickDuration, tick, instrument, octave, volume);
     }
 
-    TrackState withDelay(int tickDelay) {
-        return withTick(tick + tickDelay);
+    TrackState withLocalBpm(int newLocalBpm) {
+        return new TrackState(previousInstruction, newLocalBpm, noteTickDuration, tick, instrument, octave, volume);
     }
 }
+

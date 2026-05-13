@@ -18,13 +18,15 @@ public class DefaultTrackWriter implements TrackWriter {
         this.commandRegistry = commandRegistry;
     }
 
-    public void writeTrack(Track track, Voice voice, int channel, int ppqResolution) {
+    @Override
+    public void writeTrack(Track track, Voice voice, int initialBpm, int channel, int ppqResolution) {
 
         initializeTrack(track, voice.config(), channel);
 
+        // TODO fix magic number
         int noteTickDuration = (int) ((1.0f/2.0f)*ppqResolution);
 
-        processInstructionsToTrack(track, voice, channel, ppqResolution, noteTickDuration);
+        processInstructionsToTrack(track, voice, channel, ppqResolution, noteTickDuration, initialBpm);
 
     }
 
@@ -40,7 +42,8 @@ public class DefaultTrackWriter implements TrackWriter {
         track.add(MidiUtils.createVolumeChangeEvent(config.defaultVolume(), channel, 0));
     }
 
-    private void processInstructionsToTrack(Track track, Voice voice, int channel, int ppqResolution, int noteTickDuration) {
+    private void processInstructionsToTrack(Track track, Voice voice, int channel, int ppqResolution, int noteTickDuration, int initialBpm) {
+
 
 //        TrackSettings settings = new TrackSettings(
 //                channel,
@@ -49,13 +52,14 @@ public class DefaultTrackWriter implements TrackWriter {
 //                voice.config().defaultOctave(),
 //                NOTE_VELOCITY
 //        );
-
+        // TODO refactor param / DefaultTrackContextFactory
         TrackContext trackContext = TrackContext.initialContext(
                 voice.config(),
                 noteTickDuration,
                 channel,
                 ppqResolution,
-                NOTE_VELOCITY
+                NOTE_VELOCITY,
+                initialBpm
         );
 
         for (MusicalInstruction instruction : voice.musicalInstructions()) {

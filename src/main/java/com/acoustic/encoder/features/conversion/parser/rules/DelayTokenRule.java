@@ -20,8 +20,10 @@ public class DelayTokenRule implements TokenRule {
             return Optional.empty();
         }
 
-        // DELAY LOGIC TODO ----------------------------------------------------------
-        MusicalInstruction instruction = createDelayInstruction(Integer.parseInt(matcher.group(1)));
+        MusicalInstruction instruction = new MusicalInstruction(
+                MusicalCommand.DELAY_BEATS,
+                Integer.parseInt(matcher.group(1))
+        );
 
         return Optional.of(new TokenMatch(instruction, matcher.end()));
     }
