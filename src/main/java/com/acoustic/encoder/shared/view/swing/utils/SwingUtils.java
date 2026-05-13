@@ -14,14 +14,14 @@ public class SwingUtils {
     private static final int DEFAULT_FILE_CHOOSER_HEIGHT = 400;
     private static final int DEFAULT_FILE_CHOOSER_FONT_SIZE = 14;
 
-    private static final int DEFAULT_SCREEN_WIDTH = 1920;
+    private static final int DEFAULT_SCREEN_HEIGHT = 1080;
 
     private static final String INVALID_FILE_OPERATION_MSG =
             "Operation must be either SAVE_FILE_OPERATION or LOAD_FILE_OPERATION!";
 
     public static float getScreenScaleRatio() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        return (float)(screenSize.getWidth() / DEFAULT_SCREEN_WIDTH);
+        return (float)(screenSize.getHeight() / DEFAULT_SCREEN_HEIGHT);
     }
 
     public static void setHandCursor(AbstractButton... buttons) {

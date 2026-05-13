@@ -2,6 +2,7 @@ package com.acoustic.encoder.features.conversion.view.swing.components.assembler
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
@@ -15,8 +16,9 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final static int BORDERLAYOUT_WGAP = 10;
 
     private final static int BUTTONS_VGAP = 10;
+    private final static int BUTTONS_HGAP = 10;
 
-    private final static int PARAMETERS_VGAP = 50;
+    private final static int PARAMETERS_VGAP = (int) (30 * SwingUtils.getScreenScaleRatio());
     private final static int PARAMETERS_BORDER_PADDING = 10;
 
     private final SwingButton converterButton;
@@ -24,10 +26,10 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final SwingButton loadButton;
     private final SwingLabel instructionLabel;
     private final SwingVerticalScrollPane scrollPane;
-    private final SwingRadioButtonGroup trackSelector;
+    private final TrackSelectorPanel trackSelector;
     private final ParameterSliderPanel volumePanel;
     private final ParameterSliderPanel octavePanel;
-    private final ParameterComboBoxPanel<Integer> instrumentPanel;
+    private final ParameterComboBoxPanel<String> instrumentPanel;
     private final ParameterSliderPanel bpmPanel;
 
     public DefaultSwingConversionViewAssembler(ConversionViewComponentsWrapper components) {
@@ -52,8 +54,6 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
 
         SwingFrame frame = new SwingFrame(title, windowInitialSize, frameExitOperation);
 
-        frame.setMinimumSize(windowInitialSize);
-
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
         SwingPanel buttonsPanel = createButtonsPanel();
@@ -65,7 +65,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        SwingPanel configPanel = createConfigPanel(buttonsPanel.getHeight());
+        SwingPanel configPanel = createConfigPanel();
         configPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         configPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -76,6 +76,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         frame.setLocationRelativeTo(null);
 
         frame.pack();
+        frame.setMinimumSize(windowInitialSize);
 
         return frame;
     }
@@ -111,7 +112,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     }
 
     private SwingPanel createButtonsPanel() {
-        SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, BUTTONS_HGAP, BUTTONS_VGAP));
         fileButtonsPanel.add(loadButton);
         fileButtonsPanel.add(saveButton);
 
@@ -132,32 +133,34 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         return buttonsPanel;
     }
 
-    private SwingPanel createConfigPanel(int bottomPadding) {
+    private SwingPanel createConfigPanel() {
         SwingPanel configPanel = new SwingPanel();
 
-        configPanel.setLayout(new BoxLayout(configPanel, BoxLayout.Y_AXIS));
+        configPanel.setLayout(new GridBagLayout());
 
-        int heightGap = (int) (PARAMETERS_VGAP * SwingUtils.getScreenScaleRatio());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.insets = new Insets(0, 0, PARAMETERS_VGAP, 0);
 
-        configPanel.add(Box.createVerticalGlue());
+        gbc.gridy = 0;
+        configPanel.add(bpmPanel, gbc);
 
-        configPanel.add(volumePanel);
+        gbc.gridy++;
+        configPanel.add(trackSelector, gbc);
 
-        configPanel.add(Box.createVerticalStrut(heightGap));
+        gbc.gridy++;
+        configPanel.add(volumePanel, gbc);
 
-        configPanel.add(octavePanel);
 
-        configPanel.add(Box.createVerticalStrut(heightGap));
+        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.gridy++;
+        configPanel.add(octavePanel, gbc);
 
-        configPanel.add(bpmPanel);
-
-        configPanel.add(Box.createVerticalStrut(heightGap));
-
-        instrumentPanel.getComboBox().sortItemsAscending();
-        configPanel.add(instrumentPanel);
-
-        configPanel.add(Box.createVerticalStrut(bottomPadding));
-        configPanel.add(Box.createVerticalGlue());
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.gridy++;
+        configPanel.add(instrumentPanel, gbc);
 
         configPanel.setBorder(
                 BorderFactory.createEmptyBorder(
@@ -167,15 +170,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
                         PARAMETERS_BORDER_PADDING + BORDERLAYOUT_HGAP)
         );
 
-        // Create a wrapper panel with GridBagLayout for centering
-        SwingPanel wrapper = new SwingPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        wrapper.add(configPanel, gbc);
-
-        return wrapper;
+        return configPanel;
     }
 
 }

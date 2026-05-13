@@ -9,7 +9,8 @@ import javax.swing.*;
 
 public class SwingSlider extends JSlider {
 
-    private static final int MAX_SLIDER_FONT_SIZE = 13;
+    private static final int MAX_SLIDER_FONT_SIZE = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private static final int MIN_SCREEN_HEIGHT = 1080;
 
     private int minToShow;
     private int maxToShow;
@@ -34,7 +35,7 @@ public class SwingSlider extends JSlider {
         this.setValue(startValue);
         this.setMajorTickSpacing(tickSpacing);
         this.setPaintTicks(true);
-        this.setPaintLabels(true);
+        if (Toolkit.getDefaultToolkit().getScreenSize().height >= MIN_SCREEN_HEIGHT) this.setPaintLabels(true);
 
         if (sliderFontSize > MAX_SLIDER_FONT_SIZE) {
             sliderFontSize = MAX_SLIDER_FONT_SIZE;

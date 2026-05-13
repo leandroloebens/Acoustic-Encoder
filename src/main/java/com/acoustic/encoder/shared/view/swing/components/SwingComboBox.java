@@ -50,24 +50,18 @@ public class SwingComboBox<T> extends JComboBox<T> {
         this.originalItems = new ArrayList<>();
 
         if (items != null) {
-
             this.originalItems.addAll(items);
 
             for (T item : items)
                 this.addItem(item);
 
             if (initialIndex >= 0 && initialIndex < items.size()) {
-
                 this.initialItem = items.get(initialIndex);
-
                 this.setSelectedItem(this.initialItem);
-
                 this.lastValidItem = this.initialItem;
             }
             else if (!items.isEmpty()) {
-
                 this.setSelectedIndex(0);
-
                 this.lastValidItem = items.getFirst();
             }
         }
@@ -76,29 +70,23 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
         if (fontSize > 0) this.setFont(new Font(this.getFont().getName(), this.getFont().getStyle(), fontSize));
 
-        if (border != null)
-            this.setBorder(border);
+        if (border != null) this.setBorder(border);
 
         this.setEditable(isEditable);
     }
 
     public void enableFiltering() {
 
-        if (!this.isEditable())
-            this.setEditable(true);
+        if (!this.isEditable()) this.setEditable(true);
 
-        JTextField editor =
-                (JTextField) this.getEditor().getEditorComponent();
+        JTextField editor = (JTextField) this.getEditor().getEditorComponent();
 
         editor.getDocument().addDocumentListener(new DocumentListener() {
 
             private void filter() {
+                if (updatingModel) return;
 
-                if (updatingModel)
-                    return;
-
-                SwingUtilities.invokeLater(() ->
-                        applyFilter(editor.getText()));
+                SwingUtilities.invokeLater(() -> applyFilter(editor.getText()));
             }
 
             @Override
@@ -119,23 +107,17 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public void sortItemsAscending() {
-
         this.currentSortOrder = SortOrder.ASCENDING;
-
         applyFilter(getEditorText());
     }
 
     public void sortItemsDescending() {
-
         this.currentSortOrder = SortOrder.DESCENDING;
-
         applyFilter(getEditorText());
     }
 
     public void resetItems() {
-
         this.currentSortOrder = SortOrder.NONE;
-
         applyFilter(initialItem.toString());
     }
 
@@ -144,8 +126,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
         if (!this.isEditable())
             return "";
 
-        JTextField editor =
-                (JTextField) this.getEditor().getEditorComponent();
+        JTextField editor = (JTextField) this.getEditor().getEditorComponent();
 
         return editor.getText().trim();
     }
@@ -158,8 +139,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
         Object selected = this.getSelectedItem();
 
-        if (selected == null)
-            return ITEM_NOT_FOUND_INDEX;
+        if (selected == null) return ITEM_NOT_FOUND_INDEX;
 
         for (int i = 0; i < originalItems.size(); i++) {
             T item = originalItems.get(i);
@@ -177,7 +157,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
         if (index >= 0 && index < this.originalItems.size()) {
             T item = this.originalItems.get(index);
-
             this.setSelectedItem(item);
         }
     }
@@ -186,7 +165,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
         if (item != null && originalItems.contains(item)) {
             this.initialItem = item;
-
             this.setSelectedItem(item);
         }
     }
@@ -208,11 +186,8 @@ public class SwingComboBox<T> extends JComboBox<T> {
         String text = getEditorText();
 
         for (T item : originalItems) {
-
             if (item.toString().equals(text)) {
-
                 this.setSelectedItem(item);
-
                 this.lastValidItem = item;
 
                 return;
@@ -223,13 +198,11 @@ public class SwingComboBox<T> extends JComboBox<T> {
     public void restoreLastValidInput() {
         updatingModel = true;
 
-        JTextField editor =
-                (JTextField) this.getEditor().getEditorComponent();
+        JTextField editor = (JTextField) this.getEditor().getEditorComponent();
 
         this.setSelectedItem(this.lastValidItem);
 
-        if (this.lastValidItem != null)
-            editor.setText(this.lastValidItem.toString());
+        if (this.lastValidItem != null) editor.setText(this.lastValidItem.toString());
 
         updatingModel = false;
     }
@@ -237,7 +210,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
     public boolean finishEditing() {
 
         if (isEditorInputValid()) {
-
             commitEditorInput();
 
             return true;
@@ -249,12 +221,10 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     private void applyFilter(String text) {
-
         List<T> filteredItems = new ArrayList<>();
 
         for (T item : originalItems) {
-
-            if (item.toString().toLowerCase().contains(text.toLowerCase()))
+            if (item.toString().toLowerCase().startsWith(text.toLowerCase()))
                 filteredItems.add(item);
         }
 
@@ -273,7 +243,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
         try {
             switch (currentSortOrder) {
-
                 case ASCENDING -> sortedItems.sort(null);
 
                 case DESCENDING -> {
@@ -283,9 +252,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
             }
         }
         catch (ClassCastException e) {
-
             e.printStackTrace();
-
             System.out.println(ILLEGAL_ITEM_TYPE_FOR_SORTING_MSG);
         }
 
@@ -302,20 +269,17 @@ public class SwingComboBox<T> extends JComboBox<T> {
         for (T item : items)
             this.addItem(item);
 
-        JTextField editor =
-                (JTextField) this.getEditor().getEditorComponent();
+        JTextField editor = (JTextField) this.getEditor().getEditorComponent();
 
         this.setSelectedIndex(ITEM_NOT_FOUND_INDEX);
 
         editor.setText(editorText);
 
-        if (caret <= editorText.length())
-            editor.setCaretPosition(caret);
+        if (caret <= editorText.length()) editor.setCaretPosition(caret);
 
         if (this.getItemCount() > 0 && this.isDisplayable() && this.isShowing() && editor.hasFocus())
             SwingUtilities.invokeLater(() -> {
-                if (!this.isPopupVisible())
-                    this.showPopup();
+                if (!this.isPopupVisible()) this.showPopup();
             });
 
         updatingModel = false;

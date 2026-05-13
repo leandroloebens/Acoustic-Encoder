@@ -2,12 +2,15 @@ package com.acoustic.encoder.shared.view.swing.components;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class SwingRadioButtonGroup extends ButtonGroup {
 
     private static final String ILLEGAL_STARTING_OPTION_MSG = "Starting option not among the options";
+
+    private final List<JRadioButton> buttons = new ArrayList<>();
 
     public SwingRadioButtonGroup(
             List<String> options,
@@ -17,7 +20,6 @@ public class SwingRadioButtonGroup extends ButtonGroup {
             Icon selectedIcon
     ) {
         if (options != null) {
-
             if (startingOption != null && !startingOption.isEmpty() && !options.contains(startingOption))
                 throw new IllegalArgumentException(ILLEGAL_STARTING_OPTION_MSG);
 
@@ -36,17 +38,25 @@ public class SwingRadioButtonGroup extends ButtonGroup {
 
                 if (selectedIcon != null) button.setSelectedIcon(selectedIcon);
 
+                button.setVerticalTextPosition(SwingConstants.BOTTOM);
+                button.setHorizontalTextPosition(SwingConstants.CENTER);
+                button.setIconTextGap(5);
+
                 this.add(button);
+                buttons.add(button);
             }
 
         }
     }
 
     public int getSelectedIndex() {
-        JRadioButton selected = (JRadioButton) getSelection();
+        for (int i = 0; i < buttons.size(); i++)
+            if (buttons.get(i).isSelected()) return i;
+        
+        return -1;
+    }
 
-        List<AbstractButton> options = Collections.list(getElements());
-
-        return options.indexOf(selected);
+    public List<JRadioButton> getButtons() {
+        return buttons;
     }
 }

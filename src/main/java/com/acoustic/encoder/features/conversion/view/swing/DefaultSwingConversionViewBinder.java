@@ -7,10 +7,12 @@ import com.acoustic.encoder.features.conversion.model.MusicParametersState;
 import com.acoustic.encoder.features.conversion.model.TrackParameters;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
+import javax.sound.midi.Track;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
@@ -36,7 +38,10 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
     private final MusicParametersState parameters;
 
     private boolean bound;
+
     private final List<Runnable> removers = new ArrayList<>();
+
+    private JRadioButton selectedButton;
 
     public DefaultSwingConversionViewBinder(MusicParameters parameters) {
         this.parameters = new MusicParametersState(parameters.bpm(), parameters.trackParameters());
@@ -50,11 +55,12 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
         ParameterSliderPanel volumePanel = components.volumePanel();
         ParameterSliderPanel octavePanel = components.octavePanel();
         ParameterSliderPanel bpmPanel = components.bpmPanel();
-        ParameterComboBoxPanel<Integer> instrumentPanel = components.instrumentPanel();
+        ParameterComboBoxPanel<String> instrumentPanel = components.instrumentPanel();
         SwingButton converterButton = components.converterButton();
         SwingButton saveButton = components.saveTextButton();
         SwingButton loadButton = components.loadTextButton();
         SwingTextArea textArea = (SwingTextArea) components.scrollPane().getComponent();
+        TrackSelectorPanel trackSelector = components.trackSelector();
 
         setPanelsInitialValues(
                 volumePanel,
@@ -67,11 +73,30 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
         bindLoadTextButton(loadButton, frame, controller, textArea);
         bindSaveTextButton(saveButton, frame, controller, textArea);
 
-        bindParameterPanel(bpmPanel, () -> parameters.setBpm(bpmPanel.getSlider().getValue()));
-        bindParameterPanel(volumePanel, () -> parameters.setTrackVolume(0, volumePanel.getSlider().getValue()));
-        bindParameterPanel(octavePanel, () -> parameters.setTrackOctave(0, octavePanel.getSlider().getValue()));
+        bindParameterSliderPanel(bpmPanel, () -> parameters.setBpm(bpmPanel.getSlider().getValue()));
 
-        bindInstrumentPanel(instrumentPanel, frame);
+        bindParameterSliderPanel(
+                volumePanel,
+                () -> parameters.setTrackVolume(trackSelector.getSelectedIndex(), volumePanel.getSlider().getValue())
+        );
+
+        bindParameterSliderPanel(
+                octavePanel,
+                () -> parameters.setTrackOctave(trackSelector.getSelectedIndex(), octavePanel.getSlider().getValue())
+        );
+
+        bindParameterComboBoxPanel(
+                instrumentPanel,
+                frame,
+                () -> parameters.setTrackInstrument(
+                        trackSelector.getSelectedIndex(),
+                        instrumentPanel.getComboBox().getSelectedOriginalIndex()
+                ),
+                INVALID_INSTRUMENT_INPUT_WARNING
+        );
+
+        this.selectedButton = trackSelector.getSelectedButton();
+        bindTrackSelector(trackSelector, frame, volumePanel, octavePanel, instrumentPanel);
 
         bound = true;
     }
@@ -93,7 +118,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
             ParameterSliderPanel volumePanel,
             ParameterSliderPanel octavePanel,
             ParameterSliderPanel bpmPanel,
-            ParameterComboBoxPanel<Integer> instrumentPanel
+            ParameterComboBoxPanel<String> instrumentPanel
     ) {
         TrackParameters trackZero = parameters.getIndexedTrackParameters(0);
 
@@ -107,12 +132,11 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
         bpmPanel.updateLabel();
 
         instrumentPanel.getComboBox().setSelectedOriginalIndex(trackZero.getInstrument());
-        instrumentPanel.getComboBox().setInitialItem(
-                (Integer) instrumentPanel.getComboBox().getSelectedItem()
+        instrumentPanel.getComboBox().setInitialItem((String) instrumentPanel.getComboBox().getSelectedItem()
         );
     }
 
-    private boolean validateInstrumentInput(SwingFrame frame, ParameterComboBoxPanel<Integer> instrumentPanel) {
+    private boolean validateInstrumentInput(SwingFrame frame, ParameterComboBoxPanel<String> instrumentPanel) {
         if (instrumentPanel.getComboBox().finishEditing()) {
             JTextField editor = (JTextField) instrumentPanel.getComboBox().getEditor().getEditorComponent();
             editor.postActionEvent(); // Manually fires the event to update the instrument value
@@ -128,7 +152,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
     private void bindConvertButton(
             SwingButton converterButton,
             SwingFrame frame,
-            ParameterComboBoxPanel<Integer> instrumentPanel,
+            ParameterComboBoxPanel<String> instrumentPanel,
             ConversionController controller,
             SwingTextArea textArea
     ){
@@ -144,7 +168,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
                                     parameters.getIndexedTrackParameters(0).getOctave(),
                                     parameters.getIndexedTrackParameters(0).getVolume()
                             ));
-
+                    System.out.println(parameters);
                     frame.setVisible(false);
                 }
             } catch (IllegalArgumentException e) {
@@ -219,7 +243,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
         removers.add(() -> saveButton.removeActionListener(saveTextListener));
     }
 
-    private void bindParameterPanel(ParameterSliderPanel panel, Runnable action) {
+    private void bindParameterSliderPanel(ParameterSliderPanel panel, Runnable action) {
         ChangeListener listener = event -> {
             SwingSlider slider = panel.getSlider();
             int value = slider.getValue();
@@ -235,16 +259,50 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
         removers.add(() -> panel.getSlider().removeChangeListener(listener));
     }
 
-    private void bindInstrumentPanel(ParameterComboBoxPanel<Integer> panel, SwingFrame frame) {
+    private void bindParameterComboBoxPanel(
+            ParameterComboBoxPanel<String> panel,
+            SwingFrame frame,
+            Runnable action,
+            String warningMessage
+    ) {
         ActionListener listener = event -> {
             if (frame.isVisible() && panel.getComboBox().finishEditing())
-                parameters.setTrackInstrument(0, panel.getComboBox().getSelectedOriginalIndex());
+                action.run();
             else
-                JOptionPane.showMessageDialog(frame, INVALID_INSTRUMENT_INPUT_WARNING);
+                JOptionPane.showMessageDialog(frame, warningMessage);
         };
 
-        JTextField instrumentTextEditor = (JTextField) panel.getComboBox().getEditor().getEditorComponent();
-        instrumentTextEditor.addActionListener(listener);
-        removers.add(() -> instrumentTextEditor.removeActionListener(listener));
+        JTextField comboBoxTextEditor = (JTextField) panel.getComboBox().getEditor().getEditorComponent();
+        comboBoxTextEditor.addActionListener(listener);
+        removers.add(() -> comboBoxTextEditor.removeActionListener(listener));
+    }
+
+    private void bindTrackSelector(
+            TrackSelectorPanel selectorPanel,
+            SwingFrame frame,
+            ParameterSliderPanel volumePanel,
+            ParameterSliderPanel octavePanel,
+            ParameterComboBoxPanel<String> instrumentPanel
+    ) {
+        for (JRadioButton button : selectorPanel.getButtons()) {
+            ActionListener listener = event -> {
+                selectedButton.setSelected(true);
+                button.setSelected(false);
+                if (validateInstrumentInput(frame, instrumentPanel)) {
+                    selectedButton.setSelected(false);
+                    button.setSelected(true);
+                    selectedButton = button;
+                    TrackParameters track =
+                            parameters.getIndexedTrackParameters(selectorPanel.getButtons().indexOf(button));
+                    volumePanel.getSlider().setValue(track.getVolume());
+                    octavePanel.getSlider().setValue(track.getOctave());
+                    instrumentPanel.getComboBox().setSelectedOriginalIndex(track.getInstrument());
+                    instrumentPanel.getComboBox().finishEditing();
+                }
+            };
+
+            button.addActionListener(listener);
+            removers.add(() -> button.removeActionListener(listener));
+        }
     }
 }
