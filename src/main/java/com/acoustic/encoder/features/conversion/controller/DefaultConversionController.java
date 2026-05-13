@@ -31,12 +31,7 @@ public class DefaultConversionController implements ConversionController {
 
         MusicModel music = this.conversionService.textToMusic(
                 input.text(),
-                new VoiceConfig(
-                        input.defaultMidiInstrument(),
-                        input.bpm(),
-                        input.defaultOctave(),
-                        input.defaultVolume()
-                )
+                input.voices()
         );
 
         //TESTE-----------

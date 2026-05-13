@@ -19,16 +19,18 @@ public class DefaultConversionService implements ConversionService {
         this.eventBus = eventBus;
     }
 
-    public MusicModel textToMusic(String text, VoiceConfig config) {
+    public MusicModel textToMusic(String text, List<VoiceConfig> configList) {
 
         List<MusicalInstruction> musicalInstructions = this.parser.parseText(text);
 
-        Voice voice = new Voice(musicalInstructions, config);
-
         VoiceList voiceList = new VoiceList();
-        voiceList.add(voice);
+        for (VoiceConfig config : configList) {
+            Voice voice = new Voice(musicalInstructions, config);
+            voiceList.add(voice);
+        }
 
-        MusicModel music = new MusicModel(voiceList, config.defaultBpm());
+        int defaultBpm = configList.getFirst().defaultBpm();
+        MusicModel music = new MusicModel(voiceList, defaultBpm);
 
         this.eventBus.publish(new ConversionCompletedEvent(music));
 

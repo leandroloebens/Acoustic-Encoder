@@ -68,7 +68,7 @@ public class MusicParametersState {
                 original.getOctave(),
                 original.getInstrument()
         );
-}
+    }
 
     public void setAllTracksParameters(List<TrackParameters> trackParameters) { this.tracksParameters = trackParameters; }
 

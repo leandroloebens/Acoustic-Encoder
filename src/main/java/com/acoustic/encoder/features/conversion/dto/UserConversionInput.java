@@ -1,9 +1,10 @@
 package com.acoustic.encoder.features.conversion.dto;
 
+import com.acoustic.encoder.shared.model.VoiceConfig;
+
+import java.util.List;
+
 public record UserConversionInput(
         String text,
-        int defaultMidiInstrument,
-        int bpm,
-        int defaultOctave,
-        int defaultVolume
+        List<VoiceConfig> voices
 ) {}

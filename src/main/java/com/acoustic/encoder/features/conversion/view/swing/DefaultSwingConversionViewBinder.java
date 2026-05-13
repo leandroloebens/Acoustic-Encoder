@@ -9,6 +9,7 @@ import com.acoustic.encoder.features.conversion.view.swing.components.ParameterC
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
+import com.acoustic.encoder.shared.model.VoiceConfig;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
@@ -160,16 +161,22 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
             try {
                 if (textArea.getText().isEmpty()) throw new IllegalArgumentException();
                 else if (validateInstrumentInput(frame, instrumentPanel)) {
+                    List<VoiceConfig> voices = new ArrayList<>();
+                    for (TrackParameters track : parameters.getAllTracksParameters()) {
+                        voices.add(new VoiceConfig(
+                                track.getInstrument(),
+                                parameters.getBpm(),
+                                track.getOctave(),
+                                track.getVolume())
+                        );
+                    }
+
                     controller.handleConvertAction(
                             new UserConversionInput(
                                     textArea.getText(),
-                                    parameters.getIndexedTrackParameters(0).getInstrument(),
-                                    parameters.getBpm(),
-                                    parameters.getIndexedTrackParameters(0).getOctave(),
-                                    parameters.getIndexedTrackParameters(0).getVolume()
+                                    voices
                             ));
                     System.out.println(parameters);
-                    frame.setVisible(false);
                 }
             } catch (IllegalArgumentException e) {
                 JOptionPane.showMessageDialog(frame, EMPTY_TEXT_INPUT_WARNING);
