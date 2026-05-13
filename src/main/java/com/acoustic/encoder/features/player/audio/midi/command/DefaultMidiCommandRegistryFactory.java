@@ -20,7 +20,8 @@ public class DefaultMidiCommandRegistryFactory {
                         MusicalCommand.INCREMENT_INSTRUMENT, new MidiIncrementInstrumentHandler(),
                         MusicalCommand.INCREMENT_OCTAVE, new MidiIncrementOctaveHandler(),
                         MusicalCommand.PLAY_PREVIOUS, new MidiPlayPreviousHandler(playNoteHandler, silenceHandler),
-                        MusicalCommand.NULL_COMMAND, new MidiNullHandler()
+                        MusicalCommand.NULL_COMMAND, new MidiNullHandler(),
+                        MusicalCommand.DELAY_BEATS, new MidiDelayBeatsHandler()
                 )
         );
     }

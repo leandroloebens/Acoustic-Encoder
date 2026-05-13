@@ -9,9 +9,9 @@ public record TrackContext(
         TrackState state
 ) {
 
-    public static TrackContext initialContext(VoiceConfig config, int noteTickDuration, int channel, int noteVelocity) {
+    public static TrackContext initialContext(VoiceConfig config, int noteTickDuration, int channel, int ppqResolution, int noteVelocity) {
         return new TrackContext(
-                new TrackSettings(channel, config.defaultMidiInstrument(), config.defaultOctave(), noteVelocity),
+                new TrackSettings(channel, ppqResolution, config.defaultMidiInstrument(), config.defaultOctave(), noteVelocity),
                 new TrackState(
                         null,
                         config.defaultBpm(),
@@ -57,6 +57,10 @@ public record TrackContext(
 
     public TrackContext withPreviousInstruction(MusicalInstruction newPreviousInstruction) {
         return new TrackContext(settings, state.withPreviousInstruction(newPreviousInstruction));
+    }
+
+    public TrackContext withDelay(int tickDelay) {
+        return withTick(state.tick() + tickDelay);
     }
 
 }

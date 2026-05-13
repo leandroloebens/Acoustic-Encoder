@@ -2,6 +2,7 @@ package com.acoustic.encoder.features.player.audio.midi.track;
 
 public record TrackSettings(
         int channel,
+        int ppqResolution,
         int defaultInstrument,
         int defaultOctave,
         int noteVelocity
@@ -18,6 +19,12 @@ public record TrackSettings(
     private static void validateChannel(int channel) {
         if (channel < 0 || channel > 15) {
             throw new IllegalArgumentException("Channel must be in range [0, 15]");
+        }
+    }
+
+    private static void validatePpqResolution(int ppqResolution) {
+        if (ppqResolution < 0 || ppqResolution > 10000) {
+            throw new IllegalArgumentException("Invalid ppq resolution: " + ppqResolution);
         }
     }
 

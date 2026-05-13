@@ -34,4 +34,8 @@ public record TrackState(
     TrackState withPreviousInstruction(MusicalInstruction newPreviousInstruction) {
         return new TrackState(newPreviousInstruction, bpm, noteTickDuration, tick, instrument, octave, volume);
     }
+
+    TrackState withDelay(int tickDelay) {
+        return withTick(tick + tickDelay);
+    }
 }
