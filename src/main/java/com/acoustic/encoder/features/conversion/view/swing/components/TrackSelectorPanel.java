@@ -27,7 +27,7 @@ public class TrackSelectorPanel extends SwingPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 0, 10, 0);
 
         gbc.gridy = 0;
@@ -42,6 +42,7 @@ public class TrackSelectorPanel extends SwingPanel {
 
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
         this.add(buttonsPanel, gbc);
     }
 

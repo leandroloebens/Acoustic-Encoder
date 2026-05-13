@@ -11,7 +11,12 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
 
     private SwingComboBox<T> comboBox;
 
-    public ParameterComboBoxPanel(SwingComboBox<T> comboBox, SwingLabel label) {
+    public ParameterComboBoxPanel(
+            SwingComboBox<T> comboBox,
+            SwingLabel label,
+            Dimension preferredSize,
+            Dimension maxSize
+    ) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         if (comboBox != null) this.comboBox = comboBox;
         
@@ -20,6 +25,9 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
 
         this.add(label);
         this.add(this.comboBox);
+
+        if (preferredSize != null) this.setPreferredSize(preferredSize);
+        if (maxSize != null) this.setMaximumSize(maxSize);
 
     }
 

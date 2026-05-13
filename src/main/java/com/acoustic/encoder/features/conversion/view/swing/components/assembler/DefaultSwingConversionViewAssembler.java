@@ -15,11 +15,14 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final static int BORDERLAYOUT_HGAP = 10;
     private final static int BORDERLAYOUT_WGAP = 10;
 
-    private final static int BUTTONS_VGAP = 10;
-    private final static int BUTTONS_HGAP = 10;
+    private final static int BUTTONS_VGAP = (int) (7 * SwingUtils.getScreenScaleRatio());
+    private final static int BUTTONS_HGAP = (int) (7 * SwingUtils.getScreenScaleRatio());
 
-    private final static int PARAMETERS_VGAP = (int) (30 * SwingUtils.getScreenScaleRatio());
+    private final static int PARAMETERS_HGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private final static int PARAMETERS_VGAP = (int) (35 * SwingUtils.getScreenScaleRatio());
     private final static int PARAMETERS_BORDER_PADDING = 10;
+
+    private final static int CONFIG_PANEL_MAX_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width/2;
 
     private final SwingButton converterButton;
     private final SwingButton saveButton;
@@ -68,9 +71,13 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         SwingPanel configPanel = createConfigPanel();
         configPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
         configPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        configPanel.setMaximumSize(new Dimension(CONFIG_PANEL_MAX_WIDTH, Integer.MAX_VALUE));
+
+        SwingPanel configWrapper = new SwingPanel(new GridBagLayout());
+        configWrapper.add(configPanel);
 
         frame.add(conversionPanel, BorderLayout.CENTER);
-        frame.add(configPanel, BorderLayout.EAST);
+        frame.add(configWrapper, BorderLayout.NORTH);
 
         // Centering the frame
         frame.setLocationRelativeTo(null);
@@ -139,35 +146,36 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         configPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, PARAMETERS_HGAP, PARAMETERS_VGAP, PARAMETERS_HGAP);
         gbc.weightx = 1;
-        gbc.insets = new Insets(0, 0, PARAMETERS_VGAP, 0);
 
         gbc.gridy = 0;
+        gbc.gridx = 1;
         configPanel.add(bpmPanel, gbc);
 
+        gbc.insets = new Insets(0, PARAMETERS_HGAP, 0, PARAMETERS_HGAP);
         gbc.gridy++;
         configPanel.add(trackSelector, gbc);
 
+        gbc.gridx = 0;
         gbc.gridy++;
         configPanel.add(volumePanel, gbc);
 
-
-        gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.gridy++;
-        configPanel.add(octavePanel, gbc);
-
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.gridy++;
+        gbc.gridx++;
         configPanel.add(instrumentPanel, gbc);
+
+        gbc.gridx++;
+        configPanel.add(octavePanel, gbc);
 
         configPanel.setBorder(
                 BorderFactory.createEmptyBorder(
                         PARAMETERS_BORDER_PADDING,
                         PARAMETERS_BORDER_PADDING,
                         PARAMETERS_BORDER_PADDING,
-                        PARAMETERS_BORDER_PADDING + BORDERLAYOUT_HGAP)
+                        PARAMETERS_BORDER_PADDING
+                )
         );
 
         return configPanel;

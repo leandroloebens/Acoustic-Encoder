@@ -14,7 +14,7 @@ public class SwingUtils {
     private static final int DEFAULT_FILE_CHOOSER_HEIGHT = 400;
     private static final int DEFAULT_FILE_CHOOSER_FONT_SIZE = 14;
 
-    private static final int DEFAULT_SCREEN_HEIGHT = 1080;
+    private static final float DEFAULT_SCREEN_HEIGHT = 1080;
 
     private static final String INVALID_FILE_OPERATION_MSG =
             "Operation must be either SAVE_FILE_OPERATION or LOAD_FILE_OPERATION!";

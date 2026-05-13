@@ -15,12 +15,23 @@ import com.acoustic.encoder.features.conversion.parser.TextToInstructionParser;
 import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
 import com.acoustic.encoder.shared.navigation.listener.NavigationConversionCompletedListener;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.sound.midi.MidiSystem;
+import javax.swing.*;
 
 public class Main {
 
     void main() throws Exception {
+        // Set Look and Feel
+//        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+//        FlatLightLaf.setup();
+        FlatDarkLaf.setup();
+//        FlatDarculaLaf.setup();
+//        FlatIntelliJLaf.setup();
 
         // Event Bus
         var eventBus = new DefaultEventBus();

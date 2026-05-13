@@ -26,7 +26,8 @@ public class SwingSlider extends JSlider {
             int maxToShow,
             int startValue,
             int tickSpacing,
-            int sliderFontSize
+            Dimension preferredSize,
+            Dimension maxSize
     ) {
 
         this.setOrientation(direction);
@@ -35,11 +36,7 @@ public class SwingSlider extends JSlider {
         this.setValue(startValue);
         this.setMajorTickSpacing(tickSpacing);
         this.setPaintTicks(true);
-        if (Toolkit.getDefaultToolkit().getScreenSize().height >= MIN_SCREEN_HEIGHT) this.setPaintLabels(true);
-
-        if (sliderFontSize > MAX_SLIDER_FONT_SIZE) {
-            sliderFontSize = MAX_SLIDER_FONT_SIZE;
-        }
+        this.setPaintLabels(false);
 
         if (minToShow < min) {
             throw new IllegalArgumentException("minToShow must be greater than or equal to min");
@@ -51,24 +48,8 @@ public class SwingSlider extends JSlider {
         this.minToShow = minToShow;
         this.maxToShow = maxToShow;
 
-        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-
-        labelTable.put(min, new JLabel(String.valueOf(minToShow)));
-        labelTable.put(max, new JLabel(String.valueOf(maxToShow)));
-
-        this.setLabelTable(labelTable);
-        // Set font for all tick labels
-        Font labelFont = new Font(this.getFont().getName(), this.getFont().getStyle(), (sliderFontSize > 0) ? sliderFontSize : this.getFont().getSize());
-        for (JLabel label : labelTable.values()) {
-            label.setFont(labelFont);
-            label.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-        }
-
-        Dimension preferredSize = new Dimension(
-                (int)(200 * SwingUtils.getScreenScaleRatio()),
-                (int)(50 * SwingUtils.getScreenScaleRatio())
-        );
-        this.setPreferredSize(preferredSize);
+        if (preferredSize != null) this.setPreferredSize(preferredSize);
+        if (maxSize != null) this.setMaximumSize(maxSize);
     }
 
     public int getMinToShow() { return minToShow; }

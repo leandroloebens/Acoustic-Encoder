@@ -44,7 +44,9 @@ public class SwingComboBox<T> extends JComboBox<T> {
             int fontSize,
             Border border,
             int initialIndex,
-            boolean isEditable
+            boolean isEditable,
+            Dimension preferredSize,
+            Dimension maxSize
     ) {
 
         this.originalItems = new ArrayList<>();
@@ -73,6 +75,9 @@ public class SwingComboBox<T> extends JComboBox<T> {
         if (border != null) this.setBorder(border);
 
         this.setEditable(isEditable);
+
+        if (preferredSize != null) this.setPreferredSize(preferredSize);
+        if (maxSize != null) this.setMaximumSize(maxSize);
     }
 
     public void enableFiltering() {

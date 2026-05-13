@@ -18,6 +18,8 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
     private final static String ILLEGAL_CONFIG_ARGUMENT_MESSAGE = "Illegal config argument!";
 
+    private final static int SCROLL_PANE_MAX_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().width * 0.6);
+
     private final SwingViewConfigWrapper config;
 
     public DefaultSwingConversionViewComponentsFactory(HashMap<String, String> configMap) {
@@ -36,13 +38,19 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         SwingTextArea textArea =
                 new SwingTextArea(null, config.getScaledInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"), null);
+
         Border scrollPaneBorder = BorderFactory.createEmptyBorder(
                 config.getInt("MAIN_SCROLL_TEXTAREA_TGAP"),
                 config.getInt("MAIN_SCROLL_TEXTAREA_LGAP"),
                 config.getInt("MAIN_SCROLL_TEXTAREA_BGAP"),
                 config.getInt("MAIN_SCROLL_TEXTAREA_RGAP")
         );
-        SwingVerticalScrollPane scrollPane = new SwingVerticalScrollPane(textArea, scrollPaneBorder);
+
+        SwingVerticalScrollPane scrollPane = new SwingVerticalScrollPane(
+                textArea,
+                scrollPaneBorder,
+                new Dimension(SCROLL_PANE_MAX_WIDTH, Integer.MAX_VALUE)
+        );
 
         Border instructionLabelBorder = BorderFactory.createEmptyBorder(
                 config.getInt("INSTRUCTION_LABEL_TGAP"),
@@ -160,22 +168,19 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("VOLUME_SLIDER_MAX_TO_SHOW"),
                 config.getInt("VOLUME_SLIDER_MAX_TO_SHOW")/2, // Middle of the slider
                 config.getInt("VOLUME_SLIDER_TICK_SPACING"),
-                config.getScaledInt("PARAMETER_SLIDER_LABEL_FONT_SIZE")
+                null,
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
 
         SwingLabel volumeLabel = new SwingLabel(config.getScaledInt("PARAMETER_LABEL_FONT_SIZE"));
 
-        ParameterSliderPanel panel =
-                new ParameterSliderPanel(volumeSlider, volumeLabel, config.getString("VOLUME_LABEL_TEXT"));
-
-        Dimension size = panel.getPreferredSize();
-        panel.setPreferredSize(
-                new Dimension(
-                        size.width,
-                        size.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE"))
+        return new ParameterSliderPanel(
+                volumeSlider,
+                volumeLabel,
+                config.getString("VOLUME_LABEL_TEXT"),
+                config.getScaledDimension("PARAMETER_PANEL_PREFERRED_SIZE"),
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
-
-        return panel;
     }
 
     private ParameterSliderPanel createOctavePanel() {
@@ -187,22 +192,19 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("OCTAVE_SLIDER_MAX_TO_SHOW"),
                 config.getInt("OCTAVE_SLIDER_MAX_TO_SHOW")/2, // Middle of the slider
                 config.getInt("OCTAVE_SLIDER_TICK_SPACING"),
-                config.getScaledInt("PARAMETER_SLIDER_LABEL_FONT_SIZE")
+                null,
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
 
         SwingLabel octaveLabel = new SwingLabel(config.getScaledInt("PARAMETER_LABEL_FONT_SIZE"));
 
-        ParameterSliderPanel panel =
-                new ParameterSliderPanel(octaveSlider, octaveLabel, config.getString("OCTAVE_LABEL_TEXT"));
-
-        Dimension size = panel.getPreferredSize();
-        panel.setPreferredSize(
-                new Dimension(
-                        size.width,
-                        size.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE")*5)
+        return new ParameterSliderPanel(
+                octaveSlider,
+                octaveLabel,
+                config.getString("OCTAVE_LABEL_TEXT"),
+                config.getScaledDimension("PARAMETER_PANEL_PREFERRED_SIZE"),
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
-
-        return panel;
     }
 
     private ParameterSliderPanel createBpmPanel() {
@@ -214,29 +216,19 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("BPM_SLIDER_MAX_TO_SHOW"),
                 config.getInt("BPM_SLIDER_MAX_TO_SHOW")/2, // Middle of the slider
                 config.getInt("BPM_SLIDER_TICK_SPACING"),
-                config.getScaledInt("PARAMETER_SLIDER_LABEL_FONT_SIZE")
-        );
-
-        Dimension size = bpmSlider.getPreferredSize();
-        bpmSlider.setPreferredSize(
-                new Dimension(
-                        size.width,
-                        size.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE"))
+                null,
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
 
         SwingLabel bpmLabel = new SwingLabel(config.getScaledInt("PARAMETER_LABEL_FONT_SIZE"));
 
-        ParameterSliderPanel panel =
-                new ParameterSliderPanel(bpmSlider, bpmLabel, config.getString("BPM_LABEL_TEXT"));
-
-        Dimension panelSize = panel.getPreferredSize();
-        panel.setPreferredSize(
-                new Dimension(
-                        panelSize.width,
-                        panelSize.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE"))
+        return new ParameterSliderPanel(
+                bpmSlider,
+                bpmLabel,
+                config.getString("BPM_LABEL_TEXT"),
+                config.getScaledDimension("PARAMETER_PANEL_PREFERRED_SIZE"),
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
-
-        return panel;
     }
 
     private ParameterComboBoxPanel<String> createInstrumentPanel() {
@@ -252,7 +244,9 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getScaledInt("INSTRUMENT_COMBOBOX_FONT_SIZE"),
                 null,
                 config.getInt("INSTRUMENT_COMBOBOX_INITIAL_INDEX"),
-                config.getBoolean("INSTRUMENT_COMBOBOX_IS_EDITABLE")
+                config.getBoolean("INSTRUMENT_COMBOBOX_IS_EDITABLE"),
+                null,
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
         instrumentComboBox.enableFiltering();
 
@@ -263,6 +257,11 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 null
         );
 
-        return new ParameterComboBoxPanel<>(instrumentComboBox, instrumentLabel);
+        return new ParameterComboBoxPanel<>(
+                instrumentComboBox,
+                instrumentLabel,
+                config.getScaledDimension("PARAMETER_PANEL_PREFERRED_SIZE"),
+                config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
+        );
     }
 }

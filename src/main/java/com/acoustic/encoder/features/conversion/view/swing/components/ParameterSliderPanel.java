@@ -12,7 +12,13 @@ public class ParameterSliderPanel extends SwingPanel {
     private final SwingLabel label;
     private final String labelText;
 
-    public ParameterSliderPanel(SwingSlider slider, SwingLabel label, String labelText) {
+    public ParameterSliderPanel(
+            SwingSlider slider,
+            SwingLabel label,
+            String labelText,
+            Dimension preferredSize,
+            Dimension maxSize
+    ) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.slider = slider;
@@ -24,6 +30,9 @@ public class ParameterSliderPanel extends SwingPanel {
 
         this.label.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.slider.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        if (preferredSize != null) this.setPreferredSize(preferredSize);
+        if (maxSize != null) this.setMaximumSize(maxSize);
 
         this.updateLabel();
     }
