@@ -2,14 +2,21 @@ package com.acoustic.encoder.shared.factory;
 
 import com.acoustic.encoder.features.conversion.config.MusicParametersConfigLoader;
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
-import com.acoustic.encoder.features.conversion.service.FileService;
+import com.acoustic.encoder.features.conversion.view.swing.frame.DefaultSwingConversionViewManager;
+import com.acoustic.encoder.features.conversion.view.swing.frame.binder.DefaultSwingConversionViewFrameBinder;
+import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
+import com.acoustic.encoder.features.start.controller.DefaultStartController;
+import com.acoustic.encoder.features.start.view.DefaultStartScreen;
+import com.acoustic.encoder.features.start.view.StartScreen;
+import com.acoustic.encoder.features.start.view.StartViewManager;
+import com.acoustic.encoder.features.start.view.swing.frame.DefaultStartViewManager;
+import com.acoustic.encoder.shared.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
-import com.acoustic.encoder.features.conversion.view.swing.*;
-import com.acoustic.encoder.features.conversion.view.swing.components.assembler.DefaultSwingConversionViewAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.components.assembler.SwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.DefaultSwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.player.audio.midi.MidiInstrumentListProvider;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
@@ -58,14 +65,23 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     }
 
-    public ConversionScreen createConversionScreen() {
+    @Override
+    public StartScreen createStartScreen() {
+        return new DefaultStartScreen(
+                new DefaultStartController(this.fileService),
+                getStartViewManager()
+        );
+    }
 
+    @Override
+    public ConversionScreen createConversionScreen() {
         return new DefaultConversionScreen(
                 new DefaultConversionController(this.conversionService, this.fileService),
                 getConversionViewManager()
         );
     }
 
+    @Override
     public PlayerScreen createPlayerScreen() {
         return new DefaultPlayerScreen(
                 new DefaultAudioPlayerController(this.audioPlayerService),
@@ -74,7 +90,24 @@ public class DefaultScreenFactory implements ScreenFactory  {
         );
     }
 
+    private StartViewManager getStartViewManager() {
+        return new DefaultStartViewManager();
+    }
+
     private ConversionViewManager getConversionViewManager() {
+        SwingConversionViewFrameAssembler conversionViewAssembler = getConversionViewAssembler();
+
+        MusicParametersConfigLoader parametersLoader =
+                new MusicParametersConfigLoader(DEFAULT_MUSIC_PARAMETERS_FILE);
+        MusicParameters defaultMusicParameters = parametersLoader.loadDefaultMusicParameters();
+
+        SwingConversionViewFrameBinder conversionViewBinder =
+                new DefaultSwingConversionViewFrameBinder(defaultMusicParameters);
+
+        return new DefaultSwingConversionViewManager(conversionViewAssembler, conversionViewBinder, eventBus);
+    }
+
+    private SwingConversionViewFrameAssembler getConversionViewAssembler() {
         ViewConfigLoader conversionViewConfigLoader =
                 new ViewConfigLoader(CONVERSION_VIEW_CONFIG_FILE);
 
@@ -84,17 +117,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
                         new MidiInstrumentListProvider(MIDI_INSTRUMENT_BANK)
                 );
 
-        SwingConversionViewAssembler conversionViewAssembler =
-                new DefaultSwingConversionViewAssembler(conversionViewComponentsFactory.createComponents());
-
-        MusicParametersConfigLoader parametersLoader =
-                new MusicParametersConfigLoader(DEFAULT_MUSIC_PARAMETERS_FILE);
-        MusicParameters defaultMusicParameters = parametersLoader.loadDefaultMusicParameters();
-
-        SwingConversionViewBinder conversionViewBinder =
-                new DefaultSwingConversionViewBinder(defaultMusicParameters);
-
-        return new DefaultSwingConversionViewManager(conversionViewAssembler, conversionViewBinder, eventBus);
+        return new DefaultSwingConversionViewFrameAssembler(conversionViewComponentsFactory.createComponents());
     }
 
     private PlayerViewManager getPlayerViewManager() {

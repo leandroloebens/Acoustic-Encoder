@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.service;
+package com.acoustic.encoder.shared.service;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.view.swing.components.assembler;
+package com.acoustic.encoder.features.conversion.view.swing.frame.assembler;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
@@ -11,7 +11,7 @@ import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 import javax.swing.*;
 import java.awt.*;
 
-public class DefaultSwingConversionViewAssembler implements SwingConversionViewAssembler {
+public class DefaultSwingConversionViewFrameAssembler implements SwingConversionViewFrameAssembler {
 
     private final static int BORDERLAYOUT_HGAP = 10;
     private final static int BORDERLAYOUT_WGAP = 10;
@@ -36,7 +36,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final ParameterComboBoxPanel<InstrumentOption> instrumentPanel;
     private final ParameterSliderPanel bpmPanel;
 
-    public DefaultSwingConversionViewAssembler(ConversionViewComponentsWrapper components) {
+    public DefaultSwingConversionViewFrameAssembler(ConversionViewComponentsWrapper components) {
         this.converterButton = components.converterButton();
         this.saveButton = components.saveTextButton();
         this.loadButton = components.loadTextButton();

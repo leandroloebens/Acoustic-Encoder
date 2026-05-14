@@ -1,11 +1,11 @@
-package com.acoustic.encoder.features.conversion.view.swing.components.assembler;
+package com.acoustic.encoder.features.conversion.view.swing.frame.assembler;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 
 import java.awt.*;
 
-public interface SwingConversionViewAssembler {
+public interface SwingConversionViewFrameAssembler {
 
     SwingFrame assembleFrame(
             String title,

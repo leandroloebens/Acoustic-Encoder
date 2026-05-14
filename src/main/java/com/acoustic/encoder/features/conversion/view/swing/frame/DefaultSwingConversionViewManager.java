@@ -1,9 +1,10 @@
-package com.acoustic.encoder.features.conversion.view.swing;
+package com.acoustic.encoder.features.conversion.view.swing.frame;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
-import com.acoustic.encoder.features.conversion.view.swing.components.assembler.SwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.SwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
@@ -20,17 +21,17 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     private final static int WINDOW_MIN_WIDTH = 850;
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
-    private final SwingConversionViewAssembler assembler;
+    private final SwingConversionViewFrameAssembler assembler;
 
-    private final SwingConversionViewBinder binder;
+    private final SwingConversionViewFrameBinder binder;
 
     private final EventBus eventBus;
 
     private SwingFrame frame;
 
     public DefaultSwingConversionViewManager(
-            SwingConversionViewAssembler assembler,
-            SwingConversionViewBinder binder,
+            SwingConversionViewFrameAssembler assembler,
+            SwingConversionViewFrameBinder binder,
             EventBus eventBus
     ) {
 
@@ -46,7 +47,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     }
 
     @Override
-    public void startFrame(ConversionController conversionController) {
+    public void assemble(ConversionController conversionController) {
         Dimension windowInitialSize =
             new Dimension(
                 (int)(WINDOW_MIN_WIDTH * SwingUtils.getScreenScaleRatio()),
@@ -71,12 +72,12 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     }
 
     @Override
-    public void showFrame() { frame.setVisible(true); }
+    public void show() { frame.setVisible(true); }
 
     @Override
-    public void hideFrame() { frame.setVisible(false); }
+    public void hide() { frame.setVisible(false); }
 
     @Override
-    public void disposeFrame() { frame.dispose(); }
+    public void dispose() { frame.dispose(); }
 
 }

@@ -1,15 +1,12 @@
 package com.acoustic.encoder.features.conversion.controller;
 
-import com.acoustic.encoder.features.conversion.service.FileService;
-import com.acoustic.encoder.shared.model.VoiceConfig;
+import com.acoustic.encoder.shared.service.FileService;
 import com.acoustic.encoder.shared.model.MusicModel;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class DefaultConversionController implements ConversionController {

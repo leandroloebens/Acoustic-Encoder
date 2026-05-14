@@ -22,29 +22,21 @@ public class DefaultConversionScreen implements ConversionScreen {
 
     @Override
     public void showWindow() {
-
-        this.manager.showFrame();
-
+        this.manager.show();
     }
 
     @Override
     public void hideWindow() {
-
-        this.manager.hideFrame();
-
+        this.manager.hide();
     }
 
     @Override
     public void closeWindow() {
-
-        this.manager.disposeFrame();
-
+        this.manager.dispose();
     }
 
     private void startWindow() {
-
-        this.manager.startFrame(this.conversionController);
-
+        this.manager.assemble(this.conversionController);
     }
 }
 

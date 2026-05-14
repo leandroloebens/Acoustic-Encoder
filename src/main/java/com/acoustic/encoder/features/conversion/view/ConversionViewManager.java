@@ -4,12 +4,12 @@ import com.acoustic.encoder.features.conversion.controller.ConversionController;
 
 public interface ConversionViewManager {
 
-    void startFrame(ConversionController controller);
+    void assemble(ConversionController controller);
 
-    void showFrame();
+    void show();
 
-    void hideFrame();
+    void hide();
 
-    void disposeFrame();
+    void dispose();
 
 }

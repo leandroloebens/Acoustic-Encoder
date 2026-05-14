@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.view.swing;
+package com.acoustic.encoder.features.conversion.view.swing.frame.binder;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefaultSwingConversionViewBinder implements SwingConversionViewBinder {
+public class DefaultSwingConversionViewFrameBinder implements SwingConversionViewFrameBinder {
 
     private final static String EMPTY_TEXT_INPUT_WARNING = "Please enter some text first";
 
@@ -44,7 +44,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
 
     private JRadioButton selectedButton;
 
-    public DefaultSwingConversionViewBinder(MusicParameters parameters) {
+    public DefaultSwingConversionViewFrameBinder(MusicParameters parameters) {
         this.parameters = new MusicParametersState(parameters.bpm(), parameters.trackParameters());
         this.bound = false;
     }

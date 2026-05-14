@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.service;
+package com.acoustic.encoder.shared.service;
 
 import java.io.BufferedWriter;
 import java.io.File;

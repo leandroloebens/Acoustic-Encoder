@@ -4,12 +4,15 @@ import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEven
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
+import com.acoustic.encoder.features.start.view.StartScreen;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.factory.ScreenFactory;
 
 public class DefaultAppNavigator implements AppNavigator {
 
     private static final int SYSTEM_OUT_ONCLOSE_STATUS = 0;
+
+    //private final StartScreen startScreen;
 
     private final ConversionScreen conversionScreen;
 
@@ -20,6 +23,7 @@ public class DefaultAppNavigator implements AppNavigator {
     public DefaultAppNavigator(ScreenFactory factory, EventBus eventBus) {
         // NOTE: 'this' is passed during construction.
         // The factory must only store the reference, never invoke methods on the observer at this point.
+        //this.startScreen = factory.createStartScreen();
         this.conversionScreen = factory.createConversionScreen();
         this.playerScreen = factory.createPlayerScreen();
 

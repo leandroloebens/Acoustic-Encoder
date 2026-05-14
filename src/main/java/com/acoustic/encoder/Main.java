@@ -5,7 +5,7 @@ import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
 import com.acoustic.encoder.features.conversion.parser.DefaultVoiceParser;
 import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSelector;
-import com.acoustic.encoder.features.conversion.service.DefaultFIleService;
+import com.acoustic.encoder.shared.service.DefaultFIleService;
 import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.audio.midi.command.DefaultMidiCommandRegistryFactory;
 import com.acoustic.encoder.features.player.audio.midi.track.DefaultTrackWriter;
@@ -18,10 +18,10 @@ import com.acoustic.encoder.shared.factory.DefaultScreenFactory;
 import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
 import com.acoustic.encoder.shared.navigation.listener.NavigationConversionCompletedListener;
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+//import com.formdev.flatlaf.FlatDarculaLaf;
+//import com.formdev.flatlaf.FlatDarkLaf;
+//import com.formdev.flatlaf.FlatIntelliJLaf;
+//import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.sound.midi.MidiSystem;
 import javax.swing.*;
@@ -30,9 +30,9 @@ public class Main {
 
     void main() throws Exception {
         // Set Look and Feel
-//        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 //        FlatLightLaf.setup();
-        FlatDarkLaf.setup();
+        //FlatDarkLaf.setup();
 //        FlatDarculaLaf.setup();
 //        FlatIntelliJLaf.setup();
 
