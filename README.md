@@ -70,7 +70,19 @@ git clone https://github.com/lobos-l/Software-Development-Course.git
 
 # Navigate into the project folder
 cd Software-Development-Course
+
 ```
+
+## Setting up FlatLaf library in IntelliJ IDE
+
+Run Menu -> Edit Configurations -> Select your application (probably "Main") -> Modify Options -> Check "Add VM options"
+Back to your selected application, type on the VM options box and apply: 
+
+```bash
+--enable-native-access=ALL-UNNAMED
+```
+
+Then, go to File Menu -> Project Structure -> Project Settings -> Libraries -> + -> Choose "flatlaf-3.2.5" -> Apply
 
 ---
 
