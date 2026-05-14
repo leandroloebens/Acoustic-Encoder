@@ -45,4 +45,9 @@ public class DefaultAudioPlayerService implements AudioPlayerService {
     public void exportMusic(File destination) throws MusicExportException {
         exporter.export(destination);
     }
+
+    @Override
+    public void closePlayer() {
+        player.close();
+    }
 }
