@@ -1,7 +1,6 @@
 package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.shared.model.VoiceConfig;
 
 public interface ConversionViewManager {
 
@@ -12,7 +11,5 @@ public interface ConversionViewManager {
     void hideFrame();
 
     void disposeFrame();
-
-    void setInitialDefaultParameters(VoiceConfig parameters, int bpm);
 
 }

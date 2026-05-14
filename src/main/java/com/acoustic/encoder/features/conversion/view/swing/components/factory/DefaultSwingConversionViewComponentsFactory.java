@@ -1,14 +1,18 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
+import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
 import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
-import com.acoustic.encoder.features.conversion.view.swing.components.ParameterPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DefaultSwingConversionViewComponentsFactory implements SwingConversionViewComponentsFactory {
 
@@ -53,13 +57,15 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 instructionLabelBorder
         );
 
-        ParameterPanel volumePanel = createVolumePanel();
+        TrackSelectorPanel trackSelector = createTrackSelector();
 
-        ParameterPanel octavePanel = createOctavePanel();
+        ParameterSliderPanel volumePanel = createVolumePanel();
 
-        ParameterPanel instrumentPanel = createInstrumentPanel();
+        ParameterSliderPanel octavePanel = createOctavePanel();
 
-        ParameterPanel bpmPanel = createBpmPanel();
+        ParameterComboBoxPanel<String> instrumentPanel = createInstrumentPanel();
+
+        ParameterSliderPanel bpmPanel = createBpmPanel();
 
         return new ConversionViewComponentsWrapper(
                 conversionButton,
@@ -67,6 +73,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 loadTextButton,
                 scrollPane,
                 instructionLabel,
+                trackSelector,
                 volumePanel,
                 octavePanel,
                 instrumentPanel,
@@ -80,15 +87,13 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("CONVERSION_BUTTON_HEIGHT")
         );
 
-        SwingButton conversionButton = new SwingButton(
+        return new SwingButton(
                 config.getString("CONVERSION_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("CONVERSION_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
-
-        return conversionButton;
     }
 
     private SwingButton createSaveButton() {
@@ -97,15 +102,13 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("SAVE_TEXT_BUTTON_HEIGHT")
         );
 
-        SwingButton saveButton = new SwingButton(
+        return new SwingButton(
                 config.getString("SAVE_TEXT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("SAVE_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
-
-        return saveButton;
     }
 
     private SwingButton createLoadButton() {
@@ -114,82 +117,152 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("LOAD_TEXT_BUTTON_HEIGHT")
         );
 
-        SwingButton loadButton = new SwingButton(
+        return new SwingButton(
                 config.getString("LOAD_TEXT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("LOAD_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null
         );
-
-        return loadButton;
     }
 
-    private ParameterPanel createVolumePanel() {
+    private TrackSelectorPanel createTrackSelector() {
+        List<String> options = new ArrayList<>();
+        int i = 0;
+        while (config.getKeys().contains("TRACK_SELECTOR_OPTION_" + i)) {
+            options.add(config.getString("TRACK_SELECTOR_OPTION_" + i));
+            i++;
+        }
+
+        SwingLabel label = new SwingLabel(
+                config.getString("TRACK_SELECTOR_LABEL_TEXT"),
+                null,
+                config.getScaledInt("TRACK_SELECTOR_LABEL_FONT_SIZE"),
+                null
+        );
+
+        return new TrackSelectorPanel(
+                label,
+                options,
+                config.getString("TRACK_SELECTOR_STARTING_OPTION"),
+                null,
+                config.getScaledInt("TRACK_SELECTOR_FONT_SIZE"),
+                null
+        );
+    }
+
+    private ParameterSliderPanel createVolumePanel() {
         SwingSlider volumeSlider = new SwingSlider(
                 config.getInt("VOLUME_SLIDER_DIRECTION"),
                 config.getInt("VOLUME_SLIDER_MIN"),
                 config.getInt("VOLUME_SLIDER_MIN_TO_SHOW"),
                 config.getInt("VOLUME_SLIDER_MAX"),
                 config.getInt("VOLUME_SLIDER_MAX_TO_SHOW"),
-                config.getInt("VOLUME_SLIDER_VALUE"),
+                config.getInt("VOLUME_SLIDER_MAX_TO_SHOW")/2, // Middle of the slider
                 config.getInt("VOLUME_SLIDER_TICK_SPACING"),
-                config.getScaledInt("VOLUME_SLIDER_LABEL_FONT_SIZE")
+                config.getScaledInt("PARAMETER_SLIDER_LABEL_FONT_SIZE")
         );
 
-        SwingLabel volumeLabel = new SwingLabel(config.getScaledInt("VOLUME_LABEL_FONT_SIZE"));
+        SwingLabel volumeLabel = new SwingLabel(config.getScaledInt("PARAMETER_LABEL_FONT_SIZE"));
 
-        return new ParameterPanel(volumeSlider, volumeLabel, config.getString("VOLUME_LABEL_TEXT"));
+        ParameterSliderPanel panel =
+                new ParameterSliderPanel(volumeSlider, volumeLabel, config.getString("VOLUME_LABEL_TEXT"));
+
+        Dimension size = panel.getPreferredSize();
+        panel.setPreferredSize(
+                new Dimension(
+                        size.width,
+                        size.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE"))
+        );
+
+        return panel;
     }
 
-    private ParameterPanel createOctavePanel() {
+    private ParameterSliderPanel createOctavePanel() {
         SwingSlider octaveSlider = new SwingSlider(
                 config.getInt("OCTAVE_SLIDER_DIRECTION"),
                 config.getInt("OCTAVE_SLIDER_MIN"),
                 config.getInt("OCTAVE_SLIDER_MIN_TO_SHOW"),
                 config.getInt("OCTAVE_SLIDER_MAX"),
                 config.getInt("OCTAVE_SLIDER_MAX_TO_SHOW"),
-                config.getInt("OCTAVE_SLIDER_VALUE"),
+                config.getInt("OCTAVE_SLIDER_MAX_TO_SHOW")/2, // Middle of the slider
                 config.getInt("OCTAVE_SLIDER_TICK_SPACING"),
-                config.getScaledInt("OCTAVE_SLIDER_LABEL_FONT_SIZE")
+                config.getScaledInt("PARAMETER_SLIDER_LABEL_FONT_SIZE")
         );
 
-        SwingLabel octaveLabel = new SwingLabel(config.getScaledInt("OCTAVE_LABEL_FONT_SIZE"));
+        SwingLabel octaveLabel = new SwingLabel(config.getScaledInt("PARAMETER_LABEL_FONT_SIZE"));
 
-        return new ParameterPanel(octaveSlider, octaveLabel, config.getString("OCTAVE_LABEL_TEXT"));
-    }
+        ParameterSliderPanel panel =
+                new ParameterSliderPanel(octaveSlider, octaveLabel, config.getString("OCTAVE_LABEL_TEXT"));
 
-    private ParameterPanel createInstrumentPanel() {
-        SwingSlider instrumentSlider = new SwingSlider(
-                config.getInt("INSTRUMENT_SLIDER_DIRECTION"),
-                config.getInt("INSTRUMENT_SLIDER_MIN"),
-                config.getInt("INSTRUMENT_SLIDER_MIN_TO_SHOW"),
-                config.getInt("INSTRUMENT_SLIDER_MAX"),
-                config.getInt("INSTRUMENT_SLIDER_MAX_TO_SHOW"),
-                config.getInt("INSTRUMENT_SLIDER_VALUE"),
-                config.getInt("INSTRUMENT_SLIDER_TICK_SPACING"),
-                config.getScaledInt("INSTRUMENT_SLIDER_LABEL_FONT_SIZE")
+        Dimension size = panel.getPreferredSize();
+        panel.setPreferredSize(
+                new Dimension(
+                        size.width,
+                        size.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE")*5)
         );
 
-        SwingLabel instrumentLabel = new SwingLabel(config.getScaledInt("INSTRUMENT_LABEL_FONT_SIZE"));
-
-        return new ParameterPanel(instrumentSlider, instrumentLabel, config.getString("INSTRUMENT_LABEL_TEXT"));
+        return panel;
     }
 
-    private ParameterPanel createBpmPanel() {
+    private ParameterSliderPanel createBpmPanel() {
         SwingSlider bpmSlider = new SwingSlider(
                 config.getInt("BPM_SLIDER_DIRECTION"),
                 config.getInt("BPM_SLIDER_MIN"),
                 config.getInt("BPM_SLIDER_MIN_TO_SHOW"),
                 config.getInt("BPM_SLIDER_MAX"),
                 config.getInt("BPM_SLIDER_MAX_TO_SHOW"),
-                config.getInt("BPM_SLIDER_VALUE"),
+                config.getInt("BPM_SLIDER_MAX_TO_SHOW")/2, // Middle of the slider
                 config.getInt("BPM_SLIDER_TICK_SPACING"),
-                config.getScaledInt("BPM_SLIDER_LABEL_FONT_SIZE")
+                config.getScaledInt("PARAMETER_SLIDER_LABEL_FONT_SIZE")
         );
 
-        SwingLabel bpmLabel = new SwingLabel(config.getScaledInt("BPM_LABEL_FONT_SIZE"));
+        Dimension size = bpmSlider.getPreferredSize();
+        bpmSlider.setPreferredSize(
+                new Dimension(
+                        size.width,
+                        size.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE"))
+        );
 
-        return new ParameterPanel(bpmSlider, bpmLabel, config.getString("BPM_LABEL_TEXT"));
+        SwingLabel bpmLabel = new SwingLabel(config.getScaledInt("PARAMETER_LABEL_FONT_SIZE"));
+
+        ParameterSliderPanel panel =
+                new ParameterSliderPanel(bpmSlider, bpmLabel, config.getString("BPM_LABEL_TEXT"));
+
+        Dimension panelSize = panel.getPreferredSize();
+        panel.setPreferredSize(
+                new Dimension(
+                        panelSize.width,
+                        panelSize.height + config.getScaledInt("PARAMETER_SLIDER_PANEL_HEIGHT_INCREASE"))
+        );
+
+        return panel;
+    }
+
+    private ParameterComboBoxPanel<String> createInstrumentPanel() {
+        List<String> items = new ArrayList<>();
+
+        for (int i = 0; i < 128; i++) {
+            items.add(Integer.toString(i));
+        }
+
+        SwingComboBox<String> instrumentComboBox = new SwingComboBox<>(
+                items,
+                null,
+                config.getScaledInt("INSTRUMENT_COMBOBOX_FONT_SIZE"),
+                null,
+                config.getInt("INSTRUMENT_COMBOBOX_INITIAL_INDEX"),
+                config.getBoolean("INSTRUMENT_COMBOBOX_IS_EDITABLE")
+        );
+        instrumentComboBox.enableFiltering();
+
+        SwingLabel instrumentLabel = new SwingLabel(
+                config.getString("INSTRUMENT_LABEL_TEXT"),
+                null,
+                config.getScaledInt("PARAMETER_LABEL_FONT_SIZE"),
+                null
+        );
+
+        return new ParameterComboBoxPanel<>(instrumentComboBox, instrumentLabel);
     }
 }

@@ -28,20 +28,12 @@ public class DefaultConversionController implements ConversionController {
 
     @Override
     public void handleConvertAction(UserConversionInput input) {
-
         Objects.requireNonNull(input, "UserInput cannot be null!");
-
-        List<VoiceConfig> configs = new ArrayList<>();
-
-        configs.add(new VoiceConfig(input.defaultMidiInstrument(),
-                input.defaultOctave(),
-                input.defaultVolume())
-        );
 
         MusicModel music = this.conversionService.textToMusic(
                 input.text(),
                 input.bpm(),
-                configs
+                input.voiceConfigList()
         );
 
         //TESTE----------- TODO tirar

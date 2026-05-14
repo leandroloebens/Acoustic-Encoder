@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Properties;
 
 public class ViewConfigLoader {
-    public final static String CONVERSION_SCREEN_CONFIG_FILE = "conversionViewMapping.properties";
-    public final static String PLAYER_SCREEN_CONFIG_FILE = "playerViewMapping.properties";
 
     private final String fileName;
 

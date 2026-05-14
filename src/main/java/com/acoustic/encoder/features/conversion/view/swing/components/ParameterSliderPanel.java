@@ -7,12 +7,12 @@ import com.acoustic.encoder.shared.view.swing.components.SwingSlider;
 import javax.swing.*;
 import java.awt.*;
 
-public class ParameterPanel extends SwingPanel {
+public class ParameterSliderPanel extends SwingPanel {
     private final SwingSlider slider;
     private final SwingLabel label;
     private final String labelText;
 
-    public ParameterPanel(SwingSlider slider, SwingLabel label, String labelText) {
+    public ParameterSliderPanel(SwingSlider slider, SwingLabel label, String labelText) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.slider = slider;

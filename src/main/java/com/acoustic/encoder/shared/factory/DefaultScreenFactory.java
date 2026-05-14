@@ -1,13 +1,15 @@
 package com.acoustic.encoder.shared.factory;
 
+import com.acoustic.encoder.features.conversion.config.MusicParametersConfigLoader;
+import com.acoustic.encoder.features.conversion.dto.MusicParameters;
 import com.acoustic.encoder.features.conversion.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewManager;
-import com.acoustic.encoder.features.conversion.view.swing.SwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.*;
+import com.acoustic.encoder.features.conversion.view.swing.components.assembler.DefaultSwingConversionViewAssembler;
+import com.acoustic.encoder.features.conversion.view.swing.components.assembler.SwingConversionViewAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
@@ -18,11 +20,19 @@ import com.acoustic.encoder.features.player.view.PlayerScreen;
 import com.acoustic.encoder.features.player.view.PlayerViewManager;
 import com.acoustic.encoder.features.player.view.swing.DefaultSwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.view.swing.DefaultSwingPlayerViewManager;
+import com.acoustic.encoder.features.player.view.swing.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.view.swing.components.factory.DefaultSwingPlayerViewComponentsFactory;
+import com.acoustic.encoder.features.player.view.swing.components.factory.SwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 public class DefaultScreenFactory implements ScreenFactory  {
+
+    private final static String CONVERSION_VIEW_CONFIG_FILE = "conversionViewMapping.properties";
+
+    private final static String DEFAULT_MUSIC_PARAMETERS_FILE = "defaultMusicParameters.properties";
+
+    private final static String PLAYER_VIEW_CONFIG_FILE = "playerViewMapping.properties";
 
     private final EventBus eventBus;
 
@@ -65,22 +75,34 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     private ConversionViewManager getConversionViewManager() {
         ViewConfigLoader conversionViewConfigLoader =
-                new ViewConfigLoader(ViewConfigLoader.CONVERSION_SCREEN_CONFIG_FILE);
+                new ViewConfigLoader(CONVERSION_VIEW_CONFIG_FILE);
+
         DefaultSwingConversionViewComponentsFactory conversionViewComponentsFactory =
                 new DefaultSwingConversionViewComponentsFactory(conversionViewConfigLoader.loadConfigMap());
+
         SwingConversionViewAssembler conversionViewAssembler =
                 new DefaultSwingConversionViewAssembler(conversionViewComponentsFactory.createComponents());
 
-        return new DefaultSwingConversionViewManager(conversionViewAssembler, eventBus);
+        MusicParametersConfigLoader parametersLoader =
+                new MusicParametersConfigLoader(DEFAULT_MUSIC_PARAMETERS_FILE);
+        MusicParameters defaultMusicParameters = parametersLoader.loadDefaultMusicParameters();
+
+        SwingConversionViewBinder conversionViewBinder =
+                new DefaultSwingConversionViewBinder(defaultMusicParameters);
+
+        return new DefaultSwingConversionViewManager(conversionViewAssembler, conversionViewBinder, eventBus);
     }
 
     private PlayerViewManager getPlayerViewManager() {
-        var playerViewConfigLoader = new ViewConfigLoader(ViewConfigLoader.PLAYER_SCREEN_CONFIG_FILE);
-        var playerViewComponentsFactory =
+        ViewConfigLoader playerViewConfigLoader =
+                new ViewConfigLoader(PLAYER_VIEW_CONFIG_FILE);
+
+        SwingPlayerViewComponentsFactory playerViewComponentsFactory =
                 new DefaultSwingPlayerViewComponentsFactory(playerViewConfigLoader.loadConfigMap());
-        var playerScreenAssembler =
+
+        SwingPlayerViewAssembler playerViewAssembler =
                 new DefaultSwingPlayerViewAssembler(playerViewComponentsFactory.createComponents());
 
-        return new DefaultSwingPlayerViewManager(playerScreenAssembler, eventBus);
+        return new DefaultSwingPlayerViewManager(playerViewAssembler, eventBus);
     }
 }
