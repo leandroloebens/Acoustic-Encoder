@@ -73,10 +73,12 @@ cd Software-Development-Course
 
 ```
 
+---
+
 ## Setting up FlatLaf library in IntelliJ IDE
 
 Run Menu -> Edit Configurations -> Select your application (probably "Main") -> Modify Options -> Check "Add VM options"
-Back to your selected application, type on the VM options box and apply: 
+-> Back to your selected application, type on the VM options box and apply: 
 
 ```bash
 --enable-native-access=ALL-UNNAMED
