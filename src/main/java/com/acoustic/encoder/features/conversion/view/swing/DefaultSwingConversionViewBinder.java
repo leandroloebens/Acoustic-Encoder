@@ -9,11 +9,11 @@ import com.acoustic.encoder.features.conversion.view.swing.components.ParameterC
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
+import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.model.VoiceConfig;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
-import javax.sound.midi.Track;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
@@ -56,7 +56,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
         ParameterSliderPanel volumePanel = components.volumePanel();
         ParameterSliderPanel octavePanel = components.octavePanel();
         ParameterSliderPanel bpmPanel = components.bpmPanel();
-        ParameterComboBoxPanel<String> instrumentPanel = components.instrumentPanel();
+        ParameterComboBoxPanel<InstrumentOption> instrumentPanel = components.instrumentPanel();
         SwingButton converterButton = components.converterButton();
         SwingButton saveButton = components.saveTextButton();
         SwingButton loadButton = components.loadTextButton();
@@ -91,7 +91,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
                 frame,
                 () -> parameters.setTrackInstrument(
                         trackSelector.getSelectedIndex(),
-                        instrumentPanel.getComboBox().getSelectedOriginalIndex()
+                        instrumentPanel.getSelectedItem().id()
                 ),
                 INVALID_INSTRUMENT_INPUT_WARNING
         );
@@ -119,7 +119,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
             ParameterSliderPanel volumePanel,
             ParameterSliderPanel octavePanel,
             ParameterSliderPanel bpmPanel,
-            ParameterComboBoxPanel<String> instrumentPanel
+            ParameterComboBoxPanel<InstrumentOption> instrumentPanel
     ) {
         TrackParameters trackZero = parameters.getIndexedTrackParameters(0);
 
@@ -132,16 +132,17 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
         bpmPanel.getSlider().setValue(parameters.getBpm());
         bpmPanel.updateLabel();
 
-        instrumentPanel.getComboBox().setSelectedOriginalIndex(trackZero.getInstrument());
-        instrumentPanel.getComboBox().setInitialItem((String) instrumentPanel.getComboBox().getSelectedItem()
-        );
+        instrumentPanel.setSelectedItem(trackZero.getInstrument());
+        instrumentPanel.getComboBox().setInitialItem(instrumentPanel.getSelectedItem());
     }
 
-    private boolean validateInstrumentInput(SwingFrame frame, ParameterComboBoxPanel<String> instrumentPanel) {
+    private boolean validateInstrumentInput(
+            SwingFrame frame,
+            ParameterComboBoxPanel<InstrumentOption> instrumentPanel
+    ) {
         if (instrumentPanel.getComboBox().finishEditing()) {
-            JTextField editor = (JTextField) instrumentPanel.getComboBox().getEditor().getEditorComponent();
+            JTextField editor = instrumentPanel.getTextEditor();
             editor.postActionEvent(); // Manually fires the event to update the instrument value
-
             return true;
         }
         else {
@@ -153,7 +154,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
     private void bindConvertButton(
             SwingButton converterButton,
             SwingFrame frame,
-            ParameterComboBoxPanel<String> instrumentPanel,
+            ParameterComboBoxPanel<InstrumentOption> instrumentPanel,
             ConversionController controller,
             SwingTextArea textArea
     ){
@@ -235,14 +236,12 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
             );
 
             if (fileToSave != null) {
-
                 try {
                     controller.handleSaveTextAction(textArea.getText(), fileToSave);
                     JOptionPane.showMessageDialog(frame, "Saved!");
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(frame, "Error saving file: " + ex.getMessage());
                 }
-
             }
         };
 
@@ -267,7 +266,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
     }
 
     private void bindParameterComboBoxPanel(
-            ParameterComboBoxPanel<String> panel,
+            ParameterComboBoxPanel<InstrumentOption> panel,
             SwingFrame frame,
             Runnable action,
             String warningMessage
@@ -279,7 +278,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
                 JOptionPane.showMessageDialog(frame, warningMessage);
         };
 
-        JTextField comboBoxTextEditor = (JTextField) panel.getComboBox().getEditor().getEditorComponent();
+        JTextField comboBoxTextEditor = panel.getTextEditor();
         comboBoxTextEditor.addActionListener(listener);
         removers.add(() -> comboBoxTextEditor.removeActionListener(listener));
     }
@@ -289,21 +288,24 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
             SwingFrame frame,
             ParameterSliderPanel volumePanel,
             ParameterSliderPanel octavePanel,
-            ParameterComboBoxPanel<String> instrumentPanel
+            ParameterComboBoxPanel<InstrumentOption> instrumentPanel
     ) {
         for (JRadioButton button : selectorPanel.getButtons()) {
             ActionListener listener = event -> {
                 selectedButton.setSelected(true);
                 button.setSelected(false);
+
                 if (validateInstrumentInput(frame, instrumentPanel)) {
                     selectedButton.setSelected(false);
                     button.setSelected(true);
                     selectedButton = button;
+
                     TrackParameters track =
                             parameters.getIndexedTrackParameters(selectorPanel.getButtons().indexOf(button));
+
                     volumePanel.getSlider().setValue(track.getVolume());
                     octavePanel.getSlider().setValue(track.getOctave());
-                    instrumentPanel.getComboBox().setSelectedOriginalIndex(track.getInstrument());
+                    instrumentPanel.setSelectedItem(track.getInstrument());
                     instrumentPanel.getComboBox().finishEditing();
                 }
             };

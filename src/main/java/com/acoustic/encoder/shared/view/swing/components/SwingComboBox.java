@@ -7,20 +7,17 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SwingComboBox<T> extends JComboBox<T> {
 
     private static final String ILLEGAL_ITEM_TYPE_FOR_SORTING_MSG =
             "ClassCastException: unsupported type of items in ComboBox";
-
     private static final int ITEM_NOT_FOUND_INDEX = -1;
-
-    private static final String ITEM_NOT_IN_COMBOBOX_MSG =
-            "Current item not found in ComboBox";
-
-    private static final String ITEMS_LIST_IS_NULL_OR_EMPTY_MSG =
-            "ComboBox items list is null or empty";
+    private static final String ITEM_NOT_IN_COMBOBOX_MSG = "Current item not found in ComboBox";
+    private static final String ITEMS_LIST_IS_NULL_OR_EMPTY_MSG = "ComboBox items list is null or empty";
+    private final static String ILLEGAL_SORT_ORDER_STATE_MSG = "Illegal sort order state: ";
 
     public enum SortOrder {
         NONE,
@@ -29,13 +26,9 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     private final List<T> originalItems;
-
     private boolean updatingModel;
-
     private SortOrder currentSortOrder = SortOrder.NONE;
-
     private T lastValidItem;
-
     private T initialItem;
 
     public SwingComboBox(
@@ -81,7 +74,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public void enableFiltering() {
-
         if (!this.isEditable()) this.setEditable(true);
 
         JTextField editor = (JTextField) this.getEditor().getEditorComponent();
@@ -90,7 +82,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
             private void filter() {
                 if (updatingModel) return;
-
                 SwingUtilities.invokeLater(() -> applyFilter(editor.getText()));
             }
 
@@ -113,12 +104,10 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
     public void sortItemsAscending() {
         this.currentSortOrder = SortOrder.ASCENDING;
-        applyFilter(getEditorText());
     }
 
     public void sortItemsDescending() {
         this.currentSortOrder = SortOrder.DESCENDING;
-        applyFilter(getEditorText());
     }
 
     public void resetItems() {
@@ -134,6 +123,10 @@ public class SwingComboBox<T> extends JComboBox<T> {
         JTextField editor = (JTextField) this.getEditor().getEditorComponent();
 
         return editor.getText().trim();
+    }
+
+    public List<T> getItems() {
+        return new ArrayList<>(this.originalItems);
     }
 
     public int getSelectedOriginalIndex() {
@@ -159,7 +152,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public void setSelectedOriginalIndex(int index) {
-
         if (index >= 0 && index < this.originalItems.size()) {
             T item = this.originalItems.get(index);
             this.setSelectedItem(item);
@@ -167,7 +159,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public void setInitialItem(T item) {
-
         if (item != null && originalItems.contains(item)) {
             this.initialItem = item;
             this.setSelectedItem(item);
@@ -175,7 +166,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public boolean isEditorInputValid() {
-
         String text = getEditorText();
 
         for (T item : originalItems) {
@@ -187,7 +177,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public void commitEditorInput() {
-
         String text = getEditorText();
 
         for (T item : originalItems) {
@@ -213,7 +202,6 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public boolean finishEditing() {
-
         if (isEditorInputValid()) {
             commitEditorInput();
 
@@ -243,17 +231,19 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     private List<T> sortItems(List<T> source) {
-
         List<T> sortedItems = new ArrayList<>(source);
+
+        if (currentSortOrder == null) throw new IllegalStateException(ILLEGAL_SORT_ORDER_STATE_MSG + currentSortOrder);
+
+        Comparator<T> comparator = Comparator.comparing(T::toString);
 
         try {
             switch (currentSortOrder) {
-                case ASCENDING -> sortedItems.sort(null);
+                case ASCENDING -> sortedItems.sort(comparator);
 
-                case DESCENDING -> {
-                    sortedItems.sort(null);
-                    Collections.reverse(sortedItems);
-                }
+                case DESCENDING -> sortedItems.sort(comparator.reversed());
+
+                case NONE -> { }
             }
         }
         catch (ClassCastException e) {
@@ -273,19 +263,19 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
         for (T item : items)
             this.addItem(item);
-
+        
         JTextField editor = (JTextField) this.getEditor().getEditorComponent();
+        
+        if (this.getItemCount() > 0 && this.isDisplayable() && this.isShowing() && editor.hasFocus())
+            SwingUtilities.invokeLater(() -> {
+                if (!this.isPopupVisible()) this.showPopup();
+            });
 
         this.setSelectedIndex(ITEM_NOT_FOUND_INDEX);
 
         editor.setText(editorText);
 
         if (caret <= editorText.length()) editor.setCaretPosition(caret);
-
-        if (this.getItemCount() > 0 && this.isDisplayable() && this.isShowing() && editor.hasFocus())
-            SwingUtilities.invokeLater(() -> {
-                if (!this.isPopupVisible()) this.showPopup();
-            });
 
         updatingModel = false;
     }

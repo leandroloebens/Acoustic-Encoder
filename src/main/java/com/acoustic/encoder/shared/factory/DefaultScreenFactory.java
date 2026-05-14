@@ -11,6 +11,7 @@ import com.acoustic.encoder.features.conversion.view.swing.*;
 import com.acoustic.encoder.features.conversion.view.swing.components.assembler.DefaultSwingConversionViewAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.components.assembler.SwingConversionViewAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
+import com.acoustic.encoder.features.player.audio.midi.MidiInstrumentListProvider;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
@@ -29,10 +30,10 @@ import com.acoustic.encoder.shared.view.ViewConfigLoader;
 public class DefaultScreenFactory implements ScreenFactory  {
 
     private final static String CONVERSION_VIEW_CONFIG_FILE = "conversionViewMapping.properties";
-
     private final static String DEFAULT_MUSIC_PARAMETERS_FILE = "defaultMusicParameters.properties";
-
     private final static String PLAYER_VIEW_CONFIG_FILE = "playerViewMapping.properties";
+
+    private final static int MIDI_INSTRUMENT_BANK = 0;
 
     private final EventBus eventBus;
 
@@ -78,7 +79,10 @@ public class DefaultScreenFactory implements ScreenFactory  {
                 new ViewConfigLoader(CONVERSION_VIEW_CONFIG_FILE);
 
         DefaultSwingConversionViewComponentsFactory conversionViewComponentsFactory =
-                new DefaultSwingConversionViewComponentsFactory(conversionViewConfigLoader.loadConfigMap());
+                new DefaultSwingConversionViewComponentsFactory(
+                        conversionViewConfigLoader.loadConfigMap(),
+                        new MidiInstrumentListProvider(MIDI_INSTRUMENT_BANK)
+                );
 
         SwingConversionViewAssembler conversionViewAssembler =
                 new DefaultSwingConversionViewAssembler(conversionViewComponentsFactory.createComponents());

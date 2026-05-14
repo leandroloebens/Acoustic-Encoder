@@ -2,6 +2,7 @@ package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
+import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
@@ -11,20 +12,32 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 public class DefaultSwingConversionViewComponentsFactory implements SwingConversionViewComponentsFactory {
 
     private final static String ILLEGAL_CONFIG_ARGUMENT_MESSAGE = "Illegal config argument!";
+    private final static String ILLEGAL_INSTRUMENT_PROVIDER_ARGUMENT_MESSAGE = "Illegal instrument provider argument!";
+    private final static String INSTRUMENT_PROVIDER_FAILED_MSG = "Instrument provider failed!";
 
     private final static int SCROLL_PANE_MAX_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().width * 0.6);
 
     private final SwingViewConfigWrapper config;
 
-    public DefaultSwingConversionViewComponentsFactory(HashMap<String, String> configMap) {
+    private final InstrumentListProvider instrumentProvider;
+
+    public DefaultSwingConversionViewComponentsFactory(
+            HashMap<String, String> configMap,
+            InstrumentListProvider instrumentProvider
+    ) {
         if (configMap == null) throw new IllegalArgumentException(ILLEGAL_CONFIG_ARGUMENT_MESSAGE);
         this.config = new SwingViewConfigWrapper(configMap);
+
+        if (instrumentProvider == null)
+            throw new IllegalArgumentException(ILLEGAL_INSTRUMENT_PROVIDER_ARGUMENT_MESSAGE);
+        this.instrumentProvider = instrumentProvider;
     }
 
     @Override
@@ -71,7 +84,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         ParameterSliderPanel octavePanel = createOctavePanel();
 
-        ParameterComboBoxPanel<String> instrumentPanel = createInstrumentPanel();
+        ParameterComboBoxPanel<InstrumentOption> instrumentPanel = createInstrumentPanel();
 
         ParameterSliderPanel bpmPanel = createBpmPanel();
 
@@ -231,15 +244,32 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         );
     }
 
-    private ParameterComboBoxPanel<String> createInstrumentPanel() {
-        List<String> items = new ArrayList<>();
+    private ParameterComboBoxPanel<InstrumentOption> createInstrumentPanel() {
+        List<InstrumentOption> instrumentOptions = new ArrayList<>();
+        try {
+            List<InstrumentOption> instruments = instrumentProvider.getInstrumentList();
+            instruments.sort(Comparator.comparingInt(InstrumentOption::id));
 
-        for (int i = 0; i < 128; i++) {
-            items.add(Integer.toString(i));
+            int expectedId = 0;
+            for (InstrumentOption instrument : instruments) {
+                String instrumentName = instrument.name().trim();
+
+                if (
+                        instrumentName.isEmpty()
+                        || instrumentOptions.contains(instrument)
+                        || instrument.id() != expectedId
+                ) continue;
+
+                instrumentOptions.add(new InstrumentOption(instrumentName, instrument.id()));
+                expectedId++;
+            }
+        }
+        catch (Exception e) {
+            System.out.println(INSTRUMENT_PROVIDER_FAILED_MSG);
         }
 
-        SwingComboBox<String> instrumentComboBox = new SwingComboBox<>(
-                items,
+        SwingComboBox<InstrumentOption> instrumentComboBox = new SwingComboBox<>(
+                instrumentOptions,
                 null,
                 config.getScaledInt("INSTRUMENT_COMBOBOX_FONT_SIZE"),
                 null,

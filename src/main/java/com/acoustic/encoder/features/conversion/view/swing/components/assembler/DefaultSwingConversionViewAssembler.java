@@ -4,6 +4,7 @@ import com.acoustic.encoder.features.conversion.view.swing.components.ParameterC
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
+import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
@@ -32,7 +33,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
     private final TrackSelectorPanel trackSelector;
     private final ParameterSliderPanel volumePanel;
     private final ParameterSliderPanel octavePanel;
-    private final ParameterComboBoxPanel<String> instrumentPanel;
+    private final ParameterComboBoxPanel<InstrumentOption> instrumentPanel;
     private final ParameterSliderPanel bpmPanel;
 
     public DefaultSwingConversionViewAssembler(ConversionViewComponentsWrapper components) {
@@ -73,6 +74,7 @@ public class DefaultSwingConversionViewAssembler implements SwingConversionViewA
         configPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         configPanel.setMaximumSize(new Dimension(CONFIG_PANEL_MAX_WIDTH, Integer.MAX_VALUE));
 
+        instrumentPanel.getComboBox().sortItemsAscending();
         SwingPanel configWrapper = new SwingPanel(new GridBagLayout());
         configWrapper.add(configPanel);
 

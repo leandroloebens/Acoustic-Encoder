@@ -35,4 +35,17 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
         return this.comboBox;
     }
 
+    public T getSelectedItem() {
+        int index = this.comboBox.getSelectedIndex();
+        return (index >= 0) ? this.comboBox.getItemAt(index) : null;
+    }
+
+    public void setSelectedItem(int index) {
+        this.comboBox.setSelectedOriginalIndex(index);
+    }
+
+    public JTextField getTextEditor() {
+        return (JTextField) this.comboBox.getEditor().getEditorComponent();
+    }
+
 }
