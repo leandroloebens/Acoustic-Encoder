@@ -8,6 +8,8 @@ import com.acoustic.encoder.features.conversion.service.ConversionService;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DefaultConversionController implements ConversionController {
@@ -26,15 +28,15 @@ public class DefaultConversionController implements ConversionController {
 
     @Override
     public void handleConvertAction(UserConversionInput input) {
-
         Objects.requireNonNull(input, "UserInput cannot be null!");
 
         MusicModel music = this.conversionService.textToMusic(
                 input.text(),
-                input.voices()
+                input.bpm(),
+                input.voiceConfigList()
         );
 
-        //TESTE-----------
+        //TESTE----------- TODO tirar
         System.out.println(music);
 
     }

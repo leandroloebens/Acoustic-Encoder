@@ -1,6 +1,10 @@
 package com.acoustic.encoder;
 
+import com.acoustic.encoder.features.conversion.config.DefaultParserConfigFactory;
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
+import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
+import com.acoustic.encoder.features.conversion.parser.DefaultVoiceParser;
+import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSelector;
 import com.acoustic.encoder.features.conversion.service.DefaultFIleService;
 import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.audio.midi.command.DefaultMidiCommandRegistryFactory;
@@ -9,9 +13,8 @@ import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
 import com.acoustic.encoder.shared.navigation.DefaultAppNavigator;
-import com.acoustic.encoder.features.conversion.config.ParserConfigLoader;
+import com.acoustic.encoder.features.conversion.config.DefaultParsingConfigLoader;
 import com.acoustic.encoder.shared.factory.DefaultScreenFactory;
-import com.acoustic.encoder.features.conversion.parser.TextToInstructionParser;
 import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
 import com.acoustic.encoder.shared.navigation.listener.NavigationConversionCompletedListener;
@@ -38,10 +41,17 @@ public class Main {
 
 
         // Conversion Service
-        var parserConfigLoader = new ParserConfigLoader(ParserConfigLoader.CONFIG_FILE_NAME);
-        var instructionParser = new TextToInstructionParser(parserConfigLoader.loadConfigMap());
+        var parserConfigLoader = new DefaultParsingConfigLoader(DefaultParsingConfigLoader.CONFIG_FILE_NAME);
+        var parserConfigFactory = new DefaultParserConfigFactory();
 
-        var conversionService = new DefaultConversionService(instructionParser, eventBus);
+        var instructionParser = new DefaultInstructionParser(
+                parserConfigFactory.create(parserConfigLoader.loadConfigMap())
+        );
+        var voiceConfigSelector = new RoundRobinVoiceConfigSelector();
+
+        var voiceParser = new DefaultVoiceParser(instructionParser, voiceConfigSelector);
+
+        var conversionService = new DefaultConversionService(voiceParser, eventBus);
 
 
         // File Service

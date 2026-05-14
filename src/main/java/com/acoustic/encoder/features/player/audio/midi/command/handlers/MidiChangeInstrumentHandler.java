@@ -10,6 +10,9 @@ public class MidiChangeInstrumentHandler implements MidiCommandHandler {
 
     public TrackContext handle(Track track, TrackContext context, int newInstrument) {
 
+        if (newInstrument < MidiUtils.INSTRUMENT_MIN || newInstrument > MidiUtils.INSTRUMENT_MAX)
+            throw new IllegalArgumentException("Instrument out of range!");
+
         TrackContext newContext = context.withInstrument(newInstrument);
 
         track.add(

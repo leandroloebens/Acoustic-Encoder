@@ -25,7 +25,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
         Sequence sequence = new Sequence(DIVISION_TYPE, PPQ_RESOLUTION);
 
         Track tempoTrack = sequence.createTrack();
-        trackWriter.writeInitTempoTrack(tempoTrack, musicModel.bpm());
+        trackWriter.writeInitTempoTrack(tempoTrack, musicModel.initialBpm());
 
         int currentChannel = DEFAULT_CHANNEL;
 
@@ -35,6 +35,7 @@ public class DefaultSequenceBuilder implements SequenceBuilder {
             trackWriter.writeTrack(
                     track,
                     voice,
+                    musicModel.initialBpm(),
                     currentChannel,
                     PPQ_RESOLUTION
             );

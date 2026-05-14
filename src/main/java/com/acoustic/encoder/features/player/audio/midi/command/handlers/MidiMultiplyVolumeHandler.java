@@ -10,7 +10,12 @@ public class MidiMultiplyVolumeHandler implements MidiCommandHandler {
 
     public TrackContext handle(Track track, TrackContext context, int factor) {
 
-        TrackContext newContext = context.multiplyVolumeBy(factor);
+        int newVolume = context.state().volume() * factor;
+
+        if (newVolume < MidiUtils.VOL_MIN || newVolume > MidiUtils.VOL_MAX)
+            newVolume = MidiUtils.VOL_MAX;
+
+        TrackContext newContext = context.withVolume(newVolume);
 
         track.add(
                 MidiUtils.createVolumeChangeEvent(

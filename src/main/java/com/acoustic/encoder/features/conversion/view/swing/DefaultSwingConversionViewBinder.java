@@ -166,7 +166,6 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
                     for (TrackParameters track : parameters.getAllTracksParameters()) {
                         voices.add(new VoiceConfig(
                                 track.getInstrument(),
-                                parameters.getBpm(),
                                 track.getOctave(),
                                 track.getVolume())
                         );
@@ -175,6 +174,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
                     controller.handleConvertAction(
                             new UserConversionInput(
                                     textArea.getText(),
+                                    parameters.getBpm(),
                                     voices
                             ));
                     System.out.println(parameters);

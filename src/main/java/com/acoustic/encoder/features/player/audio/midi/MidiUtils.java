@@ -15,8 +15,10 @@ public class MidiUtils {
     private final static int VOL_CHANGE = 7;
 
     public final static int INSTRUMENT_MAX = 127;
+    public final static int INSTRUMENT_MIN = 0;
 
     public final static int OCTAVE_MAX = 9;
+    public final static int OCTAVE_MIN = 0;
 
     private final static int SET_TEMPO_TYPE = 0x51;
 
@@ -30,34 +32,34 @@ public class MidiUtils {
     }
 
     public static MidiEvent createNoteOnEvent(
-            MusicalNote note, int channel, int tick
+            MusicalNote note, int channel, long tick
     ) {
 
         return new MidiEvent(createNoteOnMsg(note, channel), tick);
     }
 
     public static MidiEvent createNoteOffEvent(
-            MusicalNote note, int channel, int tick
+            MusicalNote note, int channel, long tick
     ) {
 
         return new MidiEvent(createNoteOffMsg(note, channel), tick);
     }
 
     public static MidiEvent createInstrumentChangeEvent(
-            int instrumentVal, int channel, int tick
+            int instrumentVal, int channel, long tick
     ) {
 
         return new MidiEvent(createInstrumentChangeMsg(instrumentVal, channel), tick);
     }
 
     public static MidiEvent createVolumeChangeEvent(
-            int volume, int channel, int tick
+            int volume, int channel, long tick
     ) {
 
         return new MidiEvent(createVolumeChangeMsg(volume, channel), tick);
     }
 
-    public static MidiEvent createTempoChangeEvent(int bpm, int tick) {
+    public static MidiEvent createTempoChangeEvent(int bpm, long tick) {
 
         return new MidiEvent(createTempoChangeMsg(bpm), tick);
     }

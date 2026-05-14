@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ConversionService {
 
-    MusicModel textToMusic(String text, List<VoiceConfig> configList);
+    MusicModel textToMusic(String text, int bpm, List<VoiceConfig> configs);
 
 }

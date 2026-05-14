@@ -6,5 +6,6 @@ import java.util.List;
 
 public record UserConversionInput(
         String text,
-        List<VoiceConfig> voices
+        int bpm,
+        List<VoiceConfig> voiceConfigList
 ) {}
