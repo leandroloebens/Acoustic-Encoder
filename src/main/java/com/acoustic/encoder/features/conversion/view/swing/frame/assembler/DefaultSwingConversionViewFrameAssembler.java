@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.conversion.view.swing.frame.assembler;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.components.*;
@@ -30,7 +30,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
     private final SwingButton loadButton;
     private final SwingLabel instructionLabel;
     private final SwingVerticalScrollPane scrollPane;
-    private final TrackSelectorPanel trackSelector;
+    private final VoiceSelectorPanel voiceSelector;
     private final ParameterSliderPanel volumePanel;
     private final ParameterSliderPanel octavePanel;
     private final ParameterComboBoxPanel<InstrumentOption> instrumentPanel;
@@ -42,7 +42,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         this.loadButton = components.loadTextButton();
         this.instructionLabel = components.instructionLabel();
         this.scrollPane = components.scrollPane();
-        this.trackSelector = components.trackSelector();
+        this.voiceSelector = components.voiceSelector();
         this.volumePanel = components.volumePanel();
         this.octavePanel = components.octavePanel();
         this.instrumentPanel = components.instrumentPanel();
@@ -96,7 +96,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
                 loadButton,
                 scrollPane,
                 instructionLabel,
-                trackSelector,
+                voiceSelector,
                 volumePanel,
                 octavePanel,
                 instrumentPanel,
@@ -157,7 +157,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
         gbc.insets = new Insets(0, PARAMETERS_HGAP, 0, PARAMETERS_HGAP);
         gbc.gridy++;
-        configPanel.add(trackSelector, gbc);
+        configPanel.add(voiceSelector, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;

@@ -8,11 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class TrackSelectorPanel extends SwingPanel {
+public class VoiceSelectorPanel extends SwingPanel {
 
     private final SwingRadioButtonGroup buttonGroup;
 
-    public TrackSelectorPanel(
+    public VoiceSelectorPanel(
             SwingLabel label,
             List<String> options,
             String startingOption,

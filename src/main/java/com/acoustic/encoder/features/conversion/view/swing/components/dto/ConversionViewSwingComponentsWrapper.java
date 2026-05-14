@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.conversion.view.swing.components.dto;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.components.SwingButton;
 import com.acoustic.encoder.shared.view.swing.components.SwingLabel;
@@ -14,7 +14,7 @@ public record ConversionViewSwingComponentsWrapper(
         SwingButton loadTextButton,
         SwingVerticalScrollPane scrollPane,
         SwingLabel instructionLabel,
-        TrackSelectorPanel trackSelector,
+        VoiceSelectorPanel voiceSelector,
         ParameterSliderPanel volumePanel,
         ParameterSliderPanel octavePanel,
         ParameterComboBoxPanel<InstrumentOption> instrumentPanel,

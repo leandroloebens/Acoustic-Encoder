@@ -11,7 +11,7 @@ public class MusicParametersConfigLoader {
 
     private final static String PROPERTIES_FILE_NULL_ERROR_MSG = "Properties file cannot be null!";
 
-    private final static String MISSING_VOICE_VALUE_ERROR_MSG = "Track missing or incomplete: ";
+    private final static String MISSING_VOICE_VALUE_ERROR_MSG = "Voice missing or incomplete: ";
     private final static String MISSING_VALUE_ERROR_MSG = "Missing value: ";
 
     private final static String PROPERTIES_FILE_NOT_FOUND_ERROR_MSG = "Properties file not found: ";

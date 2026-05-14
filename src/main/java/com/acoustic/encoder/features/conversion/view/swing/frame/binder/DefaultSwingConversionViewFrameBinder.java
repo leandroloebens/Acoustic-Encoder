@@ -7,7 +7,7 @@ import com.acoustic.encoder.features.conversion.model.MusicParametersState;
 import com.acoustic.encoder.features.conversion.model.VoiceParameters;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.model.VoiceConfig;
@@ -61,7 +61,7 @@ public class DefaultSwingConversionViewFrameBinder implements SwingConversionVie
         SwingButton saveButton = components.saveTextButton();
         SwingButton loadButton = components.loadTextButton();
         SwingTextArea textArea = (SwingTextArea) components.scrollPane().getComponent();
-        TrackSelectorPanel trackSelector = components.trackSelector();
+        VoiceSelectorPanel voiceSelector = components.voiceSelector();
 
         setPanelsInitialValues(
                 volumePanel,
@@ -78,26 +78,26 @@ public class DefaultSwingConversionViewFrameBinder implements SwingConversionVie
 
         bindParameterSliderPanel(
                 volumePanel,
-                () -> parameters.setTrackVolume(trackSelector.getSelectedIndex(), volumePanel.getSlider().getValue())
+                () -> parameters.setTrackVolume(voiceSelector.getSelectedIndex(), volumePanel.getSlider().getValue())
         );
 
         bindParameterSliderPanel(
                 octavePanel,
-                () -> parameters.setTrackOctave(trackSelector.getSelectedIndex(), octavePanel.getSlider().getValue())
+                () -> parameters.setTrackOctave(voiceSelector.getSelectedIndex(), octavePanel.getSlider().getValue())
         );
 
         bindParameterComboBoxPanel(
                 instrumentPanel,
                 frame,
                 () -> parameters.setTrackInstrument(
-                        trackSelector.getSelectedIndex(),
+                        voiceSelector.getSelectedIndex(),
                         instrumentPanel.getSelectedItem().id()
                 ),
                 INVALID_INSTRUMENT_INPUT_WARNING
         );
 
-        this.selectedButton = trackSelector.getSelectedButton();
-        bindTrackSelector(trackSelector, frame, volumePanel, octavePanel, instrumentPanel);
+        this.selectedButton = voiceSelector.getSelectedButton();
+        bindvoiceSelector(voiceSelector, frame, volumePanel, octavePanel, instrumentPanel);
 
         bound = true;
     }
@@ -283,8 +283,8 @@ public class DefaultSwingConversionViewFrameBinder implements SwingConversionVie
         removers.add(() -> comboBoxTextEditor.removeActionListener(listener));
     }
 
-    private void bindTrackSelector(
-            TrackSelectorPanel selectorPanel,
+    private void bindvoiceSelector(
+            VoiceSelectorPanel selectorPanel,
             SwingFrame frame,
             ParameterSliderPanel volumePanel,
             ParameterSliderPanel octavePanel,

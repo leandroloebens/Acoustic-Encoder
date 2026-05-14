@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
+import com.acoustic.encoder.features.conversion.view.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
@@ -83,7 +83,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         ParameterSliderPanel bpmPanel = createBpmPanel();
 
-        TrackSelectorPanel trackSelector = createTrackSelector();
+        VoiceSelectorPanel voiceSelector = createVoiceSelector();
 
         ParameterSliderPanel volumePanel = createVolumePanel();
 
@@ -92,14 +92,14 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         SwingUtils.setHandCursor(volumePanel.getSlider(), octavePanel.getSlider(), bpmPanel.getSlider());
 
         ParameterComboBoxPanel<InstrumentOption> instrumentPanel = createInstrumentPanel();
-        
+
         return new ConversionViewSwingComponentsWrapper(
                 conversionButton,
                 saveTextButton,
                 loadTextButton,
                 scrollPane,
                 instructionLabel,
-                trackSelector,
+                voiceSelector,
                 volumePanel,
                 octavePanel,
                 instrumentPanel,
@@ -152,27 +152,27 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         );
     }
 
-    private TrackSelectorPanel createTrackSelector() {
+    private VoiceSelectorPanel createVoiceSelector() {
         List<String> options = new ArrayList<>();
         int i = 0;
-        while (config.getKeys().contains("TRACK_SELECTOR_OPTION_" + i)) {
-            options.add(config.getString("TRACK_SELECTOR_OPTION_" + i));
+        while (config.getKeys().contains("VOICE_SELECTOR_OPTION_" + i)) {
+            options.add(config.getString("VOICE_SELECTOR_OPTION_" + i));
             i++;
         }
 
         SwingLabel label = new SwingLabel(
-                config.getString("TRACK_SELECTOR_LABEL_TEXT"),
+                config.getString("VOICE_SELECTOR_LABEL_TEXT"),
                 null,
-                config.getScaledInt("TRACK_SELECTOR_LABEL_FONT_SIZE"),
+                config.getScaledInt("VOICE_SELECTOR_LABEL_FONT_SIZE"),
                 null
         );
 
-        return new TrackSelectorPanel(
+        return new VoiceSelectorPanel(
                 label,
                 options,
-                config.getString("TRACK_SELECTOR_STARTING_OPTION"),
+                config.getString("VOICE_SELECTOR_STARTING_OPTION"),
                 null,
-                config.getScaledInt("TRACK_SELECTOR_FONT_SIZE"),
+                config.getScaledInt("VOICE_SELECTOR_FONT_SIZE"),
                 null
         );
     }
