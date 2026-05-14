@@ -1,34 +1,16 @@
 package com.acoustic.encoder.shared.factory;
 
-import com.acoustic.encoder.features.conversion.config.MusicParametersConfigLoader;
-import com.acoustic.encoder.features.conversion.dto.MusicParameters;
 import com.acoustic.encoder.features.conversion.view.factory.ConversionViewManagerFactory;
-import com.acoustic.encoder.features.conversion.view.swing.components.factory.SwingConversionViewComponentsFactory;
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.swing.factory.DefaultSwingConversionViewManagerFactory;
-import com.acoustic.encoder.features.conversion.view.swing.frame.binder.DefaultSwingConversionViewFrameBinder;
-import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
 import com.acoustic.encoder.features.start.controller.DefaultStartController;
 import com.acoustic.encoder.features.start.view.DefaultStartScreen;
 import com.acoustic.encoder.features.start.view.StartScreen;
-import com.acoustic.encoder.features.start.view.StartViewManager;
 import com.acoustic.encoder.features.start.view.factory.StartViewManagerFactory;
-import com.acoustic.encoder.features.start.view.swing.components.factory.DefaultSwingStartViewComponentsFactory;
-import com.acoustic.encoder.features.start.view.swing.components.factory.SwingStartViewComponentsFactory;
-import com.acoustic.encoder.features.start.view.swing.DefaultSwingStartViewManager;
 import com.acoustic.encoder.features.start.view.swing.factory.DefaultSwingStartViewManagerFactory;
-import com.acoustic.encoder.features.start.view.swing.frame.assembler.DefaultSwingStartViewFrameAssembler;
-import com.acoustic.encoder.features.start.view.swing.frame.assembler.SwingStartViewFrameAssembler;
-import com.acoustic.encoder.features.start.view.swing.frame.binder.DefaultSwingStartViewFrameBinder;
 import com.acoustic.encoder.shared.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
-import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
-import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.DefaultSwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.SwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
-import com.acoustic.encoder.features.player.audio.midi.MidiInstrumentListProvider;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;

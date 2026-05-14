@@ -29,6 +29,7 @@ build/
 # Java
 *.class
 *.jar
+!lib/flatlaf-3.2.5.jar
 *.war
 *.ear
 target/

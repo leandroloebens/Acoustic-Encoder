@@ -63,8 +63,6 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         SwingPanel buttonsPanel = createButtonsPanel();
         SwingPanel textAreaPanel = createTextAreaPanel();
 
-        SwingUtils.setHandCursor(converterButton, saveButton, loadButton);
-
         SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
         conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);

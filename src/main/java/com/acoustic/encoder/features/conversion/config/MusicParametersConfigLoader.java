@@ -9,13 +9,19 @@ import java.util.*;
 
 public class MusicParametersConfigLoader {
 
-    private final static String MISSING_VALUE_ERROR_MSG = "Track missing or incomplete: ";
+    private final static String PROPERTIES_FILE_NULL_ERROR_MSG = "Properties file cannot be null!";
+
+    private final static String MISSING_TRACK_VALUE_ERROR_MSG = "Track missing or incomplete: ";
+    private final static String MISSING_VALUE_ERROR_MSG = "Missing value: ";
+
+    private final static String PROPERTIES_FILE_NOT_FOUND_ERROR_MSG = "Properties file not found: ";
+    private final static String PROPERTIES_FILE_IO_ERROR_MSG = "Properties file IO error: ";
 
     private final String fileName;
 
     public MusicParametersConfigLoader(String fileName) {
 
-        if (fileName == null) throw new IllegalArgumentException("File name cannot be null!");
+        if (fileName == null) throw new IllegalArgumentException(PROPERTIES_FILE_NULL_ERROR_MSG);
         this.fileName = fileName;
 
     }
@@ -25,16 +31,17 @@ public class MusicParametersConfigLoader {
 
         HashMap<String, Integer> map = loadConfigMap();
 
+        if (map.get("MAX_TRACK_INDEX") == null)
+            throw new IllegalArgumentException(MISSING_TRACK_VALUE_ERROR_MSG + "MAX_TRACK_INDEX");
+
         int maxTrackIndex = map.get("MAX_TRACK_INDEX");
-        map.remove("MAX_TRACK_INDEX");
 
         for (int i = 0; i <= maxTrackIndex; i++) {
             if (map.get("TRACK_" + i + "_INSTRUMENT") == null
                 || map.get("TRACK_" + i + "_VOLUME") == null
                 || map.get("TRACK_" + i + "_OCTAVE") == null
             ) {
-                System.out.println(MISSING_VALUE_ERROR_MSG + i);
-                i++;
+                throw new IllegalArgumentException(MISSING_TRACK_VALUE_ERROR_MSG + i);
             }
 
             trackParameters.add(new TrackParameters(
@@ -43,6 +50,9 @@ public class MusicParametersConfigLoader {
                     map.get("TRACK_" + i + "_INSTRUMENT")
             ));
         }
+
+        if (map.get("UNIVERSAL_BPM") == null)
+            throw new IllegalArgumentException(MISSING_VALUE_ERROR_MSG + "UNIVERSAL_BPM");
 
         return new MusicParameters(map.get("UNIVERSAL_BPM"), trackParameters);
 
@@ -60,10 +70,10 @@ public class MusicParametersConfigLoader {
                     constants.put(key, Integer.parseInt(properties.getProperty(key)));
                 }
             } else {
-                throw new IOException("Properties file not found: " + fileName);
+                throw new IOException(PROPERTIES_FILE_NOT_FOUND_ERROR_MSG + fileName);
             }
         } catch (IOException e) {
-            throw new ExceptionInInitializerError("Failed to load properties: " + e.getMessage());
+            throw new ExceptionInInitializerError(PROPERTIES_FILE_IO_ERROR_MSG + e.getMessage());
         }
 
         return constants;

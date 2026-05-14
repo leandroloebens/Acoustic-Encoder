@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.player.audio.midi;
+package com.acoustic.encoder.features.player.export.midi;
 
 import com.acoustic.encoder.features.conversion.view.swing.components.factory.InstrumentListProvider;
 import com.acoustic.encoder.shared.dto.InstrumentOption;

@@ -1,5 +1,8 @@
 package com.acoustic.encoder.shared.view.swing.components;
 
+import com.acoustic.encoder.shared.view.swing.icons.ScaledFlatRadioButtonIcon;
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,6 +12,8 @@ import java.util.List;
 public class SwingRadioButtonGroup extends ButtonGroup {
 
     private static final String ILLEGAL_STARTING_OPTION_MSG = "Starting option not among the options";
+
+    private static final int ICON_TEXT_GAP = (int) (4 * SwingUtils.getScreenScaleRatio());
 
     private final List<JRadioButton> buttons = new ArrayList<>();
 
@@ -23,6 +28,8 @@ public class SwingRadioButtonGroup extends ButtonGroup {
             if (startingOption != null && !startingOption.isEmpty() && !options.contains(startingOption))
                 throw new IllegalArgumentException(ILLEGAL_STARTING_OPTION_MSG);
 
+            Icon scaledIcon = new ScaledFlatRadioButtonIcon(SwingUtils.getScreenScaleRatio());
+
             for (String option : options) {
                 JRadioButton button;
 
@@ -36,11 +43,14 @@ public class SwingRadioButtonGroup extends ButtonGroup {
                 if (fontSize > 0)
                     button.setFont(new Font(button.getFont().getName(), button.getFont().getStyle(), fontSize));
 
+                button.setIcon(scaledIcon);
+
                 if (selectedIcon != null) button.setSelectedIcon(selectedIcon);
+                else button.setSelectedIcon(scaledIcon);
 
                 button.setVerticalTextPosition(SwingConstants.BOTTOM);
                 button.setHorizontalTextPosition(SwingConstants.CENTER);
-                button.setIconTextGap(5);
+                button.setIconTextGap(ICON_TEXT_GAP);
 
                 this.add(button);
                 buttons.add(button);

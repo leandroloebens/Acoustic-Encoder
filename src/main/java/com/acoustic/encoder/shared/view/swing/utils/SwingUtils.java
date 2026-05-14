@@ -24,12 +24,12 @@ public class SwingUtils {
         return (float)(screenSize.getHeight() / DEFAULT_SCREEN_HEIGHT);
     }
 
-    public static void setHandCursor(AbstractButton... buttons) {
+    public static void setHandCursor(Component... components) {
         Cursor hand = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-        for (AbstractButton b : buttons) {
-            b.setCursor(hand);
+        for (Component component : components) {
+            component.setCursor(hand);
         }
-    }
+}
 
     public static File getFileFromChooser(
             int operation,

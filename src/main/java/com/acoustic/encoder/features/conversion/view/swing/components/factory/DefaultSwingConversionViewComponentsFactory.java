@@ -7,6 +7,7 @@ import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
+import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -49,6 +50,8 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         SwingButton loadTextButton = createLoadButton();
 
+        SwingUtils.setHandCursor(conversionButton, saveTextButton, loadTextButton);
+
         SwingTextArea textArea =
                 new SwingTextArea(null, config.getScaledInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"), null);
 
@@ -78,16 +81,18 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 instructionLabelBorder
         );
 
+        ParameterSliderPanel bpmPanel = createBpmPanel();
+
         TrackSelectorPanel trackSelector = createTrackSelector();
 
         ParameterSliderPanel volumePanel = createVolumePanel();
 
         ParameterSliderPanel octavePanel = createOctavePanel();
 
+        SwingUtils.setHandCursor(volumePanel.getSlider(), octavePanel.getSlider(), bpmPanel.getSlider());
+
         ParameterComboBoxPanel<InstrumentOption> instrumentPanel = createInstrumentPanel();
-
-        ParameterSliderPanel bpmPanel = createBpmPanel();
-
+        
         return new ConversionViewSwingComponentsWrapper(
                 conversionButton,
                 saveTextButton,
