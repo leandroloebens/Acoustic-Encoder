@@ -169,7 +169,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
         String text = getEditorText();
 
         for (T item : originalItems) {
-            if (item.toString().equals(text))
+            if (item.toString().equalsIgnoreCase(text))
                 return true;
         }
 
@@ -180,9 +180,12 @@ public class SwingComboBox<T> extends JComboBox<T> {
         String text = getEditorText();
 
         for (T item : originalItems) {
-            if (item.toString().equals(text)) {
+            if (item.toString().equalsIgnoreCase(text)) {
                 this.setSelectedItem(item);
                 this.lastValidItem = item;
+
+                JTextField editor = (JTextField) this.getEditor().getEditorComponent();
+                editor.setText(item.toString());
 
                 return;
             }
