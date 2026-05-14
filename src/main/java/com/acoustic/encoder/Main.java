@@ -28,7 +28,6 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 
 import javax.sound.midi.MidiSystem;
-import javax.swing.*;
 
 public class Main {
 
