@@ -12,15 +12,15 @@ public class MidiOffsetLocalBpmHandler implements MidiCommandHandler {
 
         int newBpm = Math.max(context.state().localBpm() + bpmValue, 10);
 
-        int newTickDuration = determineTickDurationForNewBpm(context, newBpm);
+        int newTickDuration = Math.max(1, determineTickDurationForNewBpm(context, newBpm));
 
         return context.withLocalBpm(newBpm).withNoteTickDuration(newTickDuration);
     }
 
     private static int determineTickDurationForNewBpm(TrackContext context, int newBpm) {
         return (int) Math.round(
-                ((double) context.state().localBpm() / newBpm)
-                        * context.state().noteTickDuration()
+                ((double) context.settings().defaultBpm() / newBpm)
+                        * context.settings().baseNoteTickDuration()
         );
     }
 

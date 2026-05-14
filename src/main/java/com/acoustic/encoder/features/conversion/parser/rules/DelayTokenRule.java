@@ -28,9 +28,4 @@ public class DelayTokenRule implements TokenRule {
         return Optional.of(new TokenMatch(instruction, matcher.end()));
     }
 
-    private MusicalInstruction createDelayInstruction(int delay) {
-
-        return new MusicalInstruction(MusicalCommand.DELAY_BEATS, delay);
-
-    }
 }

@@ -1,43 +1,33 @@
 package com.acoustic.encoder.features.conversion.service;
 
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
+import com.acoustic.encoder.features.conversion.parser.VoiceParser;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.model.*;
-import com.acoustic.encoder.features.conversion.parser.InstructionParser;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DefaultConversionService implements ConversionService {
 
-    private final InstructionParser parser;
+    private final VoiceParser voiceParser;
 
     private final EventBus eventBus;
 
-    public DefaultConversionService(InstructionParser parser, EventBus eventBus) {
+    public DefaultConversionService(VoiceParser voiceParser, EventBus eventBus) {
 
-        this.parser = parser;
-        this.eventBus = eventBus;
+        this.voiceParser = Objects.requireNonNull(voiceParser, "VoiceParser cannot be null!");
+        this.eventBus = Objects.requireNonNull(eventBus, "EventBus cannot be null!");
     }
 
     @Override
-    public MusicModel textToMusic(String text, int bpm, VoiceConfig config) {
+    public MusicModel textToMusic(String text, int bpm, List<VoiceConfig> configs) {
 
-        List<MusicalInstruction> musicalInstructions = this.parser.parseText(text);
-
-        Voice voice = new Voice(musicalInstructions, config);
-
-        VoiceList voiceList = new VoiceList();
-        voiceList.add(voice);
+        VoiceList voiceList = voiceParser.parseVoices(text, configs);
 
         MusicModel music = new MusicModel(voiceList, bpm);
 
         this.eventBus.publish(new ConversionCompletedEvent(music));
-
-        // TESTE------------------------------
-        for (MusicalInstruction musicalInstruction : musicalInstructions) {
-            System.out.println(musicalInstruction);
-        }
-        //---------------------------------
 
         return music;
     }

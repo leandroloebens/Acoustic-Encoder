@@ -3,6 +3,8 @@ package com.acoustic.encoder;
 import com.acoustic.encoder.features.conversion.config.DefaultParserConfigFactory;
 import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
+import com.acoustic.encoder.features.conversion.parser.DefaultVoiceParser;
+import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSelector;
 import com.acoustic.encoder.features.conversion.service.DefaultFIleService;
 import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.audio.midi.command.DefaultMidiCommandRegistryFactory;
@@ -31,9 +33,14 @@ public class Main {
         var parserConfigLoader = new DefaultParsingConfigLoader(DefaultParsingConfigLoader.CONFIG_FILE_NAME);
         var parserConfigFactory = new DefaultParserConfigFactory();
 
-        var parser = new DefaultInstructionParser(parserConfigFactory.create(parserConfigLoader.loadConfigMap()));
+        var instructionParser = new DefaultInstructionParser(
+                parserConfigFactory.create(parserConfigLoader.loadConfigMap())
+        );
+        var voiceConfigSelector = new RoundRobinVoiceConfigSelector();
 
-        var conversionService = new DefaultConversionService(parser, eventBus);
+        var voiceParser = new DefaultVoiceParser(instructionParser, voiceConfigSelector);
+
+        var conversionService = new DefaultConversionService(voiceParser, eventBus);
 
 
         // File Service
@@ -45,7 +52,7 @@ public class Main {
         var commandRegistry = commandRegistryFactory.create();
         var trackWriter = new DefaultTrackWriter(commandRegistry);
         var sequenceBuilder = new DefaultSequenceBuilder(trackWriter);
-        var sequencePlayer = new DefaultSequencePlayer(MidiSystem.getSequencer());
+        var sequencePlayer = new DefaultSequencePlayer(MidiSystem.getSequencer(false));
 
         var audioPlayer = new JSoundAudioAdapter(sequenceBuilder, sequencePlayer);
         var musicExporter = new MidiFileExporter(sequencePlayer);
