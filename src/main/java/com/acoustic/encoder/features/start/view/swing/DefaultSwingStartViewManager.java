@@ -1,17 +1,17 @@
-package com.acoustic.encoder.features.start.view.swing.frame;
+package com.acoustic.encoder.features.start.view.swing;
 
 import com.acoustic.encoder.features.start.controller.StartController;
 import com.acoustic.encoder.features.start.view.StartViewManager;
 import com.acoustic.encoder.features.start.view.swing.frame.assembler.SwingStartViewFrameAssembler;
 import com.acoustic.encoder.features.start.view.swing.frame.binder.SwingStartViewFrameBinder;
 
-public class DefaultStartViewManager implements StartViewManager {
+public class DefaultSwingStartViewManager implements StartViewManager {
 
     private final SwingStartViewFrameAssembler assembler;
 
     private final SwingStartViewFrameBinder binder;
 
-    public DefaultStartViewManager(SwingStartViewFrameAssembler assembler, SwingStartViewFrameBinder binder) {
+    public DefaultSwingStartViewManager(SwingStartViewFrameAssembler assembler, SwingStartViewFrameBinder binder) {
         if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
         this.assembler = assembler;
 

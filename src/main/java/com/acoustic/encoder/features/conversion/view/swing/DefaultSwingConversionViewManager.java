@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.view.swing.frame;
+package com.acoustic.encoder.features.conversion.view.swing;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
