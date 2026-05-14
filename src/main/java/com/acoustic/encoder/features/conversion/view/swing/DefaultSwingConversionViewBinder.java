@@ -4,7 +4,7 @@ import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.model.MusicParametersState;
-import com.acoustic.encoder.features.conversion.model.TrackParameters;
+import com.acoustic.encoder.features.conversion.model.VoiceParameters;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
@@ -45,7 +45,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
     private JRadioButton selectedButton;
 
     public DefaultSwingConversionViewBinder(MusicParameters parameters) {
-        this.parameters = new MusicParametersState(parameters.bpm(), parameters.trackParameters());
+        this.parameters = new MusicParametersState(parameters.bpm(), parameters.voiceParameters());
         this.bound = false;
     }
 
@@ -121,7 +121,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
             ParameterSliderPanel bpmPanel,
             ParameterComboBoxPanel<InstrumentOption> instrumentPanel
     ) {
-        TrackParameters trackZero = parameters.getIndexedTrackParameters(0);
+        VoiceParameters trackZero = parameters.getIndexedTrackParameters(0);
 
         volumePanel.getSlider().setValue(trackZero.getVolume());
         volumePanel.updateLabel();
@@ -163,7 +163,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
                 if (textArea.getText().isEmpty()) throw new IllegalArgumentException();
                 else if (validateInstrumentInput(frame, instrumentPanel)) {
                     List<VoiceConfig> voices = new ArrayList<>();
-                    for (TrackParameters track : parameters.getAllTracksParameters()) {
+                    for (VoiceParameters track : parameters.getAllTracksParameters()) {
                         voices.add(new VoiceConfig(
                                 track.getInstrument(),
                                 track.getOctave(),
@@ -300,7 +300,7 @@ public class DefaultSwingConversionViewBinder implements SwingConversionViewBind
                     button.setSelected(true);
                     selectedButton = button;
 
-                    TrackParameters track =
+                    VoiceParameters track =
                             parameters.getIndexedTrackParameters(selectorPanel.getButtons().indexOf(button));
 
                     volumePanel.getSlider().setValue(track.getVolume());

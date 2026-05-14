@@ -1,18 +1,18 @@
 package com.acoustic.encoder.features.conversion.model;
 
-public class TrackParameters {
+public class VoiceParameters {
 
     private int instrument;
     private int volume;
     private int octave;
 
-    public TrackParameters(int volume, int octave, int instrument) {
+    public VoiceParameters(int volume, int octave, int instrument) {
         this.volume = volume;
         this.octave = octave;
         this.instrument = instrument;
     }
 
-    public TrackParameters(TrackParameters other) {
+    public VoiceParameters(VoiceParameters other) {
         this.volume = other.volume;
         this.octave = other.octave;
         this.instrument = other.instrument;

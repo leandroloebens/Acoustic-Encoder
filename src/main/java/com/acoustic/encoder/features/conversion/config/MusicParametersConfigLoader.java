@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.config;
 
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
-import com.acoustic.encoder.features.conversion.model.TrackParameters;
+import com.acoustic.encoder.features.conversion.model.VoiceParameters;
 import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 import java.io.*;
@@ -21,30 +21,30 @@ public class MusicParametersConfigLoader {
     }
 
     public MusicParameters loadDefaultMusicParameters() {
-        List<TrackParameters> trackParameters = new ArrayList<>();
+        List<VoiceParameters> voiceParameters = new ArrayList<>();
 
         HashMap<String, Integer> map = loadConfigMap();
 
-        int maxTrackIndex = map.get("MAX_TRACK_INDEX");
-        map.remove("MAX_TRACK_INDEX");
+        int maxTrackIndex = map.get("MAX_VOICE_INDEX");
+        map.remove("MAX_VOICE_INDEX");
 
         for (int i = 0; i <= maxTrackIndex; i++) {
-            if (map.get("TRACK_" + i + "_INSTRUMENT") == null
-                || map.get("TRACK_" + i + "_VOLUME") == null
-                || map.get("TRACK_" + i + "_OCTAVE") == null
+            if (map.get("VOICE_" + i + "_INSTRUMENT") == null
+                || map.get("VOICE_" + i + "_VOLUME") == null
+                || map.get("VOICE_" + i + "_OCTAVE") == null
             ) {
                 System.out.println(MISSING_VALUE_ERROR_MSG + i);
                 i++;
             }
 
-            trackParameters.add(new TrackParameters(
-                    map.get("TRACK_" + i + "_VOLUME"),
-                    map.get("TRACK_" + i + "_OCTAVE"),
-                    map.get("TRACK_" + i + "_INSTRUMENT")
+            voiceParameters.add(new VoiceParameters(
+                    map.get("VOICE_" + i + "_VOLUME"),
+                    map.get("VOICE_" + i + "_OCTAVE"),
+                    map.get("VOICE_" + i + "_INSTRUMENT")
             ));
         }
 
-        return new MusicParameters(map.get("UNIVERSAL_BPM"), trackParameters);
+        return new MusicParameters(map.get("UNIVERSAL_BPM"), voiceParameters);
 
     }
 
