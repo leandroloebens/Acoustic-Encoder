@@ -4,7 +4,7 @@ import com.acoustic.encoder.features.conversion.view.swing.components.ParameterC
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.shared.view.swing.components.*;
 
@@ -41,7 +41,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
     }
 
     @Override
-    public ConversionViewComponentsWrapper createComponents() {
+    public ConversionViewSwingComponentsWrapper createComponents() {
 
         SwingButton conversionButton = createConverterButton();
 
@@ -88,7 +88,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         ParameterSliderPanel bpmPanel = createBpmPanel();
 
-        return new ConversionViewComponentsWrapper(
+        return new ConversionViewSwingComponentsWrapper(
                 conversionButton,
                 saveTextButton,
                 loadTextButton,

@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.conversion.view.swing.frame.assembler;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.components.*;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
@@ -36,7 +36,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
     private final ParameterComboBoxPanel<InstrumentOption> instrumentPanel;
     private final ParameterSliderPanel bpmPanel;
 
-    public DefaultSwingConversionViewFrameAssembler(ConversionViewComponentsWrapper components) {
+    public DefaultSwingConversionViewFrameAssembler(ConversionViewSwingComponentsWrapper components) {
         this.converterButton = components.converterButton();
         this.saveButton = components.saveTextButton();
         this.loadButton = components.loadTextButton();
@@ -91,8 +91,8 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
     }
 
     @Override
-    public ConversionViewComponentsWrapper getComponents() {
-        return new ConversionViewComponentsWrapper(
+    public ConversionViewSwingComponentsWrapper getComponents() {
+        return new ConversionViewSwingComponentsWrapper(
                 converterButton,
                 saveButton,
                 loadButton,

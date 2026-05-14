@@ -12,7 +12,7 @@ public class DefaultAppNavigator implements AppNavigator {
 
     private static final int SYSTEM_OUT_ONCLOSE_STATUS = 0;
 
-    //private final StartScreen startScreen;
+    private final StartScreen startScreen;
 
     private final ConversionScreen conversionScreen;
 
@@ -24,6 +24,7 @@ public class DefaultAppNavigator implements AppNavigator {
         // NOTE: 'this' is passed during construction.
         // The factory must only store the reference, never invoke methods on the observer at this point.
         //this.startScreen = factory.createStartScreen();
+        this.startScreen = factory.createStartScreen();
         this.conversionScreen = factory.createConversionScreen();
         this.playerScreen = factory.createPlayerScreen();
 

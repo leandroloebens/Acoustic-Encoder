@@ -8,7 +8,7 @@ import com.acoustic.encoder.features.conversion.model.TrackParameters;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelectorPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.model.VoiceConfig;
 import com.acoustic.encoder.shared.view.swing.components.*;
@@ -50,7 +50,7 @@ public class DefaultSwingConversionViewFrameBinder implements SwingConversionVie
     }
 
     @Override
-    public void bind(ConversionController controller, SwingFrame frame, ConversionViewComponentsWrapper components) {
+    public void bind(ConversionController controller, SwingFrame frame, ConversionViewSwingComponentsWrapper components) {
         if (bound) return;
 
         ParameterSliderPanel volumePanel = components.volumePanel();

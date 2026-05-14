@@ -2,6 +2,7 @@ package com.acoustic.encoder.shared.factory;
 
 import com.acoustic.encoder.features.conversion.config.MusicParametersConfigLoader;
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
+import com.acoustic.encoder.features.conversion.view.swing.components.factory.SwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.conversion.view.swing.frame.DefaultSwingConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.swing.frame.binder.DefaultSwingConversionViewFrameBinder;
 import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
@@ -9,7 +10,13 @@ import com.acoustic.encoder.features.start.controller.DefaultStartController;
 import com.acoustic.encoder.features.start.view.DefaultStartScreen;
 import com.acoustic.encoder.features.start.view.StartScreen;
 import com.acoustic.encoder.features.start.view.StartViewManager;
+import com.acoustic.encoder.features.start.view.swing.components.factory.DefaultSwingStartViewComponentsFactory;
+import com.acoustic.encoder.features.start.view.swing.components.factory.SwingStartViewComponentsFactory;
 import com.acoustic.encoder.features.start.view.swing.frame.DefaultStartViewManager;
+import com.acoustic.encoder.features.start.view.swing.frame.assembler.DefaultSwingStartViewFrameAssembler;
+import com.acoustic.encoder.features.start.view.swing.frame.assembler.SwingStartViewFrameAssembler;
+import com.acoustic.encoder.features.start.view.swing.frame.binder.DefaultSwingStartViewFrameBinder;
+import com.acoustic.encoder.features.start.view.swing.frame.binder.SwingStartViewFrameBinder;
 import com.acoustic.encoder.shared.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
@@ -36,6 +43,7 @@ import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 public class DefaultScreenFactory implements ScreenFactory  {
 
+    private final static String START_VIEW_CONFIG_FILE = "startViewMapping.properties";
     private final static String CONVERSION_VIEW_CONFIG_FILE = "conversionViewMapping.properties";
     private final static String DEFAULT_MUSIC_PARAMETERS_FILE = "defaultMusicParameters.properties";
     private final static String PLAYER_VIEW_CONFIG_FILE = "playerViewMapping.properties";
@@ -91,7 +99,19 @@ public class DefaultScreenFactory implements ScreenFactory  {
     }
 
     private StartViewManager getStartViewManager() {
-        return new DefaultStartViewManager();
+        return new DefaultStartViewManager(
+                getStartViewAssembler(),
+                new DefaultSwingStartViewFrameBinder()
+        );
+    }
+
+    private SwingStartViewFrameAssembler getStartViewAssembler() {
+        ViewConfigLoader startViewConfigLoader = new ViewConfigLoader(START_VIEW_CONFIG_FILE);
+
+        SwingStartViewComponentsFactory startViewComponentsFactory =
+                new DefaultSwingStartViewComponentsFactory(startViewConfigLoader.loadConfigMap());
+
+        return new DefaultSwingStartViewFrameAssembler(startViewComponentsFactory.createComponents());
     }
 
     private ConversionViewManager getConversionViewManager() {
@@ -111,7 +131,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
         ViewConfigLoader conversionViewConfigLoader =
                 new ViewConfigLoader(CONVERSION_VIEW_CONFIG_FILE);
 
-        DefaultSwingConversionViewComponentsFactory conversionViewComponentsFactory =
+        SwingConversionViewComponentsFactory conversionViewComponentsFactory =
                 new DefaultSwingConversionViewComponentsFactory(
                         conversionViewConfigLoader.loadConfigMap(),
                         new MidiInstrumentListProvider(MIDI_INSTRUMENT_BANK)

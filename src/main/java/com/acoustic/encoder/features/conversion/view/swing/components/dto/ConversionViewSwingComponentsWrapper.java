@@ -6,10 +6,9 @@ import com.acoustic.encoder.features.conversion.view.swing.components.TrackSelec
 import com.acoustic.encoder.shared.dto.InstrumentOption;
 import com.acoustic.encoder.shared.view.swing.components.SwingButton;
 import com.acoustic.encoder.shared.view.swing.components.SwingLabel;
-import com.acoustic.encoder.shared.view.swing.components.SwingRadioButtonGroup;
 import com.acoustic.encoder.shared.view.swing.components.SwingVerticalScrollPane;
 
-public record ConversionViewComponentsWrapper(
+public record ConversionViewSwingComponentsWrapper(
         SwingButton converterButton,
         SwingButton saveTextButton,
         SwingButton loadTextButton,

@@ -1,9 +1,9 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewComponentsWrapper;
+import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 
 public interface SwingConversionViewComponentsFactory {
 
-    ConversionViewComponentsWrapper createComponents();
+    ConversionViewSwingComponentsWrapper createComponents();
 
 }
