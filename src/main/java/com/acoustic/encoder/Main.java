@@ -10,7 +10,9 @@ import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.audio.midi.command.DefaultMidiCommandRegistryFactory;
 import com.acoustic.encoder.features.player.audio.midi.track.DefaultTrackWriter;
 import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
+import com.acoustic.encoder.features.player.listener.PlayerAppShutdownListener;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
+import com.acoustic.encoder.shared.event.AppShutdownEvent;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
 import com.acoustic.encoder.shared.navigation.DefaultAppNavigator;
 import com.acoustic.encoder.features.conversion.config.DefaultParsingConfigLoader;
@@ -92,6 +94,10 @@ public class Main {
         eventBus.subscribe(
                 ConversionCompletedEvent.class,
                 new NavigationConversionCompletedListener(appNavigator)
+        );
+        eventBus.subscribe(
+                AppShutdownEvent.class,
+                new PlayerAppShutdownListener(audioPlayerService)
         );
 
         appNavigator.startApp();

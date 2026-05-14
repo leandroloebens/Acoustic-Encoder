@@ -38,4 +38,9 @@ public class DefaultSequencePlayer implements SequencePlayer {
     public Sequence getSequence() {
         return this.sequencer.getSequence();
     }
+
+    @Override
+    public void closeSequencer() {
+        this.sequencer.close();
+    }
 }

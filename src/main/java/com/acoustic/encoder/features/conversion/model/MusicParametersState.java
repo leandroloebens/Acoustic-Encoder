@@ -8,22 +8,22 @@ public class MusicParametersState {
     private final static String INDEX_OUT_OF_BOUNDS = "Index out of bounds";
 
     private int bpm;
-    private List<TrackParameters> tracksParameters;
+    private List<VoiceParameters> tracksParameters;
 
-    public MusicParametersState(int bpm, List<TrackParameters> trackParameters) {
+    public MusicParametersState(int bpm, List<VoiceParameters> voiceParameters) {
         this.bpm = bpm;
-        this.tracksParameters = trackParameters;
+        this.tracksParameters = voiceParameters;
     }
 
     public int getBpm() { return bpm; }
 
     public void setBpm(int bpm) { this.bpm = bpm; }
 
-    public List<TrackParameters> getAllTracksParameters() { 
-        List<TrackParameters> copy = new ArrayList<>();
+    public List<VoiceParameters> getAllTracksParameters() {
+        List<VoiceParameters> copy = new ArrayList<>();
 
-        for (TrackParameters track : tracksParameters) {
-            copy.add(new TrackParameters(
+        for (VoiceParameters track : tracksParameters) {
+            copy.add(new VoiceParameters(
                 track.getVolume(),
                 track.getOctave(),
                 track.getInstrument()
@@ -57,24 +57,24 @@ public class MusicParametersState {
         }
     }
 
-    public TrackParameters getIndexedTrackParameters(int index) {
+    public VoiceParameters getIndexedTrackParameters(int index) {
         if (index < 0 || index >= getNumberOfTracks()) {
             throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
         }
 
-        TrackParameters original = tracksParameters.get(index);
-        return new TrackParameters(
+        VoiceParameters original = tracksParameters.get(index);
+        return new VoiceParameters(
                 original.getVolume(),
                 original.getOctave(),
                 original.getInstrument()
         );
     }
 
-    public void setAllTracksParameters(List<TrackParameters> trackParameters) { this.tracksParameters = trackParameters; }
+    public void setAllTracksParameters(List<VoiceParameters> voiceParameters) { this.tracksParameters = voiceParameters; }
 
-    public void setIndexedTrackParameters(int index, TrackParameters trackParameters) {
+    public void setIndexedTrackParameters(int index, VoiceParameters voiceParameters) {
         if (index >= 0 && index < getNumberOfTracks())
-            tracksParameters.set(index, trackParameters);
+            tracksParameters.set(index, voiceParameters);
         else throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
     }
 

@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.config;
 
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
-import com.acoustic.encoder.features.conversion.model.TrackParameters;
+import com.acoustic.encoder.features.conversion.model.VoiceParameters;
 import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 import java.io.*;
@@ -11,7 +11,7 @@ public class MusicParametersConfigLoader {
 
     private final static String PROPERTIES_FILE_NULL_ERROR_MSG = "Properties file cannot be null!";
 
-    private final static String MISSING_TRACK_VALUE_ERROR_MSG = "Track missing or incomplete: ";
+    private final static String MISSING_VOICE_VALUE_ERROR_MSG = "Track missing or incomplete: ";
     private final static String MISSING_VALUE_ERROR_MSG = "Missing value: ";
 
     private final static String PROPERTIES_FILE_NOT_FOUND_ERROR_MSG = "Properties file not found: ";
@@ -27,34 +27,34 @@ public class MusicParametersConfigLoader {
     }
 
     public MusicParameters loadDefaultMusicParameters() {
-        List<TrackParameters> trackParameters = new ArrayList<>();
+        List<VoiceParameters> voiceParameters = new ArrayList<>();
 
         HashMap<String, Integer> map = loadConfigMap();
 
-        if (map.get("MAX_TRACK_INDEX") == null)
-            throw new IllegalArgumentException(MISSING_TRACK_VALUE_ERROR_MSG + "MAX_TRACK_INDEX");
+        if (map.get("MAX_VOICE_INDEX") == null)
+            throw new IllegalArgumentException(MISSING_VOICE_VALUE_ERROR_MSG + "MAX_VOICE_INDEX");
 
-        int maxTrackIndex = map.get("MAX_TRACK_INDEX");
+        int maxTrackIndex = map.get("MAX_VOICE_INDEX");
 
         for (int i = 0; i <= maxTrackIndex; i++) {
-            if (map.get("TRACK_" + i + "_INSTRUMENT") == null
-                || map.get("TRACK_" + i + "_VOLUME") == null
-                || map.get("TRACK_" + i + "_OCTAVE") == null
+            if (map.get("VOICE_" + i + "_INSTRUMENT") == null
+                || map.get("VOICE_" + i + "_VOLUME") == null
+                || map.get("VOICE_" + i + "_OCTAVE") == null
             ) {
-                throw new IllegalArgumentException(MISSING_TRACK_VALUE_ERROR_MSG + i);
+                throw new IllegalArgumentException(MISSING_VOICE_VALUE_ERROR_MSG + i);
             }
 
-            trackParameters.add(new TrackParameters(
-                    map.get("TRACK_" + i + "_VOLUME"),
-                    map.get("TRACK_" + i + "_OCTAVE"),
-                    map.get("TRACK_" + i + "_INSTRUMENT")
+            voiceParameters.add(new VoiceParameters(
+                    map.get("VOICE_" + i + "_VOLUME"),
+                    map.get("VOICE_" + i + "_OCTAVE"),
+                    map.get("VOICE_" + i + "_INSTRUMENT")
             ));
         }
 
         if (map.get("UNIVERSAL_BPM") == null)
             throw new IllegalArgumentException(MISSING_VALUE_ERROR_MSG + "UNIVERSAL_BPM");
 
-        return new MusicParameters(map.get("UNIVERSAL_BPM"), trackParameters);
+        return new MusicParameters(map.get("UNIVERSAL_BPM"), voiceParameters);
 
     }
 
