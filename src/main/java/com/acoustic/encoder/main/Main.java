@@ -1,4 +1,4 @@
-package com.acoustic.encoder;
+package com.acoustic.encoder.main;
 
 import com.acoustic.encoder.features.conversion.config.DefaultParserConfigFactory;
 import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
@@ -16,12 +16,12 @@ import com.acoustic.encoder.features.player.listener.PlayerAppShutdownListener;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.infrastructure.event.DefaultEventBus;
-import com.acoustic.encoder.shared.navigation.DefaultAppNavigator;
+import com.acoustic.encoder.main.navigation.DefaultAppNavigator;
 import com.acoustic.encoder.features.conversion.config.DefaultParsingConfigLoader;
-import com.acoustic.encoder.shared.factory.DefaultScreenFactory;
+import com.acoustic.encoder.main.factory.DefaultScreenFactory;
 import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
-import com.acoustic.encoder.shared.navigation.listener.NavigationConversionCompletedListener;
+import com.acoustic.encoder.main.navigation.listener.NavigationConversionCompletedListener;
 import com.formdev.flatlaf.FlatDarkLaf;
 //import com.formdev.flatlaf.FlatDarculaLaf;
 //import com.formdev.flatlaf.FlatDarkLaf;

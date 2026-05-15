@@ -1,4 +1,4 @@
-package com.acoustic.encoder.shared.factory;
+package com.acoustic.encoder.main.factory;
 
 import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
 import com.acoustic.encoder.features.player.ui.PlayerScreen;

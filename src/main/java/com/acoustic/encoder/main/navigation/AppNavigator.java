@@ -1,4 +1,4 @@
-package com.acoustic.encoder.shared.navigation;
+package com.acoustic.encoder.main.navigation;
 
 public interface AppNavigator {
 

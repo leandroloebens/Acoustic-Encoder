@@ -1,4 +1,4 @@
-package com.acoustic.encoder.shared.factory;
+package com.acoustic.encoder.main.factory;
 
 import com.acoustic.encoder.features.conversion.ui.factory.ConversionViewManagerFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.factory.DefaultSwingConversionViewManagerFactory;
@@ -26,7 +26,7 @@ import com.acoustic.encoder.features.player.ui.swing.components.factory.SwingPla
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
 
-public class DefaultScreenFactory implements ScreenFactory  {
+public class DefaultScreenFactory implements ScreenFactory {
 
     private final static String PLAYER_VIEW_CONFIG_FILE = "playerViewMapping.properties";
 
