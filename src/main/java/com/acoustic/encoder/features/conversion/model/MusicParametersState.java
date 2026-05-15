@@ -8,22 +8,24 @@ public class MusicParametersState {
     private final static String INDEX_OUT_OF_BOUNDS = "Index out of bounds";
 
     private int bpm;
-    private List<VoiceParameters> tracksParameters;
+    private List<VoiceParametersState> voices;
 
-    public MusicParametersState(int bpm, List<VoiceParameters> voiceParameters) {
+    public MusicParametersState() {}
+
+    public MusicParametersState(int bpm, List<VoiceParametersState> voiceParameters) {
         this.bpm = bpm;
-        this.tracksParameters = voiceParameters;
+        this.voices = voiceParameters;
     }
 
     public int getBpm() { return bpm; }
 
     public void setBpm(int bpm) { this.bpm = bpm; }
 
-    public List<VoiceParameters> getAllTracksParameters() {
-        List<VoiceParameters> copy = new ArrayList<>();
+    public List<VoiceParametersState> getAllVoices() {
+        List<VoiceParametersState> copy = new ArrayList<>();
 
-        for (VoiceParameters track : tracksParameters) {
-            copy.add(new VoiceParameters(
+        for (VoiceParametersState track : voices) {
+            copy.add(new VoiceParametersState(
                 track.getVolume(),
                 track.getOctave(),
                 track.getInstrument()
@@ -33,59 +35,59 @@ public class MusicParametersState {
         return copy; 
     }
 
-    public void setTrackVolume(int index, int volume) {
-        if (index >= 0 && index < getNumberOfTracks()) {
-            tracksParameters.get(index).setVolume(volume);
+    public void setVoiceVolume(int index, int volume) {
+        if (index >= 0 && index < getNumberOfVoices()) {
+            voices.get(index).setVolume(volume);
         } else {
             throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
         }
     }
 
-    public void setTrackOctave(int index, int octave) {
-        if (index >= 0 && index < getNumberOfTracks()) {
-            tracksParameters.get(index).setOctave(octave);
+    public void setVoiceOctave(int index, int octave) {
+        if (index >= 0 && index < getNumberOfVoices()) {
+            voices.get(index).setOctave(octave);
         } else {
             throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
         }
     }
 
-    public void setTrackInstrument(int index, int instrument) {
-        if (index >= 0 && index < getNumberOfTracks()) {
-            tracksParameters.get(index).setInstrument(instrument);
+    public void setVoiceInstrument(int index, int instrument) {
+        if (index >= 0 && index < getNumberOfVoices()) {
+            voices.get(index).setInstrument(instrument);
         } else {
             throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
         }
     }
 
-    public VoiceParameters getIndexedTrackParameters(int index) {
-        if (index < 0 || index >= getNumberOfTracks()) {
+    public VoiceParametersState getIndexedVoice(int index) {
+        if (index < 0 || index >= getNumberOfVoices()) {
             throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
         }
 
-        VoiceParameters original = tracksParameters.get(index);
-        return new VoiceParameters(
+        VoiceParametersState original = voices.get(index);
+        return new VoiceParametersState(
                 original.getVolume(),
                 original.getOctave(),
                 original.getInstrument()
         );
     }
 
-    public void setAllTracksParameters(List<VoiceParameters> voiceParameters) { this.tracksParameters = voiceParameters; }
+    public void setAllVoices(List<VoiceParametersState> voiceParameters) { this.voices = voiceParameters; }
 
-    public void setIndexedTrackParameters(int index, VoiceParameters voiceParameters) {
-        if (index >= 0 && index < getNumberOfTracks())
-            tracksParameters.set(index, voiceParameters);
+    public void setIndexedVoice(int index, VoiceParametersState voiceParameters) {
+        if (index >= 0 && index < getNumberOfVoices())
+            voices.set(index, voiceParameters);
         else throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
     }
 
-    public int getNumberOfTracks() { return tracksParameters.size(); }
+    public int getNumberOfVoices() { return voices.size(); }
 
     @Override
     public String toString() {
         String text = "MusicParametersState{" + "\n\tbpm=" + bpm;
 
-        for (int i = 0; i < getNumberOfTracks(); i++) {
-            text = text.concat("\n\tTrack " + i + ": " + tracksParameters.get(i));
+        for (int i = 0; i < getNumberOfVoices(); i++) {
+            text = text.concat("\n\tVoice " + i + ": " + voices.get(i));
         }
 
         return text;

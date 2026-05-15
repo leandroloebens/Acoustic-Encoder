@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.start.view.swing.frame.assembler;
+package com.acoustic.encoder.features.start.view.swing.assembler;
 
 import com.acoustic.encoder.features.start.view.swing.components.dto.StartViewSwingComponentsWrapper;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;

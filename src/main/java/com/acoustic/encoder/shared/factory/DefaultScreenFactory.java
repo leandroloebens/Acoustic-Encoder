@@ -1,11 +1,12 @@
 package com.acoustic.encoder.shared.factory;
 
-import com.acoustic.encoder.features.conversion.view.factory.ConversionViewManagerFactory;
+import com.acoustic.encoder.features.conversion.view.ConversionViewManagerFactory;
 import com.acoustic.encoder.features.conversion.view.swing.factory.DefaultSwingConversionViewManagerFactory;
 import com.acoustic.encoder.features.start.controller.DefaultStartController;
+import com.acoustic.encoder.features.start.service.StartService;
 import com.acoustic.encoder.features.start.view.DefaultStartScreen;
 import com.acoustic.encoder.features.start.view.StartScreen;
-import com.acoustic.encoder.features.start.view.factory.StartViewManagerFactory;
+import com.acoustic.encoder.features.start.view.StartViewManagerFactory;
 import com.acoustic.encoder.features.start.view.swing.factory.DefaultSwingStartViewManagerFactory;
 import com.acoustic.encoder.shared.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
@@ -32,6 +33,8 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     private final EventBus eventBus;
 
+    private final StartService startService;
+
     private final ConversionService conversionService;
 
     private final FileService fileService;
@@ -41,11 +44,13 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     public DefaultScreenFactory(
             EventBus eventBus,
+            StartService startService,
             ConversionService conversionService,
             FileService fileService,
             AudioPlayerService audioPlayerService
     ) {
 
+        this.startService = startService;
         this.conversionService = conversionService;
         this.fileService = fileService;
         this.audioPlayerService = audioPlayerService;
@@ -55,11 +60,12 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     @Override
     public StartScreen createStartScreen() {
-        StartViewManagerFactory managerFactory = new DefaultSwingStartViewManagerFactory();
+        StartViewManagerFactory managerFactory = new DefaultSwingStartViewManagerFactory(eventBus);
 
         return new DefaultStartScreen(
-                new DefaultStartController(this.fileService),
-                managerFactory.createViewManager()
+                new DefaultStartController(this.startService, this.fileService),
+                managerFactory.createViewManager(),
+                eventBus
         );
     }
 

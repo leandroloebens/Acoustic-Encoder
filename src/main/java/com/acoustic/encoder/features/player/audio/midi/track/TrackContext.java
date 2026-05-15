@@ -1,6 +1,5 @@
 package com.acoustic.encoder.features.player.audio.midi.track;
 
-import com.acoustic.encoder.features.player.audio.midi.MidiUtils;
 import com.acoustic.encoder.shared.model.MusicalInstruction;
 import com.acoustic.encoder.shared.model.VoiceConfig;
 
@@ -14,7 +13,7 @@ public record TrackContext(
                 new TrackSettings(
                         channel,
                         ppqResolution,
-                        config.defaultMidiInstrument(),
+                        config.defaultInstrument(),
                         config.defaultOctave(),
                         noteVelocity,
                         initialBpm,
@@ -25,7 +24,7 @@ public record TrackContext(
                         initialBpm,
                         noteTickDuration,
                         0,
-                        config.defaultMidiInstrument(),
+                        config.defaultInstrument(),
                         config.defaultOctave(),
                         config.defaultVolume()
                 )

@@ -5,6 +5,7 @@ import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
 import com.acoustic.encoder.features.conversion.parser.DefaultVoiceParser;
 import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSelector;
+import com.acoustic.encoder.features.start.service.DefaultStartService;
 import com.acoustic.encoder.shared.service.DefaultFIleService;
 import com.acoustic.encoder.features.player.audio.midi.*;
 import com.acoustic.encoder.features.player.audio.midi.command.DefaultMidiCommandRegistryFactory;
@@ -44,6 +45,10 @@ public class Main {
         var eventBus = new DefaultEventBus();
 
 
+        // Start Service
+        var startService = new DefaultStartService("defaultMusicProject.properties");
+
+
         // Conversion Service
         var parserConfigLoader = new DefaultParsingConfigLoader(DefaultParsingConfigLoader.CONFIG_FILE_NAME);
         var parserConfigFactory = new DefaultParserConfigFactory();
@@ -78,6 +83,7 @@ public class Main {
         // Navigation
         var screenFactory = new DefaultScreenFactory(
                 eventBus,
+                startService,
                 conversionService,
                 fileService,
                 audioPlayerService

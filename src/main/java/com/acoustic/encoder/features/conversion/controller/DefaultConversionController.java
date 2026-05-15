@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.conversion.controller;
 
 import com.acoustic.encoder.shared.service.FileService;
 import com.acoustic.encoder.shared.model.MusicModel;
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.shared.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
 
 import java.io.File;
@@ -24,8 +24,8 @@ public class DefaultConversionController implements ConversionController {
     }
 
     @Override
-    public void handleConvertAction(UserConversionInput input) {
-        Objects.requireNonNull(input, "UserInput cannot be null!");
+    public void handleConvertAction(MusicProject input) {
+        Objects.requireNonNull(input, "Project cannot be null!");
 
         MusicModel music = this.conversionService.textToMusic(
                 input.text(),
@@ -49,6 +49,13 @@ public class DefaultConversionController implements ConversionController {
     public String handleLoadTextAction(File file) throws IOException {
 
         return this.fileService.loadFromTextFile(file);
+
+    }
+
+    @Override
+    public void handleSaveProjectAction(MusicProject project, File file) throws IOException{
+
+        this.fileService.saveProjectFile(project, file);
 
     }
 

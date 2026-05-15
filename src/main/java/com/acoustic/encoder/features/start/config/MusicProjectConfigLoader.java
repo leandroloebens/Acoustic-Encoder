@@ -1,13 +1,13 @@
-package com.acoustic.encoder.features.conversion.config;
+package com.acoustic.encoder.features.start.config;
 
-import com.acoustic.encoder.features.conversion.dto.MusicParameters;
-import com.acoustic.encoder.features.conversion.model.VoiceParameters;
+import com.acoustic.encoder.shared.dto.MusicProject;
+import com.acoustic.encoder.shared.model.VoiceConfig;
 import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 import java.io.*;
 import java.util.*;
 
-public class MusicParametersConfigLoader {
+public class MusicProjectConfigLoader {
 
     private final static String PROPERTIES_FILE_NULL_ERROR_MSG = "Properties file cannot be null!";
 
@@ -19,55 +19,58 @@ public class MusicParametersConfigLoader {
 
     private final String fileName;
 
-    public MusicParametersConfigLoader(String fileName) {
+    public MusicProjectConfigLoader(String fileName) {
 
         if (fileName == null) throw new IllegalArgumentException(PROPERTIES_FILE_NULL_ERROR_MSG);
         this.fileName = fileName;
 
     }
 
-    public MusicParameters loadDefaultMusicParameters() {
-        List<VoiceParameters> voiceParameters = new ArrayList<>();
+    public MusicProject loadMusicProject() {
+        List<VoiceConfig> voices = new ArrayList<>();
 
-        HashMap<String, Integer> map = loadConfigMap();
+        HashMap<String, String> map = loadConfigMap();
 
         if (map.get("MAX_VOICE_INDEX") == null)
             throw new IllegalArgumentException(MISSING_VOICE_VALUE_ERROR_MSG + "MAX_VOICE_INDEX");
 
-        int maxTrackIndex = map.get("MAX_VOICE_INDEX");
+        int maxTrackIndex = Integer.parseInt(map.get("MAX_VOICE_INDEX"));
 
         for (int i = 0; i <= maxTrackIndex; i++) {
             if (map.get("VOICE_" + i + "_INSTRUMENT") == null
-                || map.get("VOICE_" + i + "_VOLUME") == null
                 || map.get("VOICE_" + i + "_OCTAVE") == null
+                || map.get("VOICE_" + i + "_VOLUME") == null
             ) {
                 throw new IllegalArgumentException(MISSING_VOICE_VALUE_ERROR_MSG + i);
             }
 
-            voiceParameters.add(new VoiceParameters(
-                    map.get("VOICE_" + i + "_VOLUME"),
-                    map.get("VOICE_" + i + "_OCTAVE"),
-                    map.get("VOICE_" + i + "_INSTRUMENT")
+            voices.add(new VoiceConfig(
+                    Integer.parseInt(map.get("VOICE_" + i + "_INSTRUMENT")),
+                    Integer.parseInt(map.get("VOICE_" + i + "_OCTAVE")),
+                    Integer.parseInt(map.get("VOICE_" + i + "_VOLUME"))
             ));
         }
 
         if (map.get("UNIVERSAL_BPM") == null)
             throw new IllegalArgumentException(MISSING_VALUE_ERROR_MSG + "UNIVERSAL_BPM");
 
-        return new MusicParameters(map.get("UNIVERSAL_BPM"), voiceParameters);
+        if (map.get("TEXT") == null)
+            throw new IllegalArgumentException(MISSING_VALUE_ERROR_MSG + "TEXT");
+
+        return new MusicProject(map.get("TEXT"), Integer.parseInt(map.get("UNIVERSAL_BPM")), voices);
 
     }
 
-    private HashMap<String, Integer> loadConfigMap() {
+    private HashMap<String, String> loadConfigMap() {
 
-        HashMap<String, Integer> constants = new HashMap<>();
+        HashMap<String, String> constants = new HashMap<>();
 
         try (InputStream input = ViewConfigLoader.class.getResourceAsStream("/" + fileName)) {
             if (input != null) {
                 Properties properties = new Properties();
                 properties.load(input);
                 for (String key : properties.stringPropertyNames()) {
-                    constants.put(key, Integer.parseInt(properties.getProperty(key)));
+                    constants.put(key, properties.getProperty(key));
                 }
             } else {
                 throw new IOException(PROPERTIES_FILE_NOT_FOUND_ERROR_MSG + fileName);
