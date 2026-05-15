@@ -1,7 +1,7 @@
 package com.acoustic.encoder.infrastructure.audio.export.midi;
 
 import com.acoustic.encoder.features.player.exception.MusicExportException;
-import com.acoustic.encoder.features.player.export.MusicExporter;
+import com.acoustic.encoder.features.player.ports.MusicExporter;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
