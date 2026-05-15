@@ -1,16 +1,16 @@
-package com.acoustic.encoder.features.conversion.view.swing.factory;
+package com.acoustic.encoder.features.conversion.ui.swing.factory;
 
 import com.acoustic.encoder.features.conversion.config.MusicParametersConfigLoader;
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
-import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
-import com.acoustic.encoder.features.conversion.view.factory.ConversionViewManagerFactory;
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewManager;
-import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
-import com.acoustic.encoder.features.conversion.view.swing.components.factory.SwingConversionViewComponentsFactory;
-import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.DefaultSwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.SwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.frame.binder.DefaultSwingConversionViewFrameBinder;
-import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
+import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
+import com.acoustic.encoder.features.conversion.ui.factory.ConversionViewManagerFactory;
+import com.acoustic.encoder.features.conversion.ui.swing.DefaultSwingConversionViewManager;
+import com.acoustic.encoder.features.conversion.ui.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
+import com.acoustic.encoder.features.conversion.ui.swing.components.factory.SwingConversionViewComponentsFactory;
+import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.DefaultSwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.SwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.DefaultSwingConversionViewFrameBinder;
+import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.SwingConversionViewFrameBinder;
 import com.acoustic.encoder.infrastructure.audio.export.midi.MidiInstrumentListProvider;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;

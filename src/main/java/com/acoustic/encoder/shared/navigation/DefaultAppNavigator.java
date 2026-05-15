@@ -1,7 +1,7 @@
 package com.acoustic.encoder.shared.navigation;
 
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
-import com.acoustic.encoder.features.conversion.view.ConversionScreen;
+import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
 import com.acoustic.encoder.features.start.view.StartScreen;

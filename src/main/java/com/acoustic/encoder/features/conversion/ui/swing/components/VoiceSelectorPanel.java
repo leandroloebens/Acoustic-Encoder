@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.view.swing.components;
+package com.acoustic.encoder.features.conversion.ui.swing.components;
 
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingPanel;

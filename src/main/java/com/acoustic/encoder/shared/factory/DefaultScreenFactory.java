@@ -1,15 +1,15 @@
 package com.acoustic.encoder.shared.factory;
 
-import com.acoustic.encoder.features.conversion.view.factory.ConversionViewManagerFactory;
-import com.acoustic.encoder.features.conversion.view.swing.factory.DefaultSwingConversionViewManagerFactory;
+import com.acoustic.encoder.features.conversion.ui.factory.ConversionViewManagerFactory;
+import com.acoustic.encoder.features.conversion.ui.swing.factory.DefaultSwingConversionViewManagerFactory;
 import com.acoustic.encoder.features.start.controller.DefaultStartController;
 import com.acoustic.encoder.features.start.view.DefaultStartScreen;
 import com.acoustic.encoder.features.start.view.StartScreen;
 import com.acoustic.encoder.features.start.view.factory.StartViewManagerFactory;
 import com.acoustic.encoder.features.start.view.swing.factory.DefaultSwingStartViewManagerFactory;
 import com.acoustic.encoder.domain.ports.FileService;
-import com.acoustic.encoder.features.conversion.view.ConversionScreen;
-import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
+import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
+import com.acoustic.encoder.features.conversion.ui.DefaultConversionScreen;
 
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;

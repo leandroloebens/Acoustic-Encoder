@@ -1,11 +1,11 @@
-package com.acoustic.encoder.features.conversion.view.swing.components.factory;
+package com.acoustic.encoder.features.conversion.ui.swing.components.factory;
 
-import com.acoustic.encoder.features.conversion.view.swing.components.ParameterComboBoxPanel;
-import com.acoustic.encoder.features.conversion.view.swing.components.VoiceSelectorPanel;
+import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
+import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.domain.music.InstrumentOption;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingViewConfigWrapper;
-import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
-import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
+import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
+import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.*;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 

@@ -1,6 +1,6 @@
 package com.acoustic.encoder.infrastructure.audio.export.midi;
 
-import com.acoustic.encoder.features.conversion.view.swing.components.factory.InstrumentListProvider;
+import com.acoustic.encoder.features.conversion.ui.swing.components.factory.InstrumentListProvider;
 import com.acoustic.encoder.domain.music.InstrumentOption;
 
 import javax.sound.midi.Instrument;

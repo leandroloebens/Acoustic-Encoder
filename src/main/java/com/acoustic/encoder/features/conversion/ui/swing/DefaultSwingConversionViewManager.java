@@ -1,10 +1,10 @@
-package com.acoustic.encoder.features.conversion.view.swing;
+package com.acoustic.encoder.features.conversion.ui.swing;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
-import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
-import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.SwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
+import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
+import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.SwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.SwingConversionViewFrameBinder;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
