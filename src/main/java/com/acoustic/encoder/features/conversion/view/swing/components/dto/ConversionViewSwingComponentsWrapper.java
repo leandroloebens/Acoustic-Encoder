@@ -4,9 +4,9 @@ import com.acoustic.encoder.features.conversion.view.swing.components.ParameterC
 import com.acoustic.encoder.features.conversion.view.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.view.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.domain.music.InstrumentOption;
-import com.acoustic.encoder.shared.view.swing.components.SwingButton;
-import com.acoustic.encoder.shared.view.swing.components.SwingLabel;
-import com.acoustic.encoder.shared.view.swing.components.SwingVerticalScrollPane;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingVerticalScrollPane;
 
 public record ConversionViewSwingComponentsWrapper(
         SwingButton converterButton,

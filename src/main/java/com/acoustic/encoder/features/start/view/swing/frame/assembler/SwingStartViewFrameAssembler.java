@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.start.view.swing.frame.assembler;
 
 import com.acoustic.encoder.features.start.view.swing.components.dto.StartViewSwingComponentsWrapper;
-import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 
 import java.awt.*;
 

@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.player.view.swing.components.factory;
 import com.acoustic.encoder.features.player.view.swing.components.PlayerControlsComponent;
 import com.acoustic.encoder.features.player.view.swing.components.PlayerFooterComponent;
 import com.acoustic.encoder.features.player.view.swing.components.dto.PlayerViewComponentsWrapper;
-import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingViewConfigWrapper;
 
 import java.util.HashMap;
 

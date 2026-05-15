@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.start.view.swing.frame.binder;
 
 import com.acoustic.encoder.features.start.controller.StartController;
 import com.acoustic.encoder.features.start.view.swing.components.dto.StartViewSwingComponentsWrapper;
-import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 
 import java.util.ArrayList;
 import java.util.List;

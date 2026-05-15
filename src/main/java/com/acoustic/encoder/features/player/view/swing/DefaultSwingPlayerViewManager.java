@@ -5,8 +5,8 @@ import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.view.PlayerViewManager;
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
-import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;

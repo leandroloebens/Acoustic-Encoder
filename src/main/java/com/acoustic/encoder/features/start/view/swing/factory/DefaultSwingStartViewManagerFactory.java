@@ -8,7 +8,7 @@ import com.acoustic.encoder.features.start.view.swing.components.factory.SwingSt
 import com.acoustic.encoder.features.start.view.swing.frame.assembler.DefaultSwingStartViewFrameAssembler;
 import com.acoustic.encoder.features.start.view.swing.frame.assembler.SwingStartViewFrameAssembler;
 import com.acoustic.encoder.features.start.view.swing.frame.binder.DefaultSwingStartViewFrameBinder;
-import com.acoustic.encoder.shared.view.ViewConfigLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
 
 public class DefaultSwingStartViewManagerFactory implements StartViewManagerFactory {
 

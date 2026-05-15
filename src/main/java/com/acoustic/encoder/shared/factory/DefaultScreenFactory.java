@@ -24,7 +24,7 @@ import com.acoustic.encoder.features.player.view.swing.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.view.swing.components.factory.DefaultSwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.features.player.view.swing.components.factory.SwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.shared.view.ViewConfigLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
 
 public class DefaultScreenFactory implements ScreenFactory  {
 

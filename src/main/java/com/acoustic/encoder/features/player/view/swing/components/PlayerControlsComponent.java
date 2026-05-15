@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.player.view.swing.components;
 
 import com.acoustic.encoder.features.player.view.swing.SwingPlayerViewActionHandler;
-import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;

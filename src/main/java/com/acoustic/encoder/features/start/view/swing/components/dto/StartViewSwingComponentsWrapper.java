@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.start.view.swing.components.dto;
 
-import com.acoustic.encoder.shared.view.swing.components.SwingButton;
-import com.acoustic.encoder.shared.view.swing.components.SwingLabel;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
 
 public record StartViewSwingComponentsWrapper(
         SwingLabel titleLabel,

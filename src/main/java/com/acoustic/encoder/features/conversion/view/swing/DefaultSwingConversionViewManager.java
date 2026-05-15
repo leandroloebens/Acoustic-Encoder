@@ -6,8 +6,8 @@ import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
-import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;

@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.conversion.config;
 
 import com.acoustic.encoder.features.conversion.dto.MusicParameters;
 import com.acoustic.encoder.features.conversion.model.VoiceParameters;
-import com.acoustic.encoder.shared.view.ViewConfigLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
 
 import java.io.*;
 import java.util.*;

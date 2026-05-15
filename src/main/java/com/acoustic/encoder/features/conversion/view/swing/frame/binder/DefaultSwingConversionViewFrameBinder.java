@@ -11,8 +11,11 @@ import com.acoustic.encoder.features.conversion.view.swing.components.VoiceSelec
 import com.acoustic.encoder.features.conversion.view.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.domain.music.InstrumentOption;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
-import com.acoustic.encoder.shared.view.swing.components.*;
-import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSlider;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingTextArea;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;

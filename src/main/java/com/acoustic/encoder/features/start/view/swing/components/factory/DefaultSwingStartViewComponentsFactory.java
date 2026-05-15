@@ -1,9 +1,9 @@
 package com.acoustic.encoder.features.start.view.swing.components.factory;
 
 import com.acoustic.encoder.features.start.view.swing.components.dto.StartViewSwingComponentsWrapper;
-import com.acoustic.encoder.shared.view.swing.SwingViewConfigWrapper;
-import com.acoustic.encoder.shared.view.swing.components.SwingButton;
-import com.acoustic.encoder.shared.view.swing.components.SwingLabel;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingViewConfigWrapper;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
 
 import java.util.HashMap;
 
