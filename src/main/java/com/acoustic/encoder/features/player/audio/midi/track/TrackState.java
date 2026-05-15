@@ -1,7 +1,6 @@
 package com.acoustic.encoder.features.player.audio.midi.track;
 
-import com.acoustic.encoder.features.player.model.MusicalNote;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 public record TrackState(
 

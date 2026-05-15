@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.player.audio.midi.track;
 
-import com.acoustic.encoder.shared.model.Voice;
+import com.acoustic.encoder.domain.voice.Voice;
 
 import javax.sound.midi.Track;
 

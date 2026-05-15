@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.parser;
 
-import com.acoustic.encoder.shared.model.VoiceConfig;
-import com.acoustic.encoder.shared.model.VoiceList;
+import com.acoustic.encoder.domain.voice.VoiceConfig;
+import com.acoustic.encoder.domain.voice.VoiceList;
 
 import java.util.List;
 

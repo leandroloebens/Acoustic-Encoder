@@ -2,9 +2,9 @@ package com.acoustic.encoder.features.player.audio.midi.track;
 
 import com.acoustic.encoder.features.player.audio.midi.MidiUtils;
 import com.acoustic.encoder.features.player.audio.midi.command.DefaultMidiCommandRegistry;
-import com.acoustic.encoder.shared.model.Voice;
-import com.acoustic.encoder.shared.model.VoiceConfig;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.domain.voice.Voice;
+import com.acoustic.encoder.domain.voice.VoiceConfig;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 import javax.sound.midi.Track;
 

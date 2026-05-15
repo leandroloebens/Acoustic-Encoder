@@ -1,4 +1,4 @@
-package com.acoustic.encoder.shared.model;
+package com.acoustic.encoder.domain.voice;
 
 public record VoiceConfig(
         int defaultMidiInstrument,

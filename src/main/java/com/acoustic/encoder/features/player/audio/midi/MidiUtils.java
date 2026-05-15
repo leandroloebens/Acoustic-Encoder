@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.player.audio.midi;
 
-import com.acoustic.encoder.features.player.model.MusicalNote;
+import com.acoustic.encoder.domain.music.MusicalNote;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;

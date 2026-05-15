@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.config;
 
-import com.acoustic.encoder.shared.model.MusicalCommand;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.domain.music.MusicalCommand;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.player.model;
+package com.acoustic.encoder.domain.music;
 
 public enum Pitch {
 

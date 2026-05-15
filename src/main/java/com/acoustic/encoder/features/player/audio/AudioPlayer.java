@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.player.audio;
 
-import com.acoustic.encoder.shared.model.MusicModel;
+import com.acoustic.encoder.domain.music.MusicModel;
 
 import javax.sound.midi.InvalidMidiDataException;
 

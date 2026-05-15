@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.player.view;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.shared.event.EventBus;
-import com.acoustic.encoder.shared.model.MusicModel;
+import com.acoustic.encoder.domain.music.MusicModel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -2,8 +2,8 @@ package com.acoustic.encoder.features.player.audio.midi.command.handlers;
 
 import com.acoustic.encoder.features.player.audio.midi.command.MidiCommandHandler;
 import com.acoustic.encoder.features.player.audio.midi.track.TrackContext;
-import com.acoustic.encoder.shared.model.MusicalCommand;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.domain.music.MusicalCommand;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 import javax.sound.midi.Track;
 

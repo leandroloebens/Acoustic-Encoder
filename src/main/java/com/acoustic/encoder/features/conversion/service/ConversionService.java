@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.service;
 
-import com.acoustic.encoder.shared.model.VoiceConfig;
-import com.acoustic.encoder.shared.model.MusicModel;
+import com.acoustic.encoder.domain.voice.VoiceConfig;
+import com.acoustic.encoder.domain.music.MusicModel;
 
 import java.util.List;
 

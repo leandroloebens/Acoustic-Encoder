@@ -1,8 +1,7 @@
 package com.acoustic.encoder.features.player.audio.midi.track;
 
-import com.acoustic.encoder.features.player.audio.midi.MidiUtils;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
-import com.acoustic.encoder.shared.model.VoiceConfig;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
+import com.acoustic.encoder.domain.voice.VoiceConfig;
 
 public record TrackContext(
         TrackSettings settings,

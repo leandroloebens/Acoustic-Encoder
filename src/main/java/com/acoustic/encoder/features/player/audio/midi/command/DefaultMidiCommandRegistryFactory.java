@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.player.audio.midi.command;
 
 import com.acoustic.encoder.features.player.audio.midi.command.handlers.*;
-import com.acoustic.encoder.shared.model.MusicalCommand;
+import com.acoustic.encoder.domain.music.MusicalCommand;
 
 import java.util.Map;
 

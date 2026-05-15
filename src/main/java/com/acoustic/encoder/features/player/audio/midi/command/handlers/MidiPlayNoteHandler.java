@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.player.audio.midi.command.handlers;
 import com.acoustic.encoder.features.player.audio.midi.MidiUtils;
 import com.acoustic.encoder.features.player.audio.midi.command.MidiCommandHandler;
 import com.acoustic.encoder.features.player.audio.midi.track.TrackContext;
-import com.acoustic.encoder.features.player.model.MusicalNote;
+import com.acoustic.encoder.domain.music.MusicalNote;
 
 import javax.sound.midi.Track;
 

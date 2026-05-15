@@ -1,7 +1,7 @@
 import com.acoustic.encoder.features.conversion.config.DefaultParserConfigFactory;
 import com.acoustic.encoder.features.conversion.config.DefaultParsingConfigLoader;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 import java.util.List;
 

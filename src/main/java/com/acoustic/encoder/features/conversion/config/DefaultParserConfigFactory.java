@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.conversion.config;
 import com.acoustic.encoder.features.conversion.parser.rules.DelayTokenRule;
 import com.acoustic.encoder.features.conversion.parser.rules.LiteralTokenRule;
 import com.acoustic.encoder.features.conversion.parser.rules.TokenRule;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 import java.util.ArrayList;
 import java.util.List;

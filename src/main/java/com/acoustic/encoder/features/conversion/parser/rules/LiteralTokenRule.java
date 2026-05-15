@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.parser.rules;
 
 import com.acoustic.encoder.features.conversion.parser.TokenMatch;
-import com.acoustic.encoder.shared.model.MusicalInstruction;
+import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 import java.util.Optional;
 

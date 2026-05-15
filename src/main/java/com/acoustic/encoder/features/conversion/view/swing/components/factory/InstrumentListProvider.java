@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.view.swing.components.factory;
 
-import com.acoustic.encoder.shared.dto.InstrumentOption;
+import com.acoustic.encoder.domain.music.InstrumentOption;
 
 import java.util.List;
 

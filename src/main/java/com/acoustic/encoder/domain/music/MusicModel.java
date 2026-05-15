@@ -1,4 +1,6 @@
-package com.acoustic.encoder.shared.model;
+package com.acoustic.encoder.domain.music;
+
+import com.acoustic.encoder.domain.voice.VoiceList;
 
 public record MusicModel(
         VoiceList voices,
