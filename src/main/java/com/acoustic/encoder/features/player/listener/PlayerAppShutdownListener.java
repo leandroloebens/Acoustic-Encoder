@@ -1,8 +1,8 @@
 package com.acoustic.encoder.features.player.listener;
 
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
-import com.acoustic.encoder.shared.event.AppShutdownEvent;
-import com.acoustic.encoder.shared.event.EventListener;
+import com.acoustic.encoder.domain.event.AppShutdownEvent;
+import com.acoustic.encoder.domain.event.EventListener;
 
 import java.util.Objects;
 

@@ -5,7 +5,7 @@ import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEven
 import com.acoustic.encoder.features.conversion.view.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.view.swing.frame.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.view.swing.frame.binder.SwingConversionViewFrameBinder;
-import com.acoustic.encoder.shared.event.EventBus;
+import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 

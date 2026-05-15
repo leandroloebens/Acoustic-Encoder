@@ -1,8 +1,8 @@
 package com.acoustic.encoder.features.player.listener;
 
-import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
+import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
-import com.acoustic.encoder.shared.event.EventListener;
+import com.acoustic.encoder.domain.event.EventListener;
 
 
 public class PlayerConversionCompletedListener implements EventListener<ConversionCompletedEvent> {

@@ -1,4 +1,4 @@
-package com.acoustic.encoder.shared.service;
+package com.acoustic.encoder.domain.ports;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,5 +1,7 @@
 package com.acoustic.encoder.shared.service;
 
+import com.acoustic.encoder.domain.ports.FileService;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

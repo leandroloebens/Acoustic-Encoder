@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.event;
+package com.acoustic.encoder.domain.event;
 
 import com.acoustic.encoder.domain.music.MusicModel;
 

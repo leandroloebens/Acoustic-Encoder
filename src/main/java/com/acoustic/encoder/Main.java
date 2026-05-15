@@ -1,7 +1,7 @@
 package com.acoustic.encoder;
 
 import com.acoustic.encoder.features.conversion.config.DefaultParserConfigFactory;
-import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
+import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
 import com.acoustic.encoder.features.conversion.parser.DefaultVoiceParser;
 import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSelector;
@@ -12,7 +12,7 @@ import com.acoustic.encoder.features.player.audio.midi.track.DefaultTrackWriter;
 import com.acoustic.encoder.features.player.export.midi.MidiFileExporter;
 import com.acoustic.encoder.features.player.listener.PlayerAppShutdownListener;
 import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
-import com.acoustic.encoder.shared.event.AppShutdownEvent;
+import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.shared.event.DefaultEventBus;
 import com.acoustic.encoder.shared.navigation.DefaultAppNavigator;
 import com.acoustic.encoder.features.conversion.config.DefaultParsingConfigLoader;

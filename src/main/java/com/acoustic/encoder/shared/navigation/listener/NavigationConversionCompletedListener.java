@@ -1,7 +1,7 @@
 package com.acoustic.encoder.shared.navigation.listener;
 
-import com.acoustic.encoder.features.conversion.event.ConversionCompletedEvent;
-import com.acoustic.encoder.shared.event.EventListener;
+import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
+import com.acoustic.encoder.domain.event.EventListener;
 import com.acoustic.encoder.shared.navigation.AppNavigator;
 
 public class NavigationConversionCompletedListener implements EventListener<ConversionCompletedEvent> {

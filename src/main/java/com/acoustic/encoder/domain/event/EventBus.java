@@ -1,4 +1,4 @@
-package com.acoustic.encoder.shared.event;
+package com.acoustic.encoder.domain.event;
 
 public interface EventBus {
 

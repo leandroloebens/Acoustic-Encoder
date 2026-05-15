@@ -4,7 +4,7 @@ import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.view.PlayerViewManager;
-import com.acoustic.encoder.shared.event.EventBus;
+import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 

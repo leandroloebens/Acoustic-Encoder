@@ -1,11 +1,14 @@
 package com.acoustic.encoder.shared.event;
 
+import com.acoustic.encoder.domain.event.EventBus;
+import com.acoustic.encoder.domain.event.EventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DefaultEventBus implements EventBus  {
+public class DefaultEventBus implements EventBus {
 
     private final Map<Class<?>, List<EventListener<?>>> listeners = new HashMap<>();
 

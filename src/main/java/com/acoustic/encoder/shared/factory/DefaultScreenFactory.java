@@ -7,7 +7,7 @@ import com.acoustic.encoder.features.start.view.DefaultStartScreen;
 import com.acoustic.encoder.features.start.view.StartScreen;
 import com.acoustic.encoder.features.start.view.factory.StartViewManagerFactory;
 import com.acoustic.encoder.features.start.view.swing.factory.DefaultSwingStartViewManagerFactory;
-import com.acoustic.encoder.shared.service.FileService;
+import com.acoustic.encoder.domain.ports.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
@@ -23,7 +23,7 @@ import com.acoustic.encoder.features.player.view.swing.DefaultSwingPlayerViewMan
 import com.acoustic.encoder.features.player.view.swing.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.view.swing.components.factory.DefaultSwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.features.player.view.swing.components.factory.SwingPlayerViewComponentsFactory;
-import com.acoustic.encoder.shared.event.EventBus;
+import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 public class DefaultScreenFactory implements ScreenFactory  {

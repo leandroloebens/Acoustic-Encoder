@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.start.controller;
 
-import com.acoustic.encoder.shared.service.FileService;
+import com.acoustic.encoder.domain.ports.FileService;
 
 public class DefaultStartController implements StartController {
 

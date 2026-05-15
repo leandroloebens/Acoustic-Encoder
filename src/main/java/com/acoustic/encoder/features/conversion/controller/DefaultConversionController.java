@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.controller;
 
-import com.acoustic.encoder.shared.service.FileService;
+import com.acoustic.encoder.domain.ports.FileService;
 import com.acoustic.encoder.domain.music.MusicModel;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.service.ConversionService;

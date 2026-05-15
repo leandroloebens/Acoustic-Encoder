@@ -5,8 +5,8 @@ import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
 import com.acoustic.encoder.features.start.view.StartScreen;
-import com.acoustic.encoder.shared.event.AppShutdownEvent;
-import com.acoustic.encoder.shared.event.EventBus;
+import com.acoustic.encoder.domain.event.AppShutdownEvent;
+import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.shared.factory.ScreenFactory;
 
 public class DefaultAppNavigator implements AppNavigator {
