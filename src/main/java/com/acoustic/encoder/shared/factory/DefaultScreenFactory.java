@@ -2,6 +2,8 @@ package com.acoustic.encoder.shared.factory;
 
 import com.acoustic.encoder.features.conversion.view.ConversionViewManagerFactory;
 import com.acoustic.encoder.features.conversion.view.swing.factory.DefaultSwingConversionViewManagerFactory;
+import com.acoustic.encoder.features.player.view.PlayerViewManagerFactory;
+import com.acoustic.encoder.features.player.view.swing.factory.DefaultSwingPlayerViewManagerFactory;
 import com.acoustic.encoder.features.start.controller.DefaultStartController;
 import com.acoustic.encoder.features.start.service.StartService;
 import com.acoustic.encoder.features.start.view.DefaultStartScreen;
@@ -12,10 +14,6 @@ import com.acoustic.encoder.shared.service.FileService;
 import com.acoustic.encoder.features.conversion.view.ConversionScreen;
 import com.acoustic.encoder.features.conversion.view.DefaultConversionScreen;
 
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.DefaultSwingConversionViewManager;
-import com.acoustic.encoder.features.conversion.view.swing.SwingConversionViewAssembler;
-import com.acoustic.encoder.features.conversion.view.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
@@ -26,17 +24,15 @@ import com.acoustic.encoder.features.conversion.service.ConversionService;
 import com.acoustic.encoder.features.player.view.DefaultPlayerScreen;
 import com.acoustic.encoder.features.player.view.PlayerScreen;
 import com.acoustic.encoder.features.player.view.PlayerViewManager;
-import com.acoustic.encoder.features.player.view.swing.DefaultSwingPlayerViewAssembler;
+import com.acoustic.encoder.features.player.view.swing.assembler.DefaultSwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.view.swing.DefaultSwingPlayerViewManager;
-import com.acoustic.encoder.features.player.view.swing.SwingPlayerViewAssembler;
+import com.acoustic.encoder.features.player.view.swing.assembler.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.view.swing.components.factory.DefaultSwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.features.player.view.swing.components.factory.SwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.ViewConfigLoader;
 
 public class DefaultScreenFactory implements ScreenFactory  {
-
-    private final static String PLAYER_VIEW_CONFIG_FILE = "playerViewMapping.properties";
 
     private final EventBus eventBus;
 
@@ -88,26 +84,15 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
     @Override
     public PlayerScreen createPlayerScreen() {
+        PlayerViewManagerFactory managerFactory = new DefaultSwingPlayerViewManagerFactory(eventBus);
+
         AudioPlayerController playerController = new DefaultAudioPlayerController(this.audioPlayerService);
 
         eventBus.subscribe(PlayerClosedEvent.class, new PlayerClosedListener(playerController));
 
         return new DefaultPlayerScreen(
                 playerController,
-                getPlayerViewManager()
+                managerFactory.createViewManager()
         );
-    }
-
-    private PlayerViewManager getPlayerViewManager() {
-        ViewConfigLoader playerViewConfigLoader =
-                new ViewConfigLoader(PLAYER_VIEW_CONFIG_FILE);
-
-        SwingPlayerViewComponentsFactory playerViewComponentsFactory =
-                new DefaultSwingPlayerViewComponentsFactory(playerViewConfigLoader.loadConfigMap());
-
-        SwingPlayerViewAssembler playerViewAssembler =
-                new DefaultSwingPlayerViewAssembler(playerViewComponentsFactory.createComponents());
-
-        return new DefaultSwingPlayerViewManager(playerViewAssembler, eventBus);
     }
 }
