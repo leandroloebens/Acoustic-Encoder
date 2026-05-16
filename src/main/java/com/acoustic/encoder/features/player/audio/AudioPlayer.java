@@ -13,4 +13,6 @@ public interface AudioPlayer {
     void stop();
 
     void rewind();
+
+    void close();
 }

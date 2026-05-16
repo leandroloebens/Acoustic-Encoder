@@ -14,4 +14,6 @@ public interface SequencePlayer extends SequenceProvider {
     void stop();
 
     void rewind();
+
+    void closeSequencer();
 }

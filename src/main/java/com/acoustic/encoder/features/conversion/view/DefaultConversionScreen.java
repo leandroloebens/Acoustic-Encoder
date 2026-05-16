@@ -1,14 +1,8 @@
 package com.acoustic.encoder.features.conversion.view;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.shared.model.MusicConfig;
 
 public class DefaultConversionScreen implements ConversionScreen {
-
-    private final static int INITIAL_VOLUME = 64;
-    private final static int INITIAL_INSTRUMENT = 0;
-    private final static int INITIAL_BPM = 120;
-    private final static int INITIAL_OCTAVE = 5;
 
     private final ConversionController conversionController;
 
@@ -22,44 +16,29 @@ public class DefaultConversionScreen implements ConversionScreen {
         if (manager == null) throw new IllegalArgumentException("Manager cannot be null!");
         this.manager = manager;
 
-        this.manager.setInitialDefaultParameters(
-                new MusicConfig(
-                        INITIAL_INSTRUMENT,
-                        INITIAL_BPM,
-                        INITIAL_OCTAVE,
-                        INITIAL_VOLUME
-                )
-        );
+        initialize();
 
-        startWindow();
+    }
 
+    @Override
+    public void initialize() {
+        this.manager.assemble(this.conversionController);
     }
 
     @Override
     public void showWindow() {
-
-        this.manager.showFrame();
-
+        this.manager.show();
     }
 
     @Override
     public void hideWindow() {
-
-        this.manager.hideFrame();
-
+        this.manager.hide();
     }
 
     @Override
     public void closeWindow() {
-
-        this.manager.disposeFrame();
-
+        this.manager.dispose();
     }
 
-    private void startWindow() {
-
-        this.manager.startFrame(this.conversionController);
-
-    }
 }
 

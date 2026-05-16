@@ -17,4 +17,6 @@ public interface AudioPlayerService {
     void rewindMusic();
 
     void exportMusic(File destination) throws MusicExportException;
+
+    void closePlayer();
 }
