@@ -2,18 +2,15 @@ package com.acoustic.encoder.features.player.view.swing;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
-import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.view.PlayerViewManager;
 import com.acoustic.encoder.features.player.view.swing.assembler.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.view.swing.binder.SwingPlayerViewEventBinder;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
-import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 
 public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 

@@ -65,5 +65,4 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
                 footerComponent
         );
     }
-
 }

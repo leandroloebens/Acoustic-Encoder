@@ -7,18 +7,6 @@ import com.acoustic.encoder.shared.model.MusicModel;
 
 public class DefaultPlayerScreen implements PlayerScreen {
 
-    private final static String WINDOW_TITLE = "Music Player";
-    private final static int WINDOW_HEIGHT = 200;
-    private final static int WINDOW_WIDTH = 400;
-
-    private final static int BORDERLAYOUT_HGAP = 10;
-    private final static int BORDERLAYOUT_WGAP = 10;
-
-    private final static int BUTTON_PANEL_TGAP = 10;
-    private final static int BUTTON_PANEL_LGAP = 10;
-    private final static int BUTTON_PANEL_BGAP = 10;
-    private final static int BUTTON_PANEL_RGAP = 10;
-
     private final AudioPlayerController playerController;
 
     private final PlayerViewManager manager;
@@ -45,8 +33,8 @@ public class DefaultPlayerScreen implements PlayerScreen {
         this.manager.hideFrame();
     }
 
-    @Override
-    public void loadMusic(MusicModel musicModel) {
-        this.playerController.handleLoadAction(musicModel);
-    }
+//    @Override
+//    public void loadMusic(MusicModel musicModel) {
+//        this.playerController.handleLoadAction(musicModel);
+//    }
 }
