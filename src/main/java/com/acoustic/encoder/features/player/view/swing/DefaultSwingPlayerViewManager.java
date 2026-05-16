@@ -4,6 +4,8 @@ import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.view.PlayerViewManager;
+import com.acoustic.encoder.features.player.view.swing.assembler.SwingPlayerViewAssembler;
+import com.acoustic.encoder.features.player.view.swing.binder.SwingPlayerViewEventBinder;
 import com.acoustic.encoder.shared.event.EventBus;
 import com.acoustic.encoder.shared.view.swing.components.SwingFrame;
 import com.acoustic.encoder.shared.view.swing.utils.SwingUtils;
@@ -22,14 +24,22 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
     private final SwingPlayerViewAssembler assembler;
 
+    private final SwingPlayerViewEventBinder binder;
+
     private final EventBus eventBus;
 
     private SwingFrame frame;
 
-    public DefaultSwingPlayerViewManager(SwingPlayerViewAssembler assembler, EventBus eventBus) {
+    public DefaultSwingPlayerViewManager(
+            SwingPlayerViewAssembler assembler,
+            SwingPlayerViewEventBinder binder,
+            EventBus eventBus
+    ) {
 
         if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
         this.assembler = assembler;
+
+        this.binder = binder;
 
         if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
         this.eventBus = eventBus;
@@ -42,8 +52,7 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
                 WINDOW_TITLE,
                 WINDOW_WIDTH,
                 WINDOW_HEIGHT,
-                FRAME_EXIT_OPERATION,
-                new PlayerActionHandler(controller)
+                FRAME_EXIT_OPERATION
         );
 
         frame.addWindowListener(new WindowAdapter() {
@@ -52,6 +61,8 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
                 eventBus.publish(new PlayerClosedEvent());
             }
         });
+
+        binder.bind(controller, frame, assembler.getComponents());
 
         showFrame();
     }
@@ -63,54 +74,4 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
     public void hideFrame() { frame.setVisible(false); }
 
     // void destroyFrame();
-
-    private class PlayerActionHandler implements SwingPlayerViewActionHandler {
-
-        private static final String ONSAVE_FILE_EXTENSION_FILTER = "mid";
-        private static final String ONSAVE_FILTER_DESCRIPTION = "MID Files (*.mid)";
-        private static final String ONSAVE_DIALOG_TITLE = "Save as";
-
-        private final AudioPlayerController controller;
-
-        public PlayerActionHandler(AudioPlayerController controller) {
-            this.controller = controller;
-        }
-
-        @Override
-        public void onPlay() {
-            controller.handlePlayAction();
-        }
-
-        @Override
-        public void onPause() {
-            controller.handlePauseAction();
-        }
-
-        @Override
-        public void onRewind() {
-            controller.handleRewindAction();
-        }
-
-        @Override
-        public void onSave() {
-            File fileToSave = SwingUtils.getFileFromChooser(
-                    SwingUtils.SAVE_FILE_OPERATION,
-                    frame,
-                    ONSAVE_FILE_EXTENSION_FILTER,
-                    ONSAVE_FILTER_DESCRIPTION,
-                    ONSAVE_DIALOG_TITLE
-            );
-
-            if (fileToSave != null) {
-
-                try {
-                    controller.handleSaveAction(fileToSave);
-                } catch (MusicExportException ex) {
-                    throw new RuntimeException(ex);
-                }
-
-            }
-
-        }
-    }
 }
