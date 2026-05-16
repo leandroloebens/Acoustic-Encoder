@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.model;
+package com.acoustic.encoder.domain.voice;
 
 public class VoiceParameters {
 

@@ -69,7 +69,7 @@ public class Main {
         var commandRegistry = commandRegistryFactory.create();
         var trackWriter = new DefaultTrackWriter(commandRegistry);
         var sequenceBuilder = new DefaultSequenceBuilder(trackWriter);
-        var sequencePlayer = new DefaultSequencePlayer(MidiSystem.getSequencer());
+        var sequencePlayer = new DefaultSequencePlayer(MidiSystem.getSequencer(false));
 
         var audioPlayer = new JSoundAudioAdapter(sequenceBuilder, sequencePlayer);
         var musicExporter = new MidiFileExporter(sequencePlayer);
