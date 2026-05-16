@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface InstrumentListProvider {
 
-    List<InstrumentOption> getInstrumentList() throws Exception;
+    List<InstrumentOption> getInstrumentList();
 
 }

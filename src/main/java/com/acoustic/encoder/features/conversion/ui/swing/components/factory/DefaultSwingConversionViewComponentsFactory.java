@@ -251,26 +251,22 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
     private ParameterComboBoxPanel<InstrumentOption> createInstrumentPanel() {
         List<InstrumentOption> instrumentOptions = new ArrayList<>();
-        try {
-            List<InstrumentOption> instruments = instrumentProvider.getInstrumentList();
-            instruments.sort(Comparator.comparingInt(InstrumentOption::id));
 
-            int expectedId = 0;
-            for (InstrumentOption instrument : instruments) {
-                String instrumentName = instrument.name().trim();
+        List<InstrumentOption> instruments = instrumentProvider.getInstrumentList();
+        instruments.sort(Comparator.comparingInt(InstrumentOption::id));
 
-                if (
-                        instrumentName.isEmpty()
-                        || instrumentOptions.contains(instrument)
-                        || instrument.id() != expectedId
-                ) continue;
+        int expectedId = 0;
+        for (InstrumentOption instrument : instruments) {
+            String instrumentName = instrument.name().trim();
 
-                instrumentOptions.add(new InstrumentOption(instrumentName, instrument.id()));
-                expectedId++;
-            }
-        }
-        catch (Exception e) {
-            System.out.println(INSTRUMENT_PROVIDER_FAILED_MSG);
+            if (
+                instrumentName.isEmpty()
+                || instrumentOptions.contains(instrument)
+                || instrument.id() != expectedId
+            ) continue;
+
+            instrumentOptions.add(new InstrumentOption(instrumentName, instrument.id()));
+            expectedId++;
         }
 
         SwingComboBox<InstrumentOption> instrumentComboBox = new SwingComboBox<>(

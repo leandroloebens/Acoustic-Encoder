@@ -24,23 +24,22 @@ public class MidiInstrumentListProvider implements InstrumentListProvider {
     }
 
     @Override
-    public List<InstrumentOption> getInstrumentList() throws Exception {
+    public List<InstrumentOption> getInstrumentList() {
         List<InstrumentOption> instruments = new ArrayList<>();
         
-        Synthesizer synth = MidiSystem.getSynthesizer();
-        try {
+        try (Synthesizer synth = MidiSystem.getSynthesizer()) {
             synth.open();
+
             for (Instrument inst : synth.getAvailableInstruments()) {
                 String name = inst.getName();
                 int program = inst.getPatch().getProgram(); // 0..127
-                if (inst.getPatch().getBank() == bank) instruments.add(new InstrumentOption(name, program));
+                if (inst.getPatch().getBank() == bank) {
+                    instruments.add(new InstrumentOption(name, program));
+                }
             }
         }
         catch (MidiUnavailableException e) {
             throw new RuntimeException(LOAD_INSTRUMENTS_ERROR_MSG, e);
-        }
-        finally {
-            if (synth.isOpen()) synth.close();
         }
 
         return instruments;
