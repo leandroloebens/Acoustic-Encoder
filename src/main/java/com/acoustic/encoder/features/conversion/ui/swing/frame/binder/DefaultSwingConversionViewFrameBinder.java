@@ -135,8 +135,17 @@ public class DefaultSwingConversionViewFrameBinder implements SwingConversionVie
         bpmPanel.getSlider().setValue(parameters.getBpm());
         bpmPanel.updateLabel();
 
-        instrumentPanel.setSelectedItem(trackZero.getInstrument());
-        instrumentPanel.getComboBox().setInitialItem(instrumentPanel.getSelectedItem());
+        SwingUtilities.invokeLater(() -> {
+
+            instrumentPanel.setSelectedItem(trackZero.getInstrument());
+            instrumentPanel.getComboBox().setInitialItem(instrumentPanel.getSelectedItem());
+
+        });
+// TODO   revisar combobox e lógica de criação/inicialização do combobox
+//        Versao antiga que nao funcionava corretamente ao iniciar a aplicação, provavelmente por tentar setar o
+//        item selecionado antes do combo box estar completamente renderizado
+//        instrumentPanel.setSelectedItem(trackZero.getInstrument());
+//        instrumentPanel.getComboBox().setInitialItem(instrumentPanel.getSelectedItem());
     }
 
     private boolean validateInstrumentInput(
