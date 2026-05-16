@@ -11,7 +11,7 @@ import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.Default
 import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.DefaultSwingConversionViewFrameBinder;
 import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.SwingConversionViewFrameBinder;
-import com.acoustic.encoder.infrastructure.audio.export.midi.MidiInstrumentListProvider;
+import com.acoustic.encoder.infrastructure.audio.export.MidiInstrumentListProvider;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
 

@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.parser;
 
-import com.acoustic.encoder.features.conversion.config.ParserConfig;
+import com.acoustic.encoder.features.conversion.parser.config.ParserConfig;
 import com.acoustic.encoder.domain.music.MusicalInstruction;
 
 import java.util.ArrayList;
