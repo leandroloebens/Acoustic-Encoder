@@ -1,14 +1,14 @@
 package com.acoustic.encoder.features.start.controller;
 
-import com.acoustic.encoder.domain.ports.FileService;
+import com.acoustic.encoder.features.conversion.ports.TextRepository;
 
 public class DefaultStartController implements StartController {
 
-    private final FileService fileService;
+    private final TextRepository textRepository;
 
-    public DefaultStartController(FileService fileService) {
-        if (fileService == null) throw new IllegalArgumentException();
-        this.fileService = fileService;
+    public DefaultStartController(TextRepository textRepository) {
+        if (textRepository == null) throw new IllegalArgumentException();
+        this.textRepository = textRepository;
     }
 
 }

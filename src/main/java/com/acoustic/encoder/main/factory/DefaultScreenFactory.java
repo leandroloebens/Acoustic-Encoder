@@ -7,7 +7,7 @@ import com.acoustic.encoder.features.start.ui.DefaultStartScreen;
 import com.acoustic.encoder.features.start.ui.StartScreen;
 import com.acoustic.encoder.features.start.ui.factory.StartViewManagerFactory;
 import com.acoustic.encoder.features.start.ui.swing.factory.DefaultSwingStartViewManagerFactory;
-import com.acoustic.encoder.domain.ports.FileService;
+import com.acoustic.encoder.features.conversion.ports.TextRepository;
 import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
 import com.acoustic.encoder.features.conversion.ui.DefaultConversionScreen;
 
@@ -34,7 +34,7 @@ public class DefaultScreenFactory implements ScreenFactory {
 
     private final ConversionService conversionService;
 
-    private final FileService fileService;
+    private final TextRepository textRepository;
 
     private final AudioPlayerService audioPlayerService;
 
@@ -42,12 +42,12 @@ public class DefaultScreenFactory implements ScreenFactory {
     public DefaultScreenFactory(
             EventBus eventBus,
             ConversionService conversionService,
-            FileService fileService,
+            TextRepository textRepository,
             AudioPlayerService audioPlayerService
     ) {
 
         this.conversionService = conversionService;
-        this.fileService = fileService;
+        this.textRepository = textRepository;
         this.audioPlayerService = audioPlayerService;
         this.eventBus = eventBus;
 
@@ -58,7 +58,7 @@ public class DefaultScreenFactory implements ScreenFactory {
         StartViewManagerFactory managerFactory = new DefaultSwingStartViewManagerFactory();
 
         return new DefaultStartScreen(
-                new DefaultStartController(this.fileService),
+                new DefaultStartController(this.textRepository),
                 managerFactory.createViewManager()
         );
     }
@@ -68,7 +68,7 @@ public class DefaultScreenFactory implements ScreenFactory {
         ConversionViewManagerFactory managerFactory = new DefaultSwingConversionViewManagerFactory(eventBus);
 
         return new DefaultConversionScreen(
-                new DefaultConversionController(this.conversionService, this.fileService),
+                new DefaultConversionController(this.conversionService, this.textRepository),
                 managerFactory.createViewManager()
         );
     }

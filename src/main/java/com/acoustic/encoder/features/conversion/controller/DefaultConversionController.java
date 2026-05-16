@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.controller;
 
-import com.acoustic.encoder.domain.ports.FileService;
+import com.acoustic.encoder.features.conversion.ports.TextRepository;
 import com.acoustic.encoder.domain.music.MusicModel;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
@@ -13,13 +13,13 @@ public class DefaultConversionController implements ConversionController {
 
     private final ConversionService conversionService;
 
-    private final FileService fileService;
+    private final TextRepository textRepository;
 
-    public DefaultConversionController(ConversionService conversionService, FileService fileService) {
+    public DefaultConversionController(ConversionService conversionService, TextRepository textRepository) {
 
         this.conversionService = conversionService;
 
-        this.fileService = fileService;
+        this.textRepository = textRepository;
 
     }
 
@@ -41,14 +41,14 @@ public class DefaultConversionController implements ConversionController {
     @Override
     public void handleSaveTextAction(String textInput, File file) throws IOException {
 
-        this.fileService.saveToTextFile(textInput, file);
+        this.textRepository.saveText(textInput, file);
 
     }
 
     @Override
     public String handleLoadTextAction(File file) throws IOException {
 
-        return this.fileService.loadFromTextFile(file);
+        return this.textRepository.loadText(file);
 
     }
 

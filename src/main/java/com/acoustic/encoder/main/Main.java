@@ -8,7 +8,7 @@ import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSele
 import com.acoustic.encoder.infrastructure.audio.midi.DefaultSequenceBuilder;
 import com.acoustic.encoder.infrastructure.audio.midi.DefaultSequencePlayer;
 import com.acoustic.encoder.infrastructure.audio.midi.JSoundAudioAdapter;
-import com.acoustic.encoder.infrastructure.file.DefaultFIleService;
+import com.acoustic.encoder.infrastructure.file.FileTextRepository;
 import com.acoustic.encoder.infrastructure.audio.midi.command.DefaultMidiCommandRegistryFactory;
 import com.acoustic.encoder.infrastructure.audio.midi.track.DefaultTrackWriter;
 import com.acoustic.encoder.infrastructure.audio.export.midi.MidiFileExporter;
@@ -61,7 +61,7 @@ public class Main {
 
 
         // File Service
-        var fileService = new DefaultFIleService();
+        var fileService = new FileTextRepository();
 
 
         // Audio Player Service
