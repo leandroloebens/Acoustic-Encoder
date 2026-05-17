@@ -1,9 +1,6 @@
 package com.acoustic.encoder.features.player.ui;
 
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
-import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
-import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.domain.music.MusicModel;
 
 public class DefaultPlayerScreen implements PlayerScreen {
 

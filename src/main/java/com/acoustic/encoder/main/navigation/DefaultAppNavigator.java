@@ -19,9 +19,9 @@ public class DefaultAppNavigator implements AppNavigator {
 
     private StartScreen startScreen;
 
-    private ConversionScreen conversionScreen;
+    private final ConversionScreen conversionScreen;
 
-    private PlayerScreen playerScreen;
+    private final PlayerScreen playerScreen;
 
     private final EventBus eventBus;
 
