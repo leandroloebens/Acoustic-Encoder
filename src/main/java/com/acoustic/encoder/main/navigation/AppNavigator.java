@@ -6,6 +6,8 @@ public interface AppNavigator {
 
     void closeApp();
 
+    void displayStartScreen();
+
     void displayConversionScreen();
 
     void displayPlayerScreen();

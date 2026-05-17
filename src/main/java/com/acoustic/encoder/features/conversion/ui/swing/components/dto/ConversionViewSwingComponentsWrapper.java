@@ -12,6 +12,7 @@ public record ConversionViewSwingComponentsWrapper(
         SwingButton converterButton,
         SwingButton saveTextButton,
         SwingButton loadTextButton,
+        SwingButton saveProjectButton,
         SwingVerticalScrollPane scrollPane,
         SwingLabel instructionLabel,
         VoiceSelectorPanel voiceSelector,

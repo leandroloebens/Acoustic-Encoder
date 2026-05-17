@@ -1,26 +1,26 @@
 package com.acoustic.encoder.features.conversion.ui.swing.factory;
 
-import com.acoustic.encoder.features.conversion.config.MusicParametersConfigLoader;
-import com.acoustic.encoder.features.conversion.dto.MusicParameters;
+import com.acoustic.encoder.domain.event.EventBus;
+import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
+import com.acoustic.encoder.features.conversion.service.mapper.DefaultConversionParametersService;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.ui.factory.ConversionViewManagerFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.DefaultSwingConversionViewManager;
+import com.acoustic.encoder.features.conversion.ui.swing.assembler.DefaultSwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.ui.swing.assembler.SwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.DefaultSwingConversionViewEventBinder;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.SwingConversionViewEventBinder;
 import com.acoustic.encoder.features.conversion.ui.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.components.factory.SwingConversionViewComponentsFactory;
-import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.DefaultSwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.SwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.DefaultSwingConversionViewFrameBinder;
-import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.SwingConversionViewFrameBinder;
 import com.acoustic.encoder.infrastructure.audio.export.MidiInstrumentListProvider;
-import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
+
 
 public class DefaultSwingConversionViewManagerFactory implements ConversionViewManagerFactory {
 
     private static final String ILLEGAL_EVENT_BUS_ARGUMENT = "Event bus cannot be null";
 
     private static final String CONVERSION_VIEW_CONFIG_FILE = "conversionViewMapping.properties";
-    private static final String DEFAULT_MUSIC_PARAMETERS_FILE = "defaultMusicParameters.properties";
     private static final int MIDI_INSTRUMENT_BANK = 0;
 
     private final EventBus eventBus;
@@ -34,12 +34,10 @@ public class DefaultSwingConversionViewManagerFactory implements ConversionViewM
     public ConversionViewManager createViewManager() {
         SwingConversionViewFrameAssembler conversionViewAssembler = getConversionViewAssembler();
 
-        MusicParametersConfigLoader parametersLoader =
-                new MusicParametersConfigLoader(DEFAULT_MUSIC_PARAMETERS_FILE);
-        MusicParameters defaultMusicParameters = parametersLoader.loadDefaultMusicParameters();
+        ConversionParametersService parametersService = new DefaultConversionParametersService();
 
-        SwingConversionViewFrameBinder conversionViewBinder =
-                new DefaultSwingConversionViewFrameBinder(defaultMusicParameters);
+        SwingConversionViewEventBinder conversionViewBinder =
+                new DefaultSwingConversionViewEventBinder(eventBus, parametersService);
 
         return new DefaultSwingConversionViewManager(conversionViewAssembler, conversionViewBinder, eventBus);
     }

@@ -1,7 +1,7 @@
 package com.acoustic.encoder.domain.voice;
 
 public record VoiceConfig(
-        int defaultMidiInstrument,
+        int defaultInstrument,
         int defaultOctave,
         int defaultVolume
 ) {
@@ -9,7 +9,7 @@ public record VoiceConfig(
     @Override
     public String toString() {
         return "VoiceConfig{" +
-                "\ndefaultMidiInstrument=" + defaultMidiInstrument +
+                "\ndefaultInstrument=" + defaultInstrument +
                 ", \ndefaultOctave=" + defaultOctave +
                 ", \ndefaultVolume=" + defaultVolume +
                 "\n}";

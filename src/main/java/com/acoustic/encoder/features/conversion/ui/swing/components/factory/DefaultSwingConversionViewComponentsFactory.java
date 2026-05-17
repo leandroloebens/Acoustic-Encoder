@@ -46,11 +46,13 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         SwingButton conversionButton = createConverterButton();
 
-        SwingButton saveTextButton = createSaveButton();
+        SwingButton saveTextButton = createSaveTextButton();
 
-        SwingButton loadTextButton = createLoadButton();
+        SwingButton loadTextButton = createLoadTextButton();
 
-        SwingUtils.setHandCursor(conversionButton, saveTextButton, loadTextButton);
+        SwingButton saveProjectButton = createSaveProjectButton();
+
+        SwingUtils.setHandCursor(conversionButton, saveTextButton, loadTextButton, saveProjectButton);
 
         SwingTextArea textArea =
                 new SwingTextArea(null, config.getScaledInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"), null);
@@ -97,6 +99,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 conversionButton,
                 saveTextButton,
                 loadTextButton,
+                saveProjectButton,
                 scrollPane,
                 instructionLabel,
                 voiceSelector,
@@ -122,7 +125,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         );
     }
 
-    private SwingButton createSaveButton() {
+    private SwingButton createSaveTextButton() {
         Dimension saveButtonSize = new Dimension(
                 config.getInt("SAVE_TEXT_BUTTON_WIDTH"),
                 config.getInt("SAVE_TEXT_BUTTON_HEIGHT")
@@ -137,7 +140,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         );
     }
 
-    private SwingButton createLoadButton() {
+    private SwingButton createLoadTextButton() {
         Dimension loadButtonSize = new Dimension(
                 config.getInt("LOAD_TEXT_BUTTON_WIDTH"),
                 config.getInt("LOAD_TEXT_BUTTON_HEIGHT")
@@ -147,6 +150,16 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getString("LOAD_TEXT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("LOAD_TEXT_BUTTON_FONT_SIZE"),
+                null,
+                null
+        );
+    }
+
+    private SwingButton createSaveProjectButton() {
+        return new SwingButton(
+                config.getString("SAVE_PROJECT_BUTTON_TEXT"),
+                null,
+                config.getScaledInt("SAVE_PROJECT_BUTTON_FONT_SIZE"),
                 null,
                 null
         );

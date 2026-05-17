@@ -5,9 +5,7 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
 
 public class SwingComboBox<T> extends JComboBox<T> {
@@ -112,7 +110,13 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
     public void resetItems() {
         this.currentSortOrder = SortOrder.NONE;
-        applyFilter(initialItem.toString());
+
+        if (initialItem != null) {
+            applyFilter(initialItem.toString());
+        }
+        else {
+            rebuildModel(new ArrayList<>(originalItems), "", 0);
+        }
     }
 
     private String getEditorText() {
@@ -152,16 +156,59 @@ public class SwingComboBox<T> extends JComboBox<T> {
     }
 
     public void setSelectedOriginalIndex(int index) {
-        if (index >= 0 && index < this.originalItems.size()) {
-            T item = this.originalItems.get(index);
-            this.setSelectedItem(item);
+        if (index < 0 || index >= this.originalItems.size()) {
+            return;
         }
+
+        T item = this.originalItems.get(index);
+
+        ensureModelContainsOriginalItems();
+
+        this.setSelectedItem(item);
+        this.lastValidItem = item;
+
+        if (this.isEditable()) {
+            JTextField editor = (JTextField) this.getEditor().getEditorComponent();
+            editor.setText(item.toString());
+        }
+    }
+
+    private void ensureModelContainsOriginalItems() {
+        if (this.getItemCount() == this.originalItems.size()) {
+            boolean sameItems = true;
+
+            for (int i = 0; i < this.originalItems.size(); i++) {
+                T modelItem = this.getItemAt(i);
+                T originalItem = this.originalItems.get(i);
+
+                if (!Objects.equals(modelItem, originalItem)) {
+                    sameItems = false;
+                    break;
+                }
+            }
+
+            if (sameItems) {
+                return;
+            }
+        }
+
+        updatingModel = true;
+
+        this.hidePopup();
+        this.removeAllItems();
+
+        for (T originalItem : this.originalItems) {
+            this.addItem(originalItem);
+        }
+
+        updatingModel = false;
     }
 
     public void setInitialItem(T item) {
         if (item != null && originalItems.contains(item)) {
             this.initialItem = item;
             this.setSelectedItem(item);
+            this.lastValidItem = item;
         }
     }
 
@@ -196,6 +243,8 @@ public class SwingComboBox<T> extends JComboBox<T> {
         updatingModel = true;
 
         JTextField editor = (JTextField) this.getEditor().getEditorComponent();
+
+        ensureModelContainsOriginalItems();
 
         this.setSelectedItem(this.lastValidItem);
 
@@ -262,23 +311,26 @@ public class SwingComboBox<T> extends JComboBox<T> {
 
         this.hidePopup();
 
-        this.removeAllItems();
+        DefaultComboBoxModel<T> model = new DefaultComboBoxModel<>();
 
-        for (T item : items)
-            this.addItem(item);
-        
+        for (T item : items) {
+            model.addElement(item);
+        }
+
+        this.setModel(model);
+
         JTextField editor = (JTextField) this.getEditor().getEditorComponent();
-        
-        if (this.getItemCount() > 0 && this.isDisplayable() && this.isShowing() && editor.hasFocus())
-            SwingUtilities.invokeLater(() -> {
-                if (!this.isPopupVisible()) this.showPopup();
-            });
 
         this.setSelectedIndex(ITEM_NOT_FOUND_INDEX);
 
         editor.setText(editorText);
 
         if (caret <= editorText.length()) editor.setCaretPosition(caret);
+
+        if (this.getItemCount() > 0 && this.isDisplayable() && this.isShowing() && editor.hasFocus())
+            SwingUtilities.invokeLater(() -> {
+                if (!this.isPopupVisible()) this.showPopup();
+            });
 
         updatingModel = false;
     }

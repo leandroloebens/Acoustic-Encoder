@@ -8,5 +8,5 @@ public interface PlayerScreen {
 
     void closeFrame();
 
-    void loadMusic(MusicModel musicModel);
+//    void loadMusic(MusicModel musicModel);
 }

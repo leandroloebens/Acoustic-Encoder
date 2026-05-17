@@ -1,4 +1,6 @@
-package com.acoustic.encoder.features.conversion.ui.swing.frame.assembler;
+
+package com.acoustic.encoder.features.conversion.ui.swing.assembler;
+
 
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterSliderPanel;
@@ -26,8 +28,9 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
     private final static int CONFIG_PANEL_MAX_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width/2;
 
     private final SwingButton converterButton;
-    private final SwingButton saveButton;
-    private final SwingButton loadButton;
+    private final SwingButton saveTextButton;
+    private final SwingButton loadTextButton;
+    private final SwingButton saveProjectButton;
     private final SwingLabel instructionLabel;
     private final SwingVerticalScrollPane scrollPane;
     private final VoiceSelectorPanel voiceSelector;
@@ -38,8 +41,9 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
     public DefaultSwingConversionViewFrameAssembler(ConversionViewSwingComponentsWrapper components) {
         this.converterButton = components.converterButton();
-        this.saveButton = components.saveTextButton();
-        this.loadButton = components.loadTextButton();
+        this.saveTextButton = components.saveTextButton();
+        this.loadTextButton = components.loadTextButton();
+        this.saveProjectButton = components.saveProjectButton();
         this.instructionLabel = components.instructionLabel();
         this.scrollPane = components.scrollPane();
         this.voiceSelector = components.voiceSelector();
@@ -92,8 +96,9 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
     public ConversionViewSwingComponentsWrapper getComponents() {
         return new ConversionViewSwingComponentsWrapper(
                 converterButton,
-                saveButton,
-                loadButton,
+                saveTextButton,
+                loadTextButton,
+                saveProjectButton,
                 scrollPane,
                 instructionLabel,
                 voiceSelector,
@@ -120,8 +125,9 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
     private SwingPanel createButtonsPanel() {
         SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, BUTTONS_HGAP, BUTTONS_VGAP));
-        fileButtonsPanel.add(loadButton);
-        fileButtonsPanel.add(saveButton);
+        fileButtonsPanel.add(loadTextButton);
+        fileButtonsPanel.add(saveTextButton);
+        fileButtonsPanel.add(saveProjectButton);
 
         fileButtonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         converterButton.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -1,14 +1,40 @@
 package com.acoustic.encoder.features.start.controller;
 
+import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.features.conversion.ports.TextRepository;
+import com.acoustic.encoder.features.start.service.StartService;
+
+import java.io.File;
 
 public class DefaultStartController implements StartController {
 
+    private static final String NULL_START_SERVICE_ARGUMENT_MSG = "Start Service cannot be null";
+    private static final String NULL_FILE_SERVICE_ARGUMENT_MSG = "File Service cannot be null";
+    private static final String NULL_FILE_ARGUMENT_MSG = "File cannot be null";
+
+    private final StartService startService;
+
     private final TextRepository textRepository;
 
-    public DefaultStartController(TextRepository textRepository) {
-        if (textRepository == null) throw new IllegalArgumentException();
+    public DefaultStartController(StartService startService, TextRepository textRepository) {
+        if (startService == null) throw new IllegalArgumentException(NULL_START_SERVICE_ARGUMENT_MSG);
+        this.startService = startService;
+
+        if (textRepository == null) throw new IllegalArgumentException(NULL_FILE_SERVICE_ARGUMENT_MSG);
         this.textRepository = textRepository;
+    }
+
+    @Override
+    public UserConversionInput handleOpenProjectAction(File file) {
+
+        if (file == null) throw new IllegalArgumentException(NULL_FILE_ARGUMENT_MSG);
+        return textRepository.loadProject(file);
+
+    }
+
+    @Override
+    public UserConversionInput handleNewProjectAction() {
+        return startService.getDefaultMusicProject();
     }
 
 }

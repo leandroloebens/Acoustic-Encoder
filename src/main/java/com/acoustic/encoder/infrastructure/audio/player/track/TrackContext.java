@@ -13,7 +13,7 @@ public record TrackContext(
                 new TrackSettings(
                         channel,
                         ppqResolution,
-                        config.defaultMidiInstrument(),
+                        config.defaultInstrument(),
                         config.defaultOctave(),
                         noteVelocity,
                         initialBpm,
@@ -24,7 +24,7 @@ public record TrackContext(
                         initialBpm,
                         noteTickDuration,
                         0,
-                        config.defaultMidiInstrument(),
+                        config.defaultInstrument(),
                         config.defaultOctave(),
                         config.defaultVolume()
                 )

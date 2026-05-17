@@ -1,21 +1,27 @@
 package com.acoustic.encoder.domain.voice;
 
-public class VoiceParameters {
+public class VoiceParametersState {
 
     private int instrument;
     private int volume;
     private int octave;
 
-    public VoiceParameters(int volume, int octave, int instrument) {
+    public VoiceParametersState(int volume, int octave, int instrument) {
         this.volume = volume;
         this.octave = octave;
         this.instrument = instrument;
     }
 
-    public VoiceParameters(VoiceParameters other) {
+    public VoiceParametersState(VoiceParametersState other) {
         this.volume = other.volume;
         this.octave = other.octave;
         this.instrument = other.instrument;
+    }
+
+    public VoiceParametersState(VoiceConfig config) {
+        this.volume = config.defaultVolume();
+        this.octave = config.defaultOctave();
+        this.instrument = config.defaultInstrument();
     }
 
     public int getInstrument() {

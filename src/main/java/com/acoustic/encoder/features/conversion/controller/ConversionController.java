@@ -13,4 +13,6 @@ public interface ConversionController {
 
     String handleLoadTextAction(File file) throws IOException;
 
+    void handleSaveProjectAction(UserConversionInput input, File file) throws IOException;
+
 }

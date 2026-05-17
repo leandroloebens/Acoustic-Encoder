@@ -37,7 +37,7 @@ public class DefaultTrackWriter implements TrackWriter {
 
     private void initializeTrack(Track track, VoiceConfig config, int channel)  {
 
-        track.add(MidiUtils.createInstrumentChangeEvent(config.defaultMidiInstrument(), channel, 0));
+        track.add(MidiUtils.createInstrumentChangeEvent(config.defaultInstrument(), channel, 0));
 
         track.add(MidiUtils.createVolumeChangeEvent(config.defaultVolume(), channel, 0));
     }
@@ -48,7 +48,7 @@ public class DefaultTrackWriter implements TrackWriter {
 //        TrackSettings settings = new TrackSettings(
 //                channel,
 //                noteTickDuration,
-//                voice.config().defaultMidiInstrument(),
+//                voice.config().defaultInstrument(),
 //                voice.config().defaultOctave(),
 //                NOTE_VELOCITY
 //        );

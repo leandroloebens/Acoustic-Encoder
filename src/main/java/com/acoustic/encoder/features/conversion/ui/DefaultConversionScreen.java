@@ -16,8 +16,13 @@ public class DefaultConversionScreen implements ConversionScreen {
         if (manager == null) throw new IllegalArgumentException("Manager cannot be null!");
         this.manager = manager;
 
-        startWindow();
+        initialize();
 
+    }
+
+    @Override
+    public void initialize() {
+        this.manager.assemble(this.conversionController);
     }
 
     @Override
@@ -35,8 +40,5 @@ public class DefaultConversionScreen implements ConversionScreen {
         this.manager.dispose();
     }
 
-    private void startWindow() {
-        this.manager.assemble(this.conversionController);
-    }
 }
 

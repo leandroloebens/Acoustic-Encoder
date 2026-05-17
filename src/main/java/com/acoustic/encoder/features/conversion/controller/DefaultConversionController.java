@@ -52,4 +52,11 @@ public class DefaultConversionController implements ConversionController {
 
     }
 
+    @Override
+    public void handleSaveProjectAction(UserConversionInput project, File file) throws IOException{
+
+        this.textRepository.saveProject(project, file);
+
+    }
+
 }

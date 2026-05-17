@@ -1,26 +1,28 @@
 package com.acoustic.encoder.main;
 
-import com.acoustic.encoder.features.conversion.parser.config.DefaultParserConfigFactory;
+
+import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
 import com.acoustic.encoder.features.conversion.parser.DefaultVoiceParser;
 import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSelector;
+import com.acoustic.encoder.features.conversion.parser.config.DefaultParserConfigFactory;
+import com.acoustic.encoder.features.conversion.parser.config.DefaultParsingConfigLoader;
+import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
+import com.acoustic.encoder.features.player.listener.PlayerAppShutdownListener;
+import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
+import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
+import com.acoustic.encoder.features.start.service.DefaultStartService;
+import com.acoustic.encoder.infrastructure.audio.export.MidiFileExporter;
 import com.acoustic.encoder.infrastructure.audio.player.DefaultSequenceBuilder;
 import com.acoustic.encoder.infrastructure.audio.player.DefaultSequencePlayer;
 import com.acoustic.encoder.infrastructure.audio.player.JSoundAudioAdapter;
-import com.acoustic.encoder.infrastructure.file.FileTextRepository;
 import com.acoustic.encoder.infrastructure.audio.player.command.DefaultMidiCommandRegistryFactory;
 import com.acoustic.encoder.infrastructure.audio.player.track.DefaultTrackWriter;
-import com.acoustic.encoder.infrastructure.audio.export.MidiFileExporter;
-import com.acoustic.encoder.features.player.listener.PlayerAppShutdownListener;
-import com.acoustic.encoder.features.player.listener.PlayerConversionCompletedListener;
-import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.infrastructure.event.DefaultEventBus;
-import com.acoustic.encoder.main.navigation.DefaultAppNavigator;
-import com.acoustic.encoder.features.conversion.parser.config.DefaultParsingConfigLoader;
+import com.acoustic.encoder.infrastructure.file.FileTextRepository;
 import com.acoustic.encoder.main.factory.DefaultScreenFactory;
-import com.acoustic.encoder.features.player.service.DefaultAudioPlayerService;
-import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
+import com.acoustic.encoder.main.navigation.DefaultAppNavigator;
 import com.acoustic.encoder.main.navigation.listener.NavigationConversionCompletedListener;
 import com.formdev.flatlaf.FlatDarkLaf;
 //import com.formdev.flatlaf.FlatDarculaLaf;
@@ -46,6 +48,10 @@ public class Main {
         var eventBus = new DefaultEventBus();
 
 
+        // Start Service
+        var startService = new DefaultStartService("defaultMusicProject.properties");
+
+
         // Conversion Service
         var parserConfigLoader = new DefaultParsingConfigLoader(DefaultParsingConfigLoader.CONFIG_FILE_NAME);
         var parserConfigFactory = new DefaultParserConfigFactory();
@@ -61,7 +67,7 @@ public class Main {
 
 
         // File Service
-        var fileService = new FileTextRepository();
+        var fileTextRepository = new FileTextRepository();
 
 
         // Audio Player Service
@@ -80,8 +86,9 @@ public class Main {
         // Navigation
         var screenFactory = new DefaultScreenFactory(
                 eventBus,
+                startService,
                 conversionService,
-                fileService,
+                fileTextRepository,
                 audioPlayerService
         );
         var appNavigator = new DefaultAppNavigator(screenFactory, eventBus);

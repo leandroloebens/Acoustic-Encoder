@@ -1,11 +1,11 @@
 package com.acoustic.encoder.features.conversion.ui.swing;
 
+import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
-import com.acoustic.encoder.features.conversion.ui.swing.frame.assembler.SwingConversionViewFrameAssembler;
-import com.acoustic.encoder.features.conversion.ui.swing.frame.binder.SwingConversionViewFrameBinder;
-import com.acoustic.encoder.domain.event.EventBus;
+import com.acoustic.encoder.features.conversion.ui.swing.assembler.SwingConversionViewFrameAssembler;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.SwingConversionViewEventBinder;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
@@ -16,14 +16,14 @@ import java.awt.event.WindowEvent;
 
 public class DefaultSwingConversionViewManager implements ConversionViewManager {
 
-    private final static String WINDOW_TITLE = "Conversor: Texto para Som";
-    private final static int WINDOW_MIN_HEIGHT = 750;
-    private final static int WINDOW_MIN_WIDTH = 850;
+    private final static String WINDOW_TITLE = "Text To Sound";
+    private final static int WINDOW_MIN_HEIGHT = (int) (750 * SwingUtils.getScreenScaleRatio());
+    private final static int WINDOW_MIN_WIDTH = (int) (850 * SwingUtils.getScreenScaleRatio());
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
     private final SwingConversionViewFrameAssembler assembler;
 
-    private final SwingConversionViewFrameBinder binder;
+    private final SwingConversionViewEventBinder binder;
 
     private final EventBus eventBus;
 
@@ -31,33 +31,30 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
     public DefaultSwingConversionViewManager(
             SwingConversionViewFrameAssembler assembler,
-            SwingConversionViewFrameBinder binder,
+            SwingConversionViewEventBinder binder,
             EventBus eventBus
     ) {
 
         if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
         this.assembler = assembler;
 
-        if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
-        this.eventBus = eventBus;
-
         if (binder == null) throw new IllegalArgumentException("Binder cannot be null!");
         this.binder = binder;
+
+        if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
+        this.eventBus = eventBus;
 
     }
 
     @Override
     public void assemble(ConversionController conversionController) {
-        Dimension windowInitialSize =
-            new Dimension(
-                (int)(WINDOW_MIN_WIDTH * SwingUtils.getScreenScaleRatio()),
-                (int)(WINDOW_MIN_HEIGHT * SwingUtils.getScreenScaleRatio())
-            );
+
+        if (frame != null) return;
 
         frame = assembler.assembleFrame(
-            WINDOW_TITLE,
-            windowInitialSize,
-            FRAME_EXIT_OPERATION
+                WINDOW_TITLE,
+                new Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT),
+                FRAME_EXIT_OPERATION
         );
 
         frame.addWindowListener(new WindowAdapter() {
@@ -78,6 +75,9 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     public void hide() { frame.setVisible(false); }
 
     @Override
-    public void dispose() { frame.dispose(); }
+    public void dispose() {
+        binder.unbind();
+        frame.dispose();
+    }
 
 }

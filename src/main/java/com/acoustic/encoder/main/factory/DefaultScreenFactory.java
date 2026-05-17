@@ -1,36 +1,36 @@
 package com.acoustic.encoder.main.factory;
 
+
+import com.acoustic.encoder.domain.event.EventBus;
+import com.acoustic.encoder.features.conversion.ports.TextRepository;
+import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
+import com.acoustic.encoder.features.conversion.ui.DefaultConversionScreen;
 import com.acoustic.encoder.features.conversion.ui.factory.ConversionViewManagerFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.factory.DefaultSwingConversionViewManagerFactory;
+import com.acoustic.encoder.features.player.ui.DefaultPlayerScreen;
+import com.acoustic.encoder.features.player.ui.PlayerScreen;
+import com.acoustic.encoder.features.player.ui.PlayerViewManagerFactory;
+import com.acoustic.encoder.features.player.ui.swing.factory.DefaultSwingPlayerViewManagerFactory;
 import com.acoustic.encoder.features.start.controller.DefaultStartController;
+import com.acoustic.encoder.features.start.service.StartService;
 import com.acoustic.encoder.features.start.ui.DefaultStartScreen;
 import com.acoustic.encoder.features.start.ui.StartScreen;
 import com.acoustic.encoder.features.start.ui.factory.StartViewManagerFactory;
 import com.acoustic.encoder.features.start.ui.swing.factory.DefaultSwingStartViewManagerFactory;
-import com.acoustic.encoder.features.conversion.ports.TextRepository;
-import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
-import com.acoustic.encoder.features.conversion.ui.DefaultConversionScreen;
-
+import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.controller.DefaultAudioPlayerController;
 import com.acoustic.encoder.features.conversion.controller.DefaultConversionController;
+import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
+import com.acoustic.encoder.features.player.listener.PlayerClosedListener;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
-import com.acoustic.encoder.features.player.ui.DefaultPlayerScreen;
-import com.acoustic.encoder.features.player.ui.PlayerScreen;
-import com.acoustic.encoder.features.player.ui.PlayerViewManager;
-import com.acoustic.encoder.features.player.ui.swing.DefaultSwingPlayerViewAssembler;
-import com.acoustic.encoder.features.player.ui.swing.DefaultSwingPlayerViewManager;
-import com.acoustic.encoder.features.player.ui.swing.SwingPlayerViewAssembler;
-import com.acoustic.encoder.features.player.ui.swing.components.factory.DefaultSwingPlayerViewComponentsFactory;
-import com.acoustic.encoder.features.player.ui.swing.components.factory.SwingPlayerViewComponentsFactory;
-import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
 
-public class DefaultScreenFactory implements ScreenFactory {
 
-    private final static String PLAYER_VIEW_CONFIG_FILE = "playerViewMapping.properties";
+public class DefaultScreenFactory implements ScreenFactory  {
 
     private final EventBus eventBus;
+
+    private final StartService startService;
 
     private final ConversionService conversionService;
 
@@ -41,11 +41,13 @@ public class DefaultScreenFactory implements ScreenFactory {
 
     public DefaultScreenFactory(
             EventBus eventBus,
+            StartService startService,
             ConversionService conversionService,
             TextRepository textRepository,
             AudioPlayerService audioPlayerService
     ) {
 
+        this.startService = startService;
         this.conversionService = conversionService;
         this.textRepository = textRepository;
         this.audioPlayerService = audioPlayerService;
@@ -55,11 +57,12 @@ public class DefaultScreenFactory implements ScreenFactory {
 
     @Override
     public StartScreen createStartScreen() {
-        StartViewManagerFactory managerFactory = new DefaultSwingStartViewManagerFactory();
+        StartViewManagerFactory managerFactory = new DefaultSwingStartViewManagerFactory(eventBus);
 
         return new DefaultStartScreen(
-                new DefaultStartController(this.textRepository),
-                managerFactory.createViewManager()
+                new DefaultStartController(this.startService, this.textRepository),
+                managerFactory.createViewManager(),
+                eventBus
         );
     }
 
@@ -75,23 +78,15 @@ public class DefaultScreenFactory implements ScreenFactory {
 
     @Override
     public PlayerScreen createPlayerScreen() {
+        PlayerViewManagerFactory managerFactory = new DefaultSwingPlayerViewManagerFactory(eventBus);
+
+        AudioPlayerController playerController = new DefaultAudioPlayerController(this.audioPlayerService);
+
+        eventBus.subscribe(PlayerClosedEvent.class, new PlayerClosedListener(playerController));
+
         return new DefaultPlayerScreen(
-                new DefaultAudioPlayerController(this.audioPlayerService),
-                getPlayerViewManager(),
-                eventBus
+                playerController,
+                managerFactory.createViewManager()
         );
-    }
-
-    private PlayerViewManager getPlayerViewManager() {
-        ViewConfigLoader playerViewConfigLoader =
-                new ViewConfigLoader(PLAYER_VIEW_CONFIG_FILE);
-
-        SwingPlayerViewComponentsFactory playerViewComponentsFactory =
-                new DefaultSwingPlayerViewComponentsFactory(playerViewConfigLoader.loadConfigMap());
-
-        SwingPlayerViewAssembler playerViewAssembler =
-                new DefaultSwingPlayerViewAssembler(playerViewComponentsFactory.createComponents());
-
-        return new DefaultSwingPlayerViewManager(playerViewAssembler, eventBus);
     }
 }

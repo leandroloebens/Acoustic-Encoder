@@ -1,5 +1,6 @@
-package com.acoustic.encoder.features.player.ui.swing;
+package com.acoustic.encoder.features.player.ui.swing.assembler;
 
+import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 
 public interface SwingPlayerViewAssembler {
@@ -7,7 +8,8 @@ public interface SwingPlayerViewAssembler {
             String title,
             int windowWidth,
             int windowHeight,
-            int frameExitOperation,
-            SwingPlayerViewActionHandler handler
+            int frameExitOperation
     );
+
+    PlayerViewComponentsWrapper getComponents();
 }

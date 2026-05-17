@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.player.ui.swing;
+package com.acoustic.encoder.features.player.ui.swing.assembler;
 
 import com.acoustic.encoder.features.player.ui.swing.components.PlayerControlsComponent;
 import com.acoustic.encoder.features.player.ui.swing.components.PlayerFooterComponent;
@@ -26,8 +26,7 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
             String title,
             int windowWidth,
             int windowHeight,
-            int frameExitOperation,
-            SwingPlayerViewActionHandler handler
+            int frameExitOperation
     ) {
 
         SwingFrame frame = new SwingFrame(title, new Dimension(windowWidth, windowHeight), frameExitOperation);
@@ -40,9 +39,6 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
         JPanel mainContainer = new JPanel();
         mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
         mainContainer.setMaximumSize(new Dimension(1000, 1000));
-
-        controlsComponent.setEventHandler(handler);
-        footerComponent.setEventHandler(handler);
 
         controlsComponent.setAlignmentX(Component.CENTER_ALIGNMENT);
         footerComponent.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -62,4 +58,11 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
         return frame;
     }
 
+    @Override
+    public PlayerViewComponentsWrapper getComponents() {
+        return new PlayerViewComponentsWrapper(
+                controlsComponent,
+                footerComponent
+        );
+    }
 }
