@@ -1,7 +1,5 @@
 package com.acoustic.encoder.features.conversion.dto;
 
-import com.acoustic.encoder.domain.voice.VoiceParametersState;
-
 import java.util.ArrayList;
 import java.util.List;
 

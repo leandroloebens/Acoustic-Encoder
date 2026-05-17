@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.service.mapper;
 
 import com.acoustic.encoder.domain.voice.VoiceConfig;
-import com.acoustic.encoder.domain.voice.VoiceParametersState;
+import com.acoustic.encoder.features.conversion.dto.VoiceParametersState;
 import com.acoustic.encoder.features.conversion.dto.MusicParametersState;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 

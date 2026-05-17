@@ -1,4 +1,6 @@
-package com.acoustic.encoder.domain.voice;
+package com.acoustic.encoder.features.conversion.dto;
+
+import com.acoustic.encoder.domain.voice.VoiceConfig;
 
 public class VoiceParametersState {
 

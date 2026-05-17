@@ -4,7 +4,7 @@ import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.domain.event.EventListener;
 import com.acoustic.encoder.domain.event.ProjectReadyToOpen;
 import com.acoustic.encoder.domain.music.InstrumentOption;
-import com.acoustic.encoder.domain.voice.VoiceParametersState;
+import com.acoustic.encoder.features.conversion.dto.VoiceParametersState;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.MusicParametersState;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
