@@ -4,6 +4,10 @@ import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.domain.event.EventListener;
 import com.acoustic.encoder.domain.event.ProjectReadyToOpen;
 import com.acoustic.encoder.domain.music.InstrumentOption;
+import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Octave;
+import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.features.conversion.dto.VoiceParametersState;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.MusicParametersState;
@@ -85,19 +89,22 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
 
         bindParameterSliderPanel(
                 components.bpmPanel(),
-                () -> parameters.setBpm(comps.bpmPanel().getSlider().getValue()));
+                () -> parameters.setBpm(new Bpm(comps.bpmPanel().getSlider().getValue())));
 
         bindParameterSliderPanel(
                 comps.volumePanel(),
                 () -> parameters.setVoiceVolume(
                         comps.voiceSelector().getSelectedIndex(),
-                        comps.volumePanel().getSlider().getValue()
+                        new Volume(comps.volumePanel().getSlider().getValue())
                 )
         );
 
         bindParameterSliderPanel(
                 comps.octavePanel(),
-                () -> parameters.setVoiceOctave(comps.voiceSelector().getSelectedIndex(), comps.octavePanel().getSlider().getValue())
+                () -> parameters.setVoiceOctave(
+                        comps.voiceSelector().getSelectedIndex(),
+                        new Octave(comps.octavePanel().getSlider().getValue())
+                )
         );
 
         bindParameterComboBoxPanel(
@@ -105,7 +112,7 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
                 frame,
                 () -> parameters.setVoiceInstrument(
                         comps.voiceSelector().getSelectedIndex(),
-                        comps.instrumentPanel().getSelectedItem().id()
+                        new InstrumentId(comps.instrumentPanel().getSelectedItem().id())
                 ),
                 INVALID_INSTRUMENT_INPUT_WARNING
         );
@@ -149,16 +156,16 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     private void setInitialVoicesValues() {
         VoiceParametersState trackZero = parameters.getIndexedVoice(0);
 
-        comps.volumePanel().getSlider().setValue(trackZero.getVolume());
+        comps.volumePanel().getSlider().setValue(trackZero.getVolume().value());
         comps.volumePanel().updateLabel();
 
-        comps.octavePanel().getSlider().setValue(trackZero.getOctave());
+        comps.octavePanel().getSlider().setValue(trackZero.getOctave().value());
         comps.octavePanel().updateLabel();
 
-        comps.bpmPanel().getSlider().setValue(parameters.getBpm());
+        comps.bpmPanel().getSlider().setValue(parameters.getBpm().value());
         comps.bpmPanel().updateLabel();
 
-        comps.instrumentPanel().setSelectedItem(trackZero.getInstrument());
+        comps.instrumentPanel().setSelectedItem(trackZero.getInstrument().value());
         comps.instrumentPanel().getComboBox().setInitialItem(comps.instrumentPanel().getSelectedItem());
     }
 
@@ -319,9 +326,9 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
                     VoiceParametersState track =
                             parameters.getIndexedVoice(comps.voiceSelector().getButtons().indexOf(button));
 
-                    comps.volumePanel().getSlider().setValue(track.getVolume());
-                    comps.octavePanel().getSlider().setValue(track.getOctave());
-                    comps.instrumentPanel().setSelectedItem(track.getInstrument());
+                    comps.volumePanel().getSlider().setValue(track.getVolume().value());
+                    comps.octavePanel().getSlider().setValue(track.getOctave().value());
+                    comps.instrumentPanel().setSelectedItem(track.getInstrument().value());
                     comps.instrumentPanel().getComboBox().finishEditing();
                 }
             };

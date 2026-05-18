@@ -1,16 +1,20 @@
 package com.acoustic.encoder.infrastructure.audio.player.track;
 
 import com.acoustic.encoder.domain.music.MusicalInstruction;
+import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Octave;
+import com.acoustic.encoder.domain.shared.Volume;
 
 public record TrackState(
 
         MusicalInstruction previousInstruction,
-        int localBpm,
+        Bpm localBpm,
         int noteTickDuration,
         long tick,
-        int instrument,
-        int octave,
-        int volume
+        InstrumentId instrument,
+        Octave octave,
+        Volume volume
 
 ) {
 
@@ -22,15 +26,15 @@ public record TrackState(
         return new TrackState(previousInstruction, localBpm, noteTickDuration, newTick, instrument, octave, volume);
     }
 
-    TrackState withInstrument(int newInstrument) {
+    TrackState withInstrument(InstrumentId newInstrument) {
         return new TrackState(previousInstruction, localBpm, noteTickDuration, tick, newInstrument, octave, volume);
     }
 
-    TrackState withOctave(int newOctave) {
+    TrackState withOctave(Octave newOctave) {
         return new TrackState(previousInstruction, localBpm, noteTickDuration, tick, instrument, newOctave, volume);
     }
 
-    TrackState withVolume(int newVolume) {
+    TrackState withVolume(Volume newVolume) {
         return new TrackState(previousInstruction, localBpm, noteTickDuration, tick, instrument, octave, newVolume);
     }
 
@@ -38,7 +42,7 @@ public record TrackState(
         return new TrackState(newPreviousInstruction, localBpm, noteTickDuration, tick, instrument, octave, volume);
     }
 
-    TrackState withLocalBpm(int newLocalBpm) {
+    TrackState withLocalBpm(Bpm newLocalBpm) {
         return new TrackState(previousInstruction, newLocalBpm, noteTickDuration, tick, instrument, octave, volume);
     }
 }

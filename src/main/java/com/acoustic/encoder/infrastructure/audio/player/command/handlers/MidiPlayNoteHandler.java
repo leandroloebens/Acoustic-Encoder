@@ -6,10 +6,14 @@ import com.acoustic.encoder.infrastructure.audio.player.track.TrackContext;
 import com.acoustic.encoder.domain.music.MusicalNote;
 
 import javax.sound.midi.Track;
+import java.util.Objects;
 
 public class MidiPlayNoteHandler implements MidiCommandHandler {
 
     public TrackContext handle(Track track, TrackContext context, int parameter) {
+        Objects.requireNonNull(track, "Track cannot be null!");
+        Objects.requireNonNull(context, "Track context cannot be null!");
+
         MusicalNote note = new MusicalNote(parameter, context.state().octave(), context.settings().noteVelocity());
 
         // Note ON

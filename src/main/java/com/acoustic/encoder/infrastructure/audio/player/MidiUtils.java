@@ -1,6 +1,10 @@
 package com.acoustic.encoder.infrastructure.audio.player;
 
+import com.acoustic.encoder.domain.music.InstrumentOption;
 import com.acoustic.encoder.domain.music.MusicalNote;
+import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Volume;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
@@ -10,30 +14,24 @@ import java.util.Objects;
 
 public class MidiUtils {
 
-    public final static int VOL_MIN = 0;
-    public final static int VOL_MAX = 127;
     private final static int VOL_CHANGE = 7;
-
-    public final static int INSTRUMENT_MAX = 127;
-    public final static int INSTRUMENT_MIN = 0;
-
-    public final static int OCTAVE_MAX = 9;
-    public final static int OCTAVE_MIN = 0;
 
     private final static int SET_TEMPO_TYPE = 0x51;
 
     private final static int USELESS_VAL = 0;
 
     public static int noteToMidi(MusicalNote note) {
+        Objects.requireNonNull(note, "Note cannot be null!");
 
         // Music note is represented by MIDI note number
-        return 12*(note.octave()-1) + (note.pitch().getValue());
+        return 12*(note.octave().value()-1) + (note.pitch().getValue());
 
     }
 
     public static MidiEvent createNoteOnEvent(
             MusicalNote note, int channel, long tick
     ) {
+        Objects.requireNonNull(note, "Note cannot be null!");
 
         return new MidiEvent(createNoteOnMsg(note, channel), tick);
     }
@@ -41,31 +39,34 @@ public class MidiUtils {
     public static MidiEvent createNoteOffEvent(
             MusicalNote note, int channel, long tick
     ) {
+        Objects.requireNonNull(note, "Note cannot be null!");
 
         return new MidiEvent(createNoteOffMsg(note, channel), tick);
     }
 
     public static MidiEvent createInstrumentChangeEvent(
-            int instrumentVal, int channel, long tick
+            InstrumentId instrument, int channel, long tick
     ) {
+        Objects.requireNonNull(instrument, "Instrument cannot be null!");
 
-        return new MidiEvent(createInstrumentChangeMsg(instrumentVal, channel), tick);
+        return new MidiEvent(createInstrumentChangeMsg(instrument, channel), tick);
     }
 
     public static MidiEvent createVolumeChangeEvent(
-            int volume, int channel, long tick
+            Volume volume, int channel, long tick
     ) {
+        Objects.requireNonNull(volume, "Volume cannot be null!");
 
         return new MidiEvent(createVolumeChangeMsg(volume, channel), tick);
     }
 
-    public static MidiEvent createTempoChangeEvent(int bpm, long tick) {
+    public static MidiEvent createTempoChangeEvent(Bpm bpm, long tick) {
+        Objects.requireNonNull(bpm, "BPM cannot be null!");
 
         return new MidiEvent(createTempoChangeMsg(bpm), tick);
     }
 
     public static ShortMessage createNoteOnMsg(MusicalNote note, int channel) {
-
         Objects.requireNonNull(note, "Note cannot be null!");
 
         ShortMessage noteOn = new ShortMessage();
@@ -80,6 +81,7 @@ public class MidiUtils {
     }
 
     public static ShortMessage createNoteOffMsg(MusicalNote note, int channel) {
+        Objects.requireNonNull(note, "Note cannot be null!");
 
         ShortMessage noteOff = new ShortMessage();
 
@@ -92,12 +94,12 @@ public class MidiUtils {
         return noteOff;
     }
 
-    private static ShortMessage createInstrumentChangeMsg(int instrumentVal, int channel) {
+    private static ShortMessage createInstrumentChangeMsg(InstrumentId instrument, int channel) {
 
         ShortMessage instrumentChange = new ShortMessage();
 
         try {
-            instrumentChange.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrumentVal, USELESS_VAL);
+            instrumentChange.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument.value(), USELESS_VAL);
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException("Error in instrument control message", e);
         }
@@ -105,15 +107,12 @@ public class MidiUtils {
         return instrumentChange;
     }
 
-    private static ShortMessage createVolumeChangeMsg(int volume, int channel) {
-
-        if (volume < VOL_MIN || volume > VOL_MAX)
-            throw new IllegalArgumentException("Volume must be between 0 and 127!");
+    private static ShortMessage createVolumeChangeMsg(Volume volume, int channel) {
 
         ShortMessage volumeChange = new ShortMessage();
 
         try {
-            volumeChange.setMessage(ShortMessage.CONTROL_CHANGE, channel, VOL_CHANGE, volume);
+            volumeChange.setMessage(ShortMessage.CONTROL_CHANGE, channel, VOL_CHANGE, volume.value());
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException("Error in volume control message", e);
         }
@@ -121,9 +120,9 @@ public class MidiUtils {
         return volumeChange;
     }
 
-    private static MetaMessage createTempoChangeMsg(int bpm) {
+    private static MetaMessage createTempoChangeMsg(Bpm bpm) {
 
-        int microSecPerBeat = 60000000 / bpm;
+        int microSecPerBeat = 60000000 / bpm.value();
 
         MetaMessage tempoChangeMsg = new MetaMessage();
 

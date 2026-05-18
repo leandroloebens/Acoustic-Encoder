@@ -1,18 +1,19 @@
 package com.acoustic.encoder.infrastructure.audio.player.track;
 
+import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.domain.voice.Voice;
 
 import javax.sound.midi.Track;
 
 public interface TrackWriter {
 
-    public void writeTrack(
+    void writeTrack(
             Track track,
             Voice voice,
-            int initialBpm,
+            Bpm initialBpm,
             int channel,
             int ppqResolution
     );
 
-    public void writeInitTempoTrack(Track track, int bpm);
+    void writeInitTempoTrack(Track track, Bpm bpm);
 }

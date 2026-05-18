@@ -1,25 +1,37 @@
 package com.acoustic.encoder.infrastructure.audio.player.command.handlers;
 
+import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.infrastructure.audio.player.command.MidiCommandHandler;
 import com.acoustic.encoder.infrastructure.audio.player.track.TrackContext;
 
 import javax.sound.midi.Track;
+import java.util.Objects;
 
 public class MidiOffsetLocalBpmHandler implements MidiCommandHandler {
 
     @Override
     public TrackContext handle(Track track, TrackContext context, int bpmValue) {
+        Objects.requireNonNull(track, "Track cannot be null");
+        Objects.requireNonNull(context, "TrackContext cannot be null");
 
-        int newBpm = Math.max(context.state().localBpm() + bpmValue, 10);
+        int newBpmValue = context.state().localBpm().value() + bpmValue;
 
-        int newTickDuration = Math.max(1, determineTickDurationForNewBpm(context, newBpm));
+        if (newBpmValue < Bpm.MIN_BPM) {
+            newBpmValue = Bpm.MIN_BPM;
+        }
+        else if (newBpmValue > Bpm.MAX_BPM) {
+            newBpmValue = Bpm.MAX_BPM;
+        }
 
-        return context.withLocalBpm(newBpm).withNoteTickDuration(newTickDuration);
+        int newTickDuration = Math.max(1, determineTickDurationForNewBpm(context, newBpmValue));
+
+        return context.withLocalBpm(new Bpm(newBpmValue)).withNoteTickDuration(newTickDuration);
     }
 
     private static int determineTickDurationForNewBpm(TrackContext context, int newBpm) {
         return (int) Math.round(
-                ((double) context.settings().defaultBpm() / newBpm)
+                ((double) context.settings().defaultBpm().value() / newBpm)
                         * context.settings().baseNoteTickDuration()
         );
     }

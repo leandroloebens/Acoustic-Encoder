@@ -1,10 +1,11 @@
 package com.acoustic.encoder.domain.music;
 
+import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.domain.voice.VoiceList;
 
 public record MusicModel(
         VoiceList voices,
-        int initialBpm
+        Bpm initialBpm
 ) {
 
     @Override

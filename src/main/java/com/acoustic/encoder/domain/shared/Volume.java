@@ -2,8 +2,8 @@ package com.acoustic.encoder.domain.shared;
 
 public record Volume(int value) {
 
-    private static final int MIN_VOLUME = 0;
-    private static final int MAX_VOLUME = 127;
+    public static final int MIN_VOLUME = 0;
+    public static final int MAX_VOLUME = 127;
 
     public Volume {
         if (value < MIN_VOLUME) {

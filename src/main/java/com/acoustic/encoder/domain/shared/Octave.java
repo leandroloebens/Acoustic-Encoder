@@ -2,8 +2,8 @@ package com.acoustic.encoder.domain.shared;
 
 public record Octave(int value) {
 
-    private static final int MIN_OCTAVE = 0;
-    private static final int MAX_OCTAVE = 9;
+    public static final int MIN_OCTAVE = 0;
+    public static final int MAX_OCTAVE = 9;
 
     public Octave {
         if (value < MIN_OCTAVE) {

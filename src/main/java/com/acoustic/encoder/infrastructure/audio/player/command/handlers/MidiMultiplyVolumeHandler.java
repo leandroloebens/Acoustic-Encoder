@@ -1,5 +1,6 @@
 package com.acoustic.encoder.infrastructure.audio.player.command.handlers;
 
+import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.infrastructure.audio.player.MidiUtils;
 import com.acoustic.encoder.infrastructure.audio.player.command.MidiCommandHandler;
 import com.acoustic.encoder.infrastructure.audio.player.track.TrackContext;
@@ -10,12 +11,16 @@ public class MidiMultiplyVolumeHandler implements MidiCommandHandler {
 
     public TrackContext handle(Track track, TrackContext context, int factor) {
 
-        int newVolume = context.state().volume() * factor;
+        int newVolumeValue = context.state().volume().value() * factor;
 
-        if (newVolume < MidiUtils.VOL_MIN || newVolume > MidiUtils.VOL_MAX)
-            newVolume = MidiUtils.VOL_MAX;
+        if (newVolumeValue < Volume.MIN_VOLUME) {
+            newVolumeValue = Volume.MIN_VOLUME;
+        }
+        else if (newVolumeValue > Volume.MAX_VOLUME) {
+            newVolumeValue = Volume.MAX_VOLUME;
+        }
 
-        TrackContext newContext = context.withVolume(newVolume);
+        TrackContext newContext = context.withVolume(new Volume(newVolumeValue));
 
         track.add(
                 MidiUtils.createVolumeChangeEvent(

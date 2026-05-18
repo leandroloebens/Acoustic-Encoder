@@ -1,5 +1,6 @@
 package com.acoustic.encoder.infrastructure.audio.player.track;
 
+import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.infrastructure.audio.player.MidiUtils;
 import com.acoustic.encoder.infrastructure.audio.player.command.DefaultMidiCommandRegistry;
 import com.acoustic.encoder.domain.voice.Voice;
@@ -19,7 +20,7 @@ public class DefaultTrackWriter implements TrackWriter {
     }
 
     @Override
-    public void writeTrack(Track track, Voice voice, int initialBpm, int channel, int ppqResolution) {
+    public void writeTrack(Track track, Voice voice, Bpm initialBpm, int channel, int ppqResolution) {
 
         initializeTrack(track, voice.config(), channel);
 
@@ -30,7 +31,7 @@ public class DefaultTrackWriter implements TrackWriter {
 
     }
 
-    public void writeInitTempoTrack(Track track, int bpm) {
+    public void writeInitTempoTrack(Track track, Bpm bpm) {
 
         track.add(MidiUtils.createTempoChangeEvent(bpm, 0));
     }
@@ -42,7 +43,9 @@ public class DefaultTrackWriter implements TrackWriter {
         track.add(MidiUtils.createVolumeChangeEvent(config.defaultVolume(), channel, 0));
     }
 
-    private void processInstructionsToTrack(Track track, Voice voice, int channel, int ppqResolution, int noteTickDuration, int initialBpm) {
+    private void processInstructionsToTrack(
+            Track track, Voice voice, int channel, int ppqResolution, int noteTickDuration, Bpm initialBpm
+    ) {
 
 
 //        TrackSettings settings = new TrackSettings(

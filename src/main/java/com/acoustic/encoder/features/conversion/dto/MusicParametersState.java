@@ -1,5 +1,10 @@
 package com.acoustic.encoder.features.conversion.dto;
 
+import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Octave;
+import com.acoustic.encoder.domain.shared.Volume;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,19 +12,19 @@ public class MusicParametersState {
 
     private final static String INDEX_OUT_OF_BOUNDS = "Index out of bounds";
 
-    private int bpm;
+    private Bpm bpm;
     private List<VoiceParametersState> voices;
 
     public MusicParametersState() {}
 
-    public MusicParametersState(int bpm, List<VoiceParametersState> voiceParameters) {
+    public MusicParametersState(Bpm bpm, List<VoiceParametersState> voiceParameters) {
         this.bpm = bpm;
         this.voices = voiceParameters;
     }
 
-    public int getBpm() { return bpm; }
+    public Bpm getBpm() { return bpm; }
 
-    public void setBpm(int bpm) { this.bpm = bpm; }
+    public void setBpm(Bpm bpm) { this.bpm = bpm; }
 
     public List<VoiceParametersState> getAllVoices() {
         List<VoiceParametersState> copy = new ArrayList<>();
@@ -35,7 +40,7 @@ public class MusicParametersState {
         return copy; 
     }
 
-    public void setVoiceVolume(int index, int volume) {
+    public void setVoiceVolume(int index, Volume volume) {
         if (index >= 0 && index < getNumberOfVoices()) {
             voices.get(index).setVolume(volume);
         } else {
@@ -43,7 +48,7 @@ public class MusicParametersState {
         }
     }
 
-    public void setVoiceOctave(int index, int octave) {
+    public void setVoiceOctave(int index, Octave octave) {
         if (index >= 0 && index < getNumberOfVoices()) {
             voices.get(index).setOctave(octave);
         } else {
@@ -51,7 +56,7 @@ public class MusicParametersState {
         }
     }
 
-    public void setVoiceInstrument(int index, int instrument) {
+    public void setVoiceInstrument(int index, InstrumentId instrument) {
         if (index >= 0 && index < getNumberOfVoices()) {
             voices.get(index).setInstrument(instrument);
         } else {

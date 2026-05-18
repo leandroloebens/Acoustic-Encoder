@@ -1,6 +1,7 @@
 package com.acoustic.encoder.features.conversion.service;
 
 import com.acoustic.encoder.domain.music.MusicModel;
+import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 import com.acoustic.encoder.domain.voice.VoiceList;
 import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
@@ -23,7 +24,10 @@ public class DefaultConversionService implements ConversionService {
     }
 
     @Override
-    public MusicModel textToMusic(String text, int bpm, List<VoiceConfig> configs) {
+    public MusicModel textToMusic(String text, Bpm bpm, List<VoiceConfig> configs) {
+        Objects.requireNonNull(text, "Text cannot be null!");
+        Objects.requireNonNull(bpm, "Bpm cannot be null!");
+        Objects.requireNonNull(configs, "VoiceConfigs cannot be null!");
 
         VoiceList voiceList = voiceParser.parseVoices(text, configs);
 

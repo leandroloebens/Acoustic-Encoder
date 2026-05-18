@@ -1,9 +1,13 @@
 package com.acoustic.encoder.domain.voice;
 
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Octave;
+import com.acoustic.encoder.domain.shared.Volume;
+
 public record VoiceConfig(
-        int defaultInstrument,
-        int defaultOctave,
-        int defaultVolume
+        InstrumentId defaultInstrument,
+        Octave defaultOctave,
+        Volume defaultVolume
 ) {
 
     @Override

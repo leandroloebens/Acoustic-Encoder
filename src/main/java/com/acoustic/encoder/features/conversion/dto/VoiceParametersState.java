@@ -1,14 +1,17 @@
 package com.acoustic.encoder.features.conversion.dto;
 
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Octave;
+import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 
 public class VoiceParametersState {
 
-    private int instrument;
-    private int volume;
-    private int octave;
+    private InstrumentId instrument;
+    private Volume volume;
+    private Octave octave;
 
-    public VoiceParametersState(int volume, int octave, int instrument) {
+    public VoiceParametersState(Volume volume, Octave octave, InstrumentId instrument) {
         this.volume = volume;
         this.octave = octave;
         this.instrument = instrument;
@@ -26,27 +29,27 @@ public class VoiceParametersState {
         this.instrument = config.defaultInstrument();
     }
 
-    public int getInstrument() {
+    public InstrumentId getInstrument() {
         return instrument;
     }
 
-    public void setInstrument(int instrument) {
+    public void setInstrument(InstrumentId instrument) {
         this.instrument = instrument;
     }
 
-    public int getVolume() {
+    public Volume getVolume() {
         return volume;
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(Volume volume) {
         this.volume = volume;
     }
 
-    public int getOctave() {
+    public Octave getOctave() {
         return octave;
     }
 
-    public void setOctave(int octave) {
+    public void setOctave(Octave octave) {
         this.octave = octave;
     }
 

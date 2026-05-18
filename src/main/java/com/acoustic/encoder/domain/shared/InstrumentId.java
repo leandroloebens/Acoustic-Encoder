@@ -2,8 +2,8 @@ package com.acoustic.encoder.domain.shared;
 
 public record InstrumentId(int value) {
 
-    private static final int MIN_INSTRUMENT_ID = 0;
-    private static final int MAX_INSTRUMENT_ID = 127;
+    public static final int MIN_INSTRUMENT_ID = 0;
+    public static final int MAX_INSTRUMENT_ID = 127;
 
     public InstrumentId {
         if (value < MIN_INSTRUMENT_ID) {

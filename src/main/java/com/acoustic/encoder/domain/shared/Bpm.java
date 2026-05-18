@@ -2,8 +2,8 @@ package com.acoustic.encoder.domain.shared;
 
 public record Bpm(int value) {
 
-    private static final int MIN_BPM = 10;
-    private static final int MAX_BPM = 1000;
+    public static final int MIN_BPM = 10;
+    public static final int MAX_BPM = 1000;
 
     public Bpm {
         if (value < MIN_BPM) {

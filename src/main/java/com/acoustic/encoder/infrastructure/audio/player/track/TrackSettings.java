@@ -1,12 +1,16 @@
 package com.acoustic.encoder.infrastructure.audio.player.track;
 
+import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Octave;
+
 public record TrackSettings(
         int channel,
         int ppqResolution,
-        int defaultInstrument,
-        int defaultOctave,
+        InstrumentId defaultInstrument,
+        Octave defaultOctave,
         int noteVelocity,
-        int defaultBpm,
+        Bpm defaultBpm,
         int baseNoteTickDuration
 ) {
 
@@ -14,8 +18,6 @@ public record TrackSettings(
 
         // TODO validate OTHERS INPUTS
         validateChannel(channel);
-        validateInstrument(defaultInstrument);
-        validateOctave(defaultOctave);
 
     }
 
@@ -31,15 +33,4 @@ public record TrackSettings(
         }
     }
 
-    private static void validateInstrument(int instrument) {
-        if (instrument < 0 || instrument > 127) {
-            throw new IllegalArgumentException("Instrument must be in range [0, 127]");
-        }
-    }
-
-    private static void validateOctave(int octave) {
-        if (octave < 1 || octave > 10) {
-            throw new IllegalArgumentException("Octave must be in range [1, 10]");
-        }
-    }
 }

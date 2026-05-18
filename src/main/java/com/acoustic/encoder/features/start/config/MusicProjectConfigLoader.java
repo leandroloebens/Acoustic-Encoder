@@ -2,6 +2,10 @@ package com.acoustic.encoder.features.start.config;
 
 
 
+import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.InstrumentId;
+import com.acoustic.encoder.domain.shared.Octave;
+import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
@@ -47,9 +51,9 @@ public class MusicProjectConfigLoader {
             }
 
             voices.add(new VoiceConfig(
-                    Integer.parseInt(map.get("VOICE_" + i + "_INSTRUMENT")),
-                    Integer.parseInt(map.get("VOICE_" + i + "_OCTAVE")),
-                    Integer.parseInt(map.get("VOICE_" + i + "_VOLUME"))
+                    new InstrumentId(Integer.parseInt(map.get("VOICE_" + i + "_INSTRUMENT"))),
+                    new Octave(Integer.parseInt(map.get("VOICE_" + i + "_OCTAVE"))),
+                    new Volume(Integer.parseInt(map.get("VOICE_" + i + "_VOLUME")))
             ));
         }
 
@@ -59,7 +63,7 @@ public class MusicProjectConfigLoader {
         if (map.get("TEXT") == null)
             throw new IllegalArgumentException(MISSING_VALUE_ERROR_MSG + "TEXT");
 
-        return new UserConversionInput(map.get("TEXT"), Integer.parseInt(map.get("UNIVERSAL_BPM")), voices);
+        return new UserConversionInput(map.get("TEXT"), new Bpm(Integer.parseInt(map.get("UNIVERSAL_BPM"))), voices);
 
     }
 
