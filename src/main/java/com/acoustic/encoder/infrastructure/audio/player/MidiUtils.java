@@ -1,6 +1,5 @@
 package com.acoustic.encoder.infrastructure.audio.player;
 
-import com.acoustic.encoder.domain.music.InstrumentOption;
 import com.acoustic.encoder.domain.music.MusicalNote;
 import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.domain.shared.InstrumentId;

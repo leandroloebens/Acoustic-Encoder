@@ -1,7 +1,6 @@
 package com.acoustic.encoder.infrastructure.audio.player.command.handlers;
 
 import com.acoustic.encoder.domain.shared.Octave;
-import com.acoustic.encoder.infrastructure.audio.player.MidiUtils;
 import com.acoustic.encoder.infrastructure.audio.player.command.MidiCommandHandler;
 import com.acoustic.encoder.infrastructure.audio.player.track.TrackContext;
 
