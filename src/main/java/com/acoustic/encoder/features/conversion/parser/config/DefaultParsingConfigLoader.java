@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class DefaultParsingConfigLoader {
 
-    public final static String CONFIG_FILE_NAME = "encoderMapping.properties";
+    public final static String DEFAULT_ENCODER_MAPPING_PATH = "encoderMapping/defaultEncoderMapping.properties";
 
     private final String fileName;
 

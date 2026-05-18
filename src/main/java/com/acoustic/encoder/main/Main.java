@@ -53,7 +53,7 @@ public class Main {
 
 
         // Conversion Service
-        var parserConfigLoader = new DefaultParsingConfigLoader(DefaultParsingConfigLoader.CONFIG_FILE_NAME);
+        var parserConfigLoader = new DefaultParsingConfigLoader(DefaultParsingConfigLoader.DEFAULT_ENCODER_MAPPING_PATH);
         var parserConfigFactory = new DefaultParserConfigFactory();
 
         var instructionParser = new DefaultInstructionParser(

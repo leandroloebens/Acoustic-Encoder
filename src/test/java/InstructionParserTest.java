@@ -11,7 +11,7 @@ void main() throws Exception {
 
     DefaultInstructionParser parser = new DefaultInstructionParser(
             new DefaultParserConfigFactory().create(
-                    new DefaultParsingConfigLoader(DefaultParsingConfigLoader.CONFIG_FILE_NAME).loadConfigMap()
+                    new DefaultParsingConfigLoader(DefaultParsingConfigLoader.DEFAULT_ENCODER_MAPPING_PATH).loadConfigMap()
             )
     );
 
