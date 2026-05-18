@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.conversion.ui.swing.binder;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.domain.event.EventListener;
-import com.acoustic.encoder.domain.event.ProjectReadyToOpen;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
 import com.acoustic.encoder.domain.music.InstrumentOption;
 import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.domain.shared.InstrumentId;

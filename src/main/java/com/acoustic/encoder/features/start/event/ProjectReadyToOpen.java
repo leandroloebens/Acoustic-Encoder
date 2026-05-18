@@ -1,4 +1,4 @@
-package com.acoustic.encoder.domain.event;
+package com.acoustic.encoder.features.start.event;
 
 import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
 

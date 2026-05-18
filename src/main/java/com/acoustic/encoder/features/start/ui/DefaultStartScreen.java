@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.start.ui;
 
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.domain.event.ProjectReadyToOpen;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
 import com.acoustic.encoder.features.start.controller.StartController;
 
 public class DefaultStartScreen implements StartScreen {

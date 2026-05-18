@@ -2,7 +2,7 @@ package com.acoustic.encoder.main.navigation;
 
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.domain.event.ProjectReadyToOpen;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
 import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
 import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
 import com.acoustic.encoder.features.player.ui.PlayerScreen;
