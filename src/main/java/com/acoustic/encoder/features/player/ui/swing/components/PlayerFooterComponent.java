@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.player.ui.swing.components;
 
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
@@ -10,10 +11,13 @@ public class PlayerFooterComponent extends JPanel {
     private final static String SAVE_BUTTON_TEXT = "Save";
 
     private final JProgressBar progressBar;
-    private final JButton saveButton;
+//    private final JButton saveButton;
 
-    public PlayerFooterComponent() {
-        this.saveButton = new JButton(SAVE_BUTTON_TEXT);
+    private final SwingButton saveButton;
+
+    public PlayerFooterComponent(SwingButton saveButton) {
+//        this.saveButton = new JButton(SAVE_BUTTON_TEXT);
+        this.saveButton = saveButton;
         this.progressBar = new JProgressBar();
 
         initializeComponent();
@@ -39,7 +43,7 @@ public class PlayerFooterComponent extends JPanel {
         progressBar.setValue(value);
     }
 
-    public JButton getSaveButton() {
+    public SwingButton getSaveButton() {
         return this.saveButton;
     }
 }

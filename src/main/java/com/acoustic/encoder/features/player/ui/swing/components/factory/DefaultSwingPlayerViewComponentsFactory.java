@@ -4,7 +4,11 @@ import com.acoustic.encoder.features.player.ui.swing.components.PlayerControlsCo
 import com.acoustic.encoder.features.player.ui.swing.components.PlayerFooterComponent;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingViewConfigWrapper;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.IconLoader;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 
 public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewComponentsFactory {
@@ -21,12 +25,55 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     @Override
     public PlayerViewComponentsWrapper createComponents() {
 
-        PlayerControlsComponent controlsComponent = new PlayerControlsComponent();
-        PlayerFooterComponent footerComponent = new PlayerFooterComponent();
+        PlayerControlsComponent controlsComponent = new PlayerControlsComponent(
+                createPlayPauseButton(),
+                createRewindButton()
+        );
+
+        PlayerFooterComponent footerComponent = new PlayerFooterComponent(
+                createSaveButton()
+        );
 
         return new PlayerViewComponentsWrapper(
                 controlsComponent,
                 footerComponent
+        );
+    }
+
+    private SwingButton createPlayPauseButton() {
+        Icon playIcon = IconLoader.load("/ui/icons/play.png");
+
+        return new SwingButton(
+                config.getString("PLAY_BUTTON_TEXT"),
+                playIcon,
+                null,
+                20,
+                null,
+                null
+        );
+    }
+
+    private SwingButton createRewindButton() {
+
+        return new SwingButton(
+                config.getString("REWIND_BUTTON_TEXT"),
+                null,
+                20,
+                null,
+                null
+        );
+    }
+
+    private SwingButton createSaveButton() {
+        Icon saveIcon = IconLoader.load("/ui/icons/download.png");
+
+        return new SwingButton(
+                config.getString("SAVE_BUTTON_TEXT"),
+                saveIcon,
+                null,
+                20,
+                null,
+                null
         );
     }
 }
