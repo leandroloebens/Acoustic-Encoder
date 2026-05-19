@@ -112,7 +112,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 1000000,
                 1000000,
                 10,
-                10,
+                1000000,
                 null,
                 null
         );

@@ -56,7 +56,7 @@ public class DefaultAudioPlayerController implements AudioPlayerController {
 
     @Override
     public void handleSeekAction(long microsecPosition) {
-
+        playerService.seekMusic(microsecPosition);
     }
 
 

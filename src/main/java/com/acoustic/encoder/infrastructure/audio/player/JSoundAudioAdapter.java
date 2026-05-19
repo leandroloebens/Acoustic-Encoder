@@ -55,4 +55,9 @@ public class JSoundAudioAdapter implements AudioPlayer {
     public long getMicrosecDuration() {
         return sequencePlayer.getMicrosecDuration();
     }
+
+    @Override
+    public void seekMusic(long microsecPosition) {
+        sequencePlayer.setMicrosecPosition(microsecPosition);
+    }
 }

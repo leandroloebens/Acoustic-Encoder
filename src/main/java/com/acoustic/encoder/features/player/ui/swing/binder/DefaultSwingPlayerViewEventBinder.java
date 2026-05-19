@@ -10,6 +10,7 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +24,14 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     private static final String ONSAVE_DIALOG_TITLE = "Save as";
 
     private final EventBus eventBus;
-
-    private boolean bound = false;
-
-    private PlayerViewComponentsWrapper comps;
-    private SwingPlayerViewSynchronizerFactory synchronizerFactory;
-
+    private final SwingPlayerViewSynchronizerFactory synchronizerFactory;
     private final List<Runnable> removers = new ArrayList<>();
 
+    private PlayerViewComponentsWrapper comps;
+    private SwingPlayerViewSynchronizer synchronizer;
+    private boolean bound = false;
     private boolean isPlaying = false;
+
 
     public DefaultSwingPlayerViewEventBinder(
             EventBus eventBus, SwingPlayerViewSynchronizerFactory synchronizerFactory
@@ -49,7 +49,7 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
             SwingFrame frame,
             PlayerViewComponentsWrapper components
     ) {
-        if (bound) return null;
+        if (bound) return this.synchronizer;
 
         this.comps = components;
 
@@ -60,11 +60,13 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
 
         bound = true;
 
-        return synchronizerFactory.createSynchronizer(
+        this.synchronizer = synchronizerFactory.createSynchronizer(
                 comps,
                 controller::getMicrosecPosition,
                 controller::getMicrosecDuration
         );
+
+        return synchronizer;
     }
 
     @Override
@@ -139,8 +141,18 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
 
         playbackSeekBar.addChangeListener(e -> {
 
-            if (!playbackSeekBar.getValueIsAdjusting()) {
-                controller.handleSeekAction(playbackSeekBar.getValue());
+            if (synchronizer != null && synchronizer.isUpdatingProgrammaticaly()) {
+                return;
+            }
+
+            JSlider source = (JSlider) e.getSource();
+
+            if (source.hasFocus() && !playbackSeekBar.getValueIsAdjusting()) {
+                source.transferFocus();
+
+                double percentage = (double) playbackSeekBar.getValue() / playbackSeekBar.getMaximum();
+                long microsecPosition = (long) (percentage * controller.getMicrosecDuration());
+                controller.handleSeekAction(microsecPosition);
             }
 
         });

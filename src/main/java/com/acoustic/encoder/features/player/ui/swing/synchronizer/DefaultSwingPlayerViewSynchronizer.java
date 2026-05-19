@@ -18,6 +18,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     private final LongSupplier microsecDurationSupplier;
 
     private boolean isSyncing = false;
+    private boolean isUpdatingProgrammaticaly = false;
 
     public DefaultSwingPlayerViewSynchronizer(
             PlayerViewComponentsWrapper components,
@@ -55,6 +56,11 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         isSyncing = false;
     }
 
+    @Override
+    public boolean isUpdatingProgrammaticaly() {
+        return isUpdatingProgrammaticaly;
+    }
+
     private void syncState() {
         if (!isSyncing) return;
 
@@ -70,13 +76,19 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
             return;
         }
 
-        int newPosition = (int) Math.round(
-                (double) playbackSeekBar.getMaximum()
-                        * microsecPositionSupplier.getAsLong()
-                        / microsecDurationSupplier.getAsLong()
-        );
+        this.isUpdatingProgrammaticaly = true;
+        try {
+            int newPosition = (int) Math.round(
+                    (double) playbackSeekBar.getMaximum()
+                            * microsecPositionSupplier.getAsLong()
+                            / microsecDurationSupplier.getAsLong()
+            );
+            components.footerComponent().getPlaybackSeekBar().setValue(newPosition);
+        }
+        finally {
+            this.isUpdatingProgrammaticaly = false;
+        }
 
-        components.footerComponent().getPlaybackSeekBar().setValue(newPosition);
     }
 
 }

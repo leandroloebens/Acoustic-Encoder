@@ -24,5 +24,5 @@ public interface AudioPlayerService {
 
     long getMicrosecDuration();
 
-    //long setMicrosecPosition(long microsecPosition);
+    void seekMusic(long microsecPosition);
 }

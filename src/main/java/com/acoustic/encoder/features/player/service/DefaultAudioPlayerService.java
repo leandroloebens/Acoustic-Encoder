@@ -60,4 +60,9 @@ public class DefaultAudioPlayerService implements AudioPlayerService {
     public long getMicrosecDuration() {
         return player.getMicrosecDuration();
     }
+
+    @Override
+    public void seekMusic(long microsecPosition) {
+        player.seekMusic(microsecPosition);
+    }
 }

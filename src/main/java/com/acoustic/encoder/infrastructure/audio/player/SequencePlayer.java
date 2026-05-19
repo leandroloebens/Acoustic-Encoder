@@ -20,4 +20,6 @@ public interface SequencePlayer extends SequenceProvider {
     long getMicrosecPosition();
 
     long getMicrosecDuration();
+
+    void setMicrosecPosition(long microsecPosition);
 }
