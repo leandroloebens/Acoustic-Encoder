@@ -5,10 +5,10 @@ import com.acoustic.encoder.features.player.ui.swing.components.PlayerFooterComp
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingViewConfigWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.IconLoader;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.HashMap;
 
 public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewComponentsFactory {
@@ -37,31 +37,21 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         Icon rewindIcon = IconLoader.load("/ui/icons/rewind.png");
         Icon forwardIcon = IconLoader.load("/ui/icons/forward.png");
 
-        createPlayPauseButton(playIcon);
-        createRewindButton(rewindIcon);
-        createForwardButton(forwardIcon);
-
         return new PlayerControlsComponent(
                 createPlayPauseButton(playIcon),
                 createRewindButton(rewindIcon),
                 createForwardButton(forwardIcon),
                 playIcon,
-                pauseIcon,
-                rewindIcon,
-                forwardIcon
+                pauseIcon
         );
     }
 
     private PlayerFooterComponent createFooterComponent() {
         Icon saveIcon = IconLoader.load("/ui/icons/download.png");
 
-        createSaveButton(saveIcon);
-        createProgressBar();
-
         return new PlayerFooterComponent(
                 createSaveButton(saveIcon),
-                createProgressBar(),
-                saveIcon
+                createSeekBar()
         );
     }
 
@@ -113,8 +103,18 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         );
     }
 
-    private JProgressBar createProgressBar() {
+    private SwingSeekBar createSeekBar() {
 
-        return new JProgressBar();
+        return new SwingSeekBar(
+                0,
+                0,
+                0,
+                100,
+                100,
+                10,
+                10,
+                null,
+                null
+        );
     }
 }

@@ -43,4 +43,21 @@ public class DefaultAudioPlayerController implements AudioPlayerController {
     public void handleSaveAction(File destination) throws MusicExportException {
         playerService.exportMusic(destination);
     }
+
+    @Override
+    public long getMicrosecPosition() {
+        return 0;
+    }
+
+    @Override
+    public long getMicrosecDuration() {
+        return 0;
+    }
+
+    @Override
+    public void handleSeekAction(long microsecPosition) {
+
+    }
+
+
 }

@@ -4,15 +4,16 @@ import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizer;
+import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizerFactory;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.IconLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBinder {
     private static final String NULL_EVENT_BUS_ERROR_MSG = "EventBus cannot be null!";
@@ -26,32 +27,44 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     private boolean bound = false;
 
     private PlayerViewComponentsWrapper comps;
+    private SwingPlayerViewSynchronizerFactory synchronizerFactory;
 
     private final List<Runnable> removers = new ArrayList<>();
 
     private boolean isPlaying = false;
 
-    public DefaultSwingPlayerViewEventBinder(EventBus eventBus) {
-        if (eventBus == null) throw new IllegalArgumentException(NULL_EVENT_BUS_ERROR_MSG);
-        this.eventBus = eventBus;
+    public DefaultSwingPlayerViewEventBinder(
+            EventBus eventBus, SwingPlayerViewSynchronizerFactory synchronizerFactory
+    ) {
+        Objects.requireNonNull(eventBus, NULL_EVENT_BUS_ERROR_MSG);
+        Objects.requireNonNull(synchronizerFactory, "SynchronizerFactory cannot be null!");
 
+        this.eventBus = eventBus;
+        this.synchronizerFactory = synchronizerFactory;
     }
 
     @Override
-    public void bind(
+    public SwingPlayerViewSynchronizer bind(
             AudioPlayerController controller,
             SwingFrame frame,
             PlayerViewComponentsWrapper components
     ) {
-        if (bound) return;
+        if (bound) return null;
 
         this.comps = components;
 
         bindPlayPauseButton(controller);
         bindRewindButton(controller);
         bindSaveButton(frame, controller);
+        bindPlaybackSeekBar(comps.footerComponent().getPlaybackSeekBar(), controller);
 
         bound = true;
+
+        return synchronizerFactory.createSynchronizer(
+                comps,
+                controller::getMicrosecPosition,
+                controller::getMicrosecDuration
+        );
     }
 
     @Override
@@ -120,5 +133,18 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
 
             }
         });
+    }
+
+    private void bindPlaybackSeekBar(SwingSeekBar playbackSeekBar, AudioPlayerController controller) {
+
+        playbackSeekBar.addChangeListener(e -> {
+
+            if (!playbackSeekBar.getValueIsAdjusting()) {
+                controller.handleSeekAction(playbackSeekBar.getValue());
+            }
+
+        });
+
+
     }
 }

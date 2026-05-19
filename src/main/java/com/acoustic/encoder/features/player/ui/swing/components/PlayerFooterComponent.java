@@ -1,6 +1,7 @@
 package com.acoustic.encoder.features.player.ui.swing.components;
 
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
@@ -8,21 +9,16 @@ import java.awt.*;
 
 public class PlayerFooterComponent extends JPanel {
 
-    private final JProgressBar progressBar;
+    private final SwingSeekBar playbackSeekBar;
 
     private final SwingButton saveButton;
 
-    private final Icon saveIcon;
-
     public PlayerFooterComponent(
             SwingButton saveButton,
-            JProgressBar progressBar,
-            Icon saveIcon
+            SwingSeekBar playbackSeekBar
     ) {
         this.saveButton = saveButton;
-        this.progressBar = progressBar;
-
-        this.saveIcon = saveIcon;
+        this.playbackSeekBar = playbackSeekBar;
 
         initializeComponent();
     }
@@ -37,17 +33,17 @@ public class PlayerFooterComponent extends JPanel {
         //setBackground(Color.BLUE);
         setBackground(Color.darkGray);
 
-        add(progressBar, BorderLayout.CENTER);
+        add(playbackSeekBar, BorderLayout.CENTER);
         add(saveButton, BorderLayout.EAST);
 
-        updateProgress(10);
-    }
-
-    public void updateProgress(int value) {
-        progressBar.setValue(value);
     }
 
     public SwingButton getSaveButton() {
         return this.saveButton;
     }
+
+    public SwingSeekBar getPlaybackSeekBar() {
+        return this.playbackSeekBar;
+    }
+
 }

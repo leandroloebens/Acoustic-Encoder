@@ -16,4 +16,11 @@ public interface AudioPlayerController {
     void handleRewindAction();
 
     void handleSaveAction(File destination) throws MusicExportException;
+
+    long getMicrosecPosition();
+
+    long getMicrosecDuration();
+
+    void handleSeekAction(long microsecPosition);
+
 }

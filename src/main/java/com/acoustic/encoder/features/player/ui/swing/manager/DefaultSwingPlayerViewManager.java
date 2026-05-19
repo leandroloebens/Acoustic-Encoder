@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.player.ui.swing;
+package com.acoustic.encoder.features.player.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
@@ -6,11 +6,13 @@ import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.ui.PlayerViewManager;
 import com.acoustic.encoder.features.player.ui.swing.assembler.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.ui.swing.binder.SwingPlayerViewEventBinder;
+import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Objects;
 
 public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
@@ -20,11 +22,10 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
     private final SwingPlayerViewAssembler assembler;
-
     private final SwingPlayerViewEventBinder binder;
-
     private final EventBus eventBus;
 
+    private SwingPlayerViewSynchronizer synchronizer;
     private SwingFrame frame;
 
     public DefaultSwingPlayerViewManager(
@@ -32,13 +33,13 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
             SwingPlayerViewEventBinder binder,
             EventBus eventBus
     ) {
+        Objects.requireNonNull(assembler, "Assembler cannot be null!");
+        Objects.requireNonNull(binder, "Binder cannot be null!");
+        Objects.requireNonNull(eventBus, "EventBus cannot be null!");
 
-        if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
         this.assembler = assembler;
-
         this.binder = binder;
 
-        if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
         this.eventBus = eventBus;
 
     }
@@ -55,20 +56,31 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                hideFrame();
                 eventBus.publish(new PlayerClosedEvent());
             }
         });
 
-        binder.bind(controller, frame, assembler.getComponents());
+        this.synchronizer = binder.bind(controller, frame, assembler.getComponents());
 
         showFrame();
     }
 
     @Override
-    public void showFrame() { frame.setVisible(true); }
+    public void showFrame() {
+
+        synchronizer.startSync();
+
+        frame.setVisible(true);
+    }
 
     @Override
-    public void hideFrame() { frame.setVisible(false); }
+    public void hideFrame() {
+
+        synchronizer.stopSync();
+
+        frame.setVisible(false);
+    }
 
     // void destroyFrame();
 }

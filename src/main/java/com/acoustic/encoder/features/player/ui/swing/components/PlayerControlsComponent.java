@@ -14,17 +14,13 @@ public class PlayerControlsComponent extends JPanel {
 
     private final Icon playIcon;
     private final Icon pauseIcon;
-    private final Icon rewindIcon;
-    private final Icon forwardIcon;
 
     public PlayerControlsComponent(
             SwingButton playPauseButton,
             SwingButton rewindButton,
             SwingButton forwardButton,
             Icon playIcon,
-            Icon pauseIcon,
-            Icon rewindIcon,
-            Icon forwardIcon
+            Icon pauseIcon
     ) {
 
         this.playPauseButton = playPauseButton;
@@ -33,8 +29,6 @@ public class PlayerControlsComponent extends JPanel {
 
         this.playIcon = playIcon;
         this.pauseIcon = pauseIcon;
-        this.rewindIcon = rewindIcon;
-        this.forwardIcon = forwardIcon;
 
         initializeComponent();
     }

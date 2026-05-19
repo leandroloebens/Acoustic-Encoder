@@ -10,7 +10,7 @@ import com.acoustic.encoder.features.conversion.ui.swing.factory.DefaultSwingCon
 import com.acoustic.encoder.features.player.ui.DefaultPlayerScreen;
 import com.acoustic.encoder.features.player.ui.PlayerScreen;
 import com.acoustic.encoder.features.player.ui.PlayerViewManagerFactory;
-import com.acoustic.encoder.features.player.ui.swing.factory.DefaultSwingPlayerViewManagerFactory;
+import com.acoustic.encoder.features.player.ui.swing.manager.DefaultSwingPlayerViewManagerFactory;
 import com.acoustic.encoder.features.start.controller.DefaultStartController;
 import com.acoustic.encoder.features.start.service.StartService;
 import com.acoustic.encoder.features.start.ui.DefaultStartScreen;
