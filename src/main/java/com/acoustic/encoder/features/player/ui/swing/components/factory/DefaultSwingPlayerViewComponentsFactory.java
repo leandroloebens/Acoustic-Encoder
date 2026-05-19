@@ -34,14 +34,21 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     private PlayerControlsComponent createControlsComponent() {
         Icon playIcon = IconLoader.load("/ui/icons/play.png");
         Icon pauseIcon = IconLoader.load("/ui/icons/pause.png");
+        Icon rewindIcon = IconLoader.load("/ui/icons/rewind.png");
+        Icon forwardIcon = IconLoader.load("/ui/icons/forward.png");
 
         createPlayPauseButton(playIcon);
+        createRewindButton(rewindIcon);
+        createForwardButton(forwardIcon);
 
         return new PlayerControlsComponent(
                 createPlayPauseButton(playIcon),
-                createRewindButton(),
+                createRewindButton(rewindIcon),
+                createForwardButton(forwardIcon),
                 playIcon,
-                pauseIcon
+                pauseIcon,
+                rewindIcon,
+                forwardIcon
         );
     }
 
@@ -49,9 +56,11 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         Icon saveIcon = IconLoader.load("/ui/icons/download.png");
 
         createSaveButton(saveIcon);
+        createProgressBar();
 
         return new PlayerFooterComponent(
                 createSaveButton(saveIcon),
+                createProgressBar(),
                 saveIcon
         );
     }
@@ -68,10 +77,23 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         );
     }
 
-    private SwingButton createRewindButton() {
+    private SwingButton createRewindButton(Icon rewindIcon) {
 
         return new SwingButton(
                 config.getString("REWIND_BUTTON_TEXT"),
+                rewindIcon,
+                null,
+                20,
+                null,
+                null
+        );
+    }
+
+    private SwingButton createForwardButton(Icon forwardIcon) {
+
+        return new SwingButton(
+                config.getString("FORWARD_BUTTON_TEXT"),
+                forwardIcon,
                 null,
                 20,
                 null,
@@ -89,5 +111,10 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 null,
                 null
         );
+    }
+
+    private JProgressBar createProgressBar() {
+
+        return new JProgressBar();
     }
 }

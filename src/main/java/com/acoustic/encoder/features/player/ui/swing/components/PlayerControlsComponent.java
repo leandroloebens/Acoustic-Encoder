@@ -10,22 +10,31 @@ public class PlayerControlsComponent extends JPanel {
 
     private final SwingButton playPauseButton;
     private final SwingButton rewindButton;
+    private final SwingButton forwardButton;
 
     private final Icon playIcon;
     private final Icon pauseIcon;
+    private final Icon rewindIcon;
+    private final Icon forwardIcon;
 
     public PlayerControlsComponent(
             SwingButton playPauseButton,
             SwingButton rewindButton,
+            SwingButton forwardButton,
             Icon playIcon,
-            Icon pauseIcon
+            Icon pauseIcon,
+            Icon rewindIcon,
+            Icon forwardIcon
     ) {
 
         this.playPauseButton = playPauseButton;
         this.rewindButton = rewindButton;
+        this.forwardButton = forwardButton;
 
         this.playIcon = playIcon;
         this.pauseIcon = pauseIcon;
+        this.rewindIcon = rewindIcon;
+        this.forwardIcon = forwardIcon;
 
         initializeComponent();
     }
@@ -34,13 +43,14 @@ public class PlayerControlsComponent extends JPanel {
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        SwingUtils.setHandCursor(playPauseButton, rewindButton);
+        SwingUtils.setHandCursor(playPauseButton, rewindButton, forwardButton);
 
         //setBackground(Color.RED);
         setBackground(Color.darkGray);
 
-        add(playPauseButton);
         add(rewindButton);
+        add(playPauseButton);
+        add(forwardButton);
     }
 
     public SwingButton getPlayPauseButton() {
@@ -49,6 +59,10 @@ public class PlayerControlsComponent extends JPanel {
 
     public SwingButton getRewindButton() {
         return this.rewindButton;
+    }
+
+    public SwingButton getForwardButton() {
+        return this.forwardButton;
     }
 
     public void setPlayPauseState(boolean isPlaying) {
