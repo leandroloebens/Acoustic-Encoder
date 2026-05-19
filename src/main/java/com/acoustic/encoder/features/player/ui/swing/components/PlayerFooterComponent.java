@@ -14,7 +14,10 @@ public class PlayerFooterComponent extends JPanel {
 
     private final Icon saveIcon;
 
-    public PlayerFooterComponent(SwingButton saveButton, Icon saveIcon) {
+    public PlayerFooterComponent(
+            SwingButton saveButton,
+            Icon saveIcon
+    ) {
         this.saveButton = saveButton;
         this.progressBar = new JProgressBar();
 

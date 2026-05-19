@@ -52,7 +52,7 @@ public class PlayerControlsComponent extends JPanel {
     }
 
     public void setPlayPauseState(boolean isPlaying) {
-        playPauseButton.setText(isPlaying ? "Pause" : "Play");
-        playPauseButton.setIcon(isPlaying ? pauseIcon : playIcon);
+        playPauseButton.setText(isPlaying ? "Play" : "Pause");
+        playPauseButton.setIcon(isPlaying ? playIcon : pauseIcon);
     }
 }
