@@ -31,7 +31,7 @@ public class PlayerFooterComponent extends JPanel {
         SwingUtils.setHandCursor(saveButton);
 
         //setBackground(Color.BLUE);
-        setBackground(Color.darkGray);
+        setBackground(new Color(18,18,18));
 
         add(playbackSeekBar, BorderLayout.CENTER);
         add(saveButton, BorderLayout.EAST);
