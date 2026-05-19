@@ -16,4 +16,8 @@ public interface SequencePlayer extends SequenceProvider {
     void rewind();
 
     void closeSequencer();
+
+    long getMicrosecPosition();
+
+    long getMicrosecDuration();
 }

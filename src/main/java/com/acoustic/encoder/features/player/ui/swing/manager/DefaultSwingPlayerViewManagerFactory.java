@@ -4,7 +4,6 @@ import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.ui.PlayerViewManager;
 import com.acoustic.encoder.features.player.ui.PlayerViewManagerFactory;
 import com.acoustic.encoder.features.player.ui.swing.synchronizer.DefaultSwingPlayerViewSynchronizer;
-import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizer;
 import com.acoustic.encoder.features.player.ui.swing.assembler.DefaultSwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.ui.swing.assembler.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.ui.swing.binder.DefaultSwingPlayerViewEventBinder;

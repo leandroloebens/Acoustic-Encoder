@@ -15,4 +15,8 @@ public interface AudioPlayer {
     void rewind();
 
     void close();
+
+    long getMicrosecPosition();
+
+    long getMicrosecDuration();
 }

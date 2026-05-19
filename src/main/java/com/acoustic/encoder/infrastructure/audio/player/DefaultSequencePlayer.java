@@ -43,4 +43,14 @@ public class DefaultSequencePlayer implements SequencePlayer {
     public void closeSequencer() {
         this.sequencer.close();
     }
+
+    @Override
+    public long getMicrosecPosition() {
+        return this.sequencer.getMicrosecondPosition();
+    }
+
+    @Override
+    public long getMicrosecDuration() {
+        return this.sequencer.getMicrosecondLength();
+    }
 }

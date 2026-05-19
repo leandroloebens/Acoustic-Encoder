@@ -50,4 +50,14 @@ public class DefaultAudioPlayerService implements AudioPlayerService {
     public void closePlayer() {
         player.close();
     }
+
+    @Override
+    public long getMicrosecPosition() {
+        return player.getMicrosecPosition();
+    }
+
+    @Override
+    public long getMicrosecDuration() {
+        return player.getMicrosecDuration();
+    }
 }

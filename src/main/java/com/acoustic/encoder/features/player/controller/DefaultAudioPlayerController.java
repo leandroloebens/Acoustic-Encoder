@@ -46,12 +46,12 @@ public class DefaultAudioPlayerController implements AudioPlayerController {
 
     @Override
     public long getMicrosecPosition() {
-        return 0;
+        return playerService.getMicrosecPosition();
     }
 
     @Override
     public long getMicrosecDuration() {
-        return 0;
+        return playerService.getMicrosecDuration();
     }
 
     @Override

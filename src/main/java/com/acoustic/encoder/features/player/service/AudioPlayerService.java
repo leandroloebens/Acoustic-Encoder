@@ -19,4 +19,10 @@ public interface AudioPlayerService {
     void exportMusic(File destination) throws MusicExportException;
 
     void closePlayer();
+
+    long getMicrosecPosition();
+
+    long getMicrosecDuration();
+
+    //long setMicrosecPosition(long microsecPosition);
 }
