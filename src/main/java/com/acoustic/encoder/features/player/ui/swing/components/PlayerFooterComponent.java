@@ -12,17 +12,12 @@ public class PlayerFooterComponent extends JPanel {
 
     private final SwingButton saveButton;
 
-    private final Icon saveIcon;
-
     public PlayerFooterComponent(
             SwingButton saveButton,
-            JProgressBar progressBar,
-            Icon saveIcon
+            JProgressBar progressBar
     ) {
         this.saveButton = saveButton;
         this.progressBar = progressBar;
-
-        this.saveIcon = saveIcon;
 
         initializeComponent();
     }
@@ -35,7 +30,7 @@ public class PlayerFooterComponent extends JPanel {
         SwingUtils.setHandCursor(saveButton);
 
         //setBackground(Color.BLUE);
-        setBackground(Color.darkGray);
+        setBackground(new Color(18,18,18));
 
         add(progressBar, BorderLayout.CENTER);
         add(saveButton, BorderLayout.EAST);

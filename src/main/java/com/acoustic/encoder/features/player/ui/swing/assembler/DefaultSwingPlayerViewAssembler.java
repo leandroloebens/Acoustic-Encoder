@@ -47,7 +47,7 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
         mainContainer.add(Box.createVerticalStrut(8));
         mainContainer.add(footerComponent);
 
-        mainContainer.setBackground(Color.darkGray);
+        mainContainer.setBackground(new Color(18,18,18));
 
         centerPanel.add(mainContainer);
         frame.add(centerPanel, BorderLayout.CENTER);

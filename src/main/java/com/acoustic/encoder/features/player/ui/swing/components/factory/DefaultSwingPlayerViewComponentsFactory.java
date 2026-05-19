@@ -15,6 +15,8 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
 
     private final static String ILLEGAL_CONFIG_ARGUMENT_MESSAGE = "Illegal config argument!";
 
+    private final int lado = 40;
+
     private final SwingViewConfigWrapper config;
 
     public DefaultSwingPlayerViewComponentsFactory(HashMap<String, String> configMap) {
@@ -32,79 +34,69 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     }
 
     private PlayerControlsComponent createControlsComponent() {
-        Icon playIcon = IconLoader.load("/ui/icons/play.png");
-        Icon pauseIcon = IconLoader.load("/ui/icons/pause.png");
-        Icon rewindIcon = IconLoader.load("/ui/icons/rewind.png");
-        Icon forwardIcon = IconLoader.load("/ui/icons/forward.png");
-
-        createPlayPauseButton(playIcon);
-        createRewindButton(rewindIcon);
-        createForwardButton(forwardIcon);
+        Icon playIcon = IconLoader.load("/ui/icons/play_filled_32.png");
+        Icon pauseIcon = IconLoader.load("/ui/icons/pause_filled_32.png");
+        Icon rewindIcon = IconLoader.load("/ui/icons/fast_rewind_B3B3B3.png");
+        Icon forwardIcon = IconLoader.load("/ui/icons/fast_forward_B3B3B3.png");
 
         return new PlayerControlsComponent(
                 createPlayPauseButton(playIcon),
                 createRewindButton(rewindIcon),
                 createForwardButton(forwardIcon),
                 playIcon,
-                pauseIcon,
-                rewindIcon,
-                forwardIcon
+                pauseIcon
         );
     }
 
     private PlayerFooterComponent createFooterComponent() {
         Icon saveIcon = IconLoader.load("/ui/icons/download.png");
 
-        createSaveButton(saveIcon);
-        createProgressBar();
-
         return new PlayerFooterComponent(
                 createSaveButton(saveIcon),
-                createProgressBar(),
-                saveIcon
+                createProgressBar()
         );
     }
 
     private SwingButton createPlayPauseButton(Icon playIcon) {
 
         return new SwingButton(
-                config.getString("PLAY_BUTTON_TEXT"),
+                null,
                 playIcon,
                 null,
                 20,
                 null,
-                null
+                new Dimension(50, 50)
         );
     }
 
     private SwingButton createRewindButton(Icon rewindIcon) {
 
         return new SwingButton(
-                config.getString("REWIND_BUTTON_TEXT"),
+                null,
                 rewindIcon,
                 null,
                 20,
                 null,
-                null
+                new Dimension(lado, lado)
         );
     }
 
     private SwingButton createForwardButton(Icon forwardIcon) {
 
         return new SwingButton(
-                config.getString("FORWARD_BUTTON_TEXT"),
+                null,
                 forwardIcon,
                 null,
                 20,
                 null,
-                null
+                new Dimension(lado, lado)
         );
     }
 
     private SwingButton createSaveButton(Icon saveIcon) {
 
         return new SwingButton(
-                config.getString("SAVE_BUTTON_TEXT"),
+                null,
                 saveIcon,
                 null,
                 20,

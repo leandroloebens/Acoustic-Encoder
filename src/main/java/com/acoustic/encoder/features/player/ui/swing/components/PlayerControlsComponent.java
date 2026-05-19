@@ -1,6 +1,7 @@
 package com.acoustic.encoder.features.player.ui.swing.components;
 
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingRoundedPanel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
@@ -14,17 +15,13 @@ public class PlayerControlsComponent extends JPanel {
 
     private final Icon playIcon;
     private final Icon pauseIcon;
-    private final Icon rewindIcon;
-    private final Icon forwardIcon;
 
     public PlayerControlsComponent(
             SwingButton playPauseButton,
             SwingButton rewindButton,
             SwingButton forwardButton,
             Icon playIcon,
-            Icon pauseIcon,
-            Icon rewindIcon,
-            Icon forwardIcon
+            Icon pauseIcon
     ) {
 
         this.playPauseButton = playPauseButton;
@@ -33,23 +30,36 @@ public class PlayerControlsComponent extends JPanel {
 
         this.playIcon = playIcon;
         this.pauseIcon = pauseIcon;
-        this.rewindIcon = rewindIcon;
-        this.forwardIcon = forwardIcon;
 
         initializeComponent();
     }
 
     private void initializeComponent() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setLayout(new FlowLayout(FlowLayout.CENTER, 50, 5));
+        setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         SwingUtils.setHandCursor(playPauseButton, rewindButton, forwardButton);
 
         //setBackground(Color.RED);
-        setBackground(Color.darkGray);
+        setBackground(new Color(18,18,18));
+
+        JPanel playPauseWrapper = new SwingRoundedPanel(70);
+        playPauseWrapper.setBackground(new Color(200, 200, 200));
+        playPauseWrapper.setLayout(new GridBagLayout());
+        //playPauseWrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        playPauseWrapper.add(playPauseButton);
+
+        playPauseButton.setContentAreaFilled(false);
+        playPauseButton.setBorderPainted(false);
+
+        forwardButton.setContentAreaFilled(false);
+        forwardButton.setBorderPainted(false);
+
+        rewindButton.setContentAreaFilled(false);
+        rewindButton.setBorderPainted(false);
 
         add(rewindButton);
-        add(playPauseButton);
+        add(playPauseWrapper);
         add(forwardButton);
     }
 
@@ -66,7 +76,7 @@ public class PlayerControlsComponent extends JPanel {
     }
 
     public void setPlayPauseState(boolean isPlaying) {
-        playPauseButton.setText(isPlaying ? "Play" : "Pause");
+        //playPauseButton.setText(isPlaying ? "Play" : "Pause");
         playPauseButton.setIcon(isPlaying ? playIcon : pauseIcon);
     }
 }
