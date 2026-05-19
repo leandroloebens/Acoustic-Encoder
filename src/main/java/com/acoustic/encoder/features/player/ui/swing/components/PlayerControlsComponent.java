@@ -8,27 +8,24 @@ import java.awt.*;
 
 public class PlayerControlsComponent extends JPanel {
 
-//    private final static String PLAY_BUTTON_TEXT = "Play";
-//    private final static String PAUSE_BUTTON_TEXT = "Pause";
-//    private final static String REWIND_BUTTON_TEXT = "Rewind";
-
-//    private final JButton playButton;
-//    private final JButton pauseButton;
-//    private final JButton rewindButton;
-
     private final SwingButton playPauseButton;
     private final SwingButton rewindButton;
 
+    private final Icon playIcon;
+    private final Icon pauseIcon;
+
     public PlayerControlsComponent(
             SwingButton playPauseButton,
-            SwingButton rewindButton
+            SwingButton rewindButton,
+            Icon playIcon,
+            Icon pauseIcon
     ) {
-//        this.playPauseButton = new JButton(PLAY_BUTTON_TEXT);
-//        this.pauseButton = new JButton(PAUSE_BUTTON_TEXT);
-//        this.rewindButton = new JButton(REWIND_BUTTON_TEXT);
 
         this.playPauseButton = playPauseButton;
         this.rewindButton = rewindButton;
+
+        this.playIcon = playIcon;
+        this.pauseIcon = pauseIcon;
 
         initializeComponent();
     }
@@ -43,7 +40,6 @@ public class PlayerControlsComponent extends JPanel {
         setBackground(Color.darkGray);
 
         add(playPauseButton);
-//        add(pauseButton);
         add(rewindButton);
     }
 
@@ -51,11 +47,12 @@ public class PlayerControlsComponent extends JPanel {
         return this.playPauseButton;
     }
 
-//    public JButton getPauseButton() {
-//        return this.pauseButton;
-//    }
-
     public SwingButton getRewindButton() {
         return this.rewindButton;
+    }
+
+    public void setPlayPauseState(boolean isPlaying) {
+        playPauseButton.setText(isPlaying ? "Pause" : "Play");
+        playPauseButton.setIcon(isPlaying ? pauseIcon : playIcon);
     }
 }

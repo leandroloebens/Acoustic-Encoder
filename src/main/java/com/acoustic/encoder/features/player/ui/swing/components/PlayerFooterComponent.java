@@ -8,17 +8,17 @@ import java.awt.*;
 
 public class PlayerFooterComponent extends JPanel {
 
-    private final static String SAVE_BUTTON_TEXT = "Save";
-
     private final JProgressBar progressBar;
-//    private final JButton saveButton;
 
     private final SwingButton saveButton;
 
-    public PlayerFooterComponent(SwingButton saveButton) {
-//        this.saveButton = new JButton(SAVE_BUTTON_TEXT);
+    private final Icon saveIcon;
+
+    public PlayerFooterComponent(SwingButton saveButton, Icon saveIcon) {
         this.saveButton = saveButton;
         this.progressBar = new JProgressBar();
+
+        this.saveIcon = saveIcon;
 
         initializeComponent();
     }

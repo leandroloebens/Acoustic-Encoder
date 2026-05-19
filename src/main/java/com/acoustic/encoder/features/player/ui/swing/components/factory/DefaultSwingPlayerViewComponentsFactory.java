@@ -25,23 +25,38 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     @Override
     public PlayerViewComponentsWrapper createComponents() {
 
-        PlayerControlsComponent controlsComponent = new PlayerControlsComponent(
-                createPlayPauseButton(),
-                createRewindButton()
-        );
-
-        PlayerFooterComponent footerComponent = new PlayerFooterComponent(
-                createSaveButton()
-        );
-
         return new PlayerViewComponentsWrapper(
-                controlsComponent,
-                footerComponent
+                createControlsComponent(),
+                createFooterComponent()
         );
     }
 
-    private SwingButton createPlayPauseButton() {
+    private PlayerControlsComponent createControlsComponent() {
         Icon playIcon = IconLoader.load("/ui/icons/play.png");
+        Icon pauseIcon = IconLoader.load("/ui/icons/pause.png");
+
+        createPlayPauseButton(playIcon);
+
+        return new PlayerControlsComponent(
+                createPlayPauseButton(playIcon),
+                createRewindButton(),
+                playIcon,
+                pauseIcon
+        );
+    }
+
+    private PlayerFooterComponent createFooterComponent() {
+        Icon saveIcon = IconLoader.load("/ui/icons/download.png");
+
+        createSaveButton(saveIcon);
+
+        return new PlayerFooterComponent(
+                createSaveButton(saveIcon),
+                saveIcon
+        );
+    }
+
+    private SwingButton createPlayPauseButton(Icon playIcon) {
 
         return new SwingButton(
                 config.getString("PLAY_BUTTON_TEXT"),
@@ -64,8 +79,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         );
     }
 
-    private SwingButton createSaveButton() {
-        Icon saveIcon = IconLoader.load("/ui/icons/download.png");
+    private SwingButton createSaveButton(Icon saveIcon) {
 
         return new SwingButton(
                 config.getString("SAVE_BUTTON_TEXT"),

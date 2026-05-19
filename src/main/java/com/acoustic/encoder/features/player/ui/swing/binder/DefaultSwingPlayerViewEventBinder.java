@@ -4,6 +4,7 @@ import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.IconLoader;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
@@ -28,10 +29,6 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
 
     private final List<Runnable> removers = new ArrayList<>();
 
-    private final Icon playIcon = IconLoader.load("/ui/icons/play.png");
-    private final Icon pauseIcon = IconLoader.load("/ui/icons/pause.png");
-    private final Icon saveIcon = IconLoader.load("/ui/icons/download.png");
-
     private boolean isPlaying = false;
 
     public DefaultSwingPlayerViewEventBinder(EventBus eventBus) {
@@ -51,7 +48,6 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
         this.comps = components;
 
         bindPlayPauseButton(controller);
-//        bindPauseButton(controller);
         bindRewindButton(controller);
         bindSaveButton(frame, controller);
 
@@ -73,25 +69,31 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     }
 
     private void bindPlayPauseButton(AudioPlayerController controller) {
+//        comps.controlsComponent().getPlayPauseButton().addActionListener(e -> {
+//            if (isPlaying) {
+//                controller.handlePauseAction();
+//                comps.controlsComponent().getPlayPauseButton().setText("Play");
+//                comps.controlsComponent().getPlayPauseButton().setIcon(playIcon);
+//            } else {
+//                controller.handlePlayAction();
+//                comps.controlsComponent().getPlayPauseButton().setText("Pause");
+//                comps.controlsComponent().getPlayPauseButton().setIcon(pauseIcon);
+//            }
+//
+//            isPlaying = !isPlaying;
+//        });
+
         comps.controlsComponent().getPlayPauseButton().addActionListener(e -> {
             if (isPlaying) {
                 controller.handlePauseAction();
-                comps.controlsComponent().getPlayPauseButton().setText("Play");
-                comps.controlsComponent().getPlayPauseButton().setIcon(playIcon);
-//                button.setIcon(playIcon);
+                comps.controlsComponent().setPlayPauseState(isPlaying);
             } else {
                 controller.handlePlayAction();
-                comps.controlsComponent().getPlayPauseButton().setText("Pause");
-                comps.controlsComponent().getPlayPauseButton().setIcon(pauseIcon);
-//                button.setIcon(pauseIcon);
+                comps.controlsComponent().setPlayPauseState(isPlaying);
             }
 
             isPlaying = !isPlaying;
         });
-    }
-
-    private void bindPauseButton(AudioPlayerController controller) {
-//        comps.controlsComponent().getPauseButton().addActionListener(e -> controller.handlePauseAction());
     }
 
     private void bindRewindButton(AudioPlayerController controller) {
