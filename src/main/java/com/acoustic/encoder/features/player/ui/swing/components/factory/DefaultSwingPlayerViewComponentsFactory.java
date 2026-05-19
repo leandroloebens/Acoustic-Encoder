@@ -9,6 +9,7 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekB
 import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.IconLoader;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.HashMap;
 
 public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewComponentsFactory {
