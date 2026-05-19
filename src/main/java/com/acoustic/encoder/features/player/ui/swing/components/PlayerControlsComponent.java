@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.player.ui.swing.components;
 
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
@@ -7,18 +8,33 @@ import java.awt.*;
 
 public class PlayerControlsComponent extends JPanel {
 
-    private final static String PLAY_BUTTON_TEXT = "Play";
-    private final static String PAUSE_BUTTON_TEXT = "Pause";
-    private final static String REWIND_BUTTON_TEXT = "Rewind";
+    private final SwingButton playPauseButton;
+    private final SwingButton rewindButton;
+    private final SwingButton forwardButton;
 
-    private final JButton playButton;
-    private final JButton pauseButton;
-    private final JButton rewindButton;
+    private final Icon playIcon;
+    private final Icon pauseIcon;
+    private final Icon rewindIcon;
+    private final Icon forwardIcon;
 
-    public PlayerControlsComponent() {
-        this.playButton = new JButton(PLAY_BUTTON_TEXT);
-        this.pauseButton = new JButton(PAUSE_BUTTON_TEXT);
-        this.rewindButton = new JButton(REWIND_BUTTON_TEXT);
+    public PlayerControlsComponent(
+            SwingButton playPauseButton,
+            SwingButton rewindButton,
+            SwingButton forwardButton,
+            Icon playIcon,
+            Icon pauseIcon,
+            Icon rewindIcon,
+            Icon forwardIcon
+    ) {
+
+        this.playPauseButton = playPauseButton;
+        this.rewindButton = rewindButton;
+        this.forwardButton = forwardButton;
+
+        this.playIcon = playIcon;
+        this.pauseIcon = pauseIcon;
+        this.rewindIcon = rewindIcon;
+        this.forwardIcon = forwardIcon;
 
         initializeComponent();
     }
@@ -27,25 +43,30 @@ public class PlayerControlsComponent extends JPanel {
         setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        SwingUtils.setHandCursor(playButton, pauseButton, rewindButton);
+        SwingUtils.setHandCursor(playPauseButton, rewindButton, forwardButton);
 
         //setBackground(Color.RED);
         setBackground(Color.darkGray);
 
-        add(playButton);
-        add(pauseButton);
         add(rewindButton);
+        add(playPauseButton);
+        add(forwardButton);
     }
 
-    public JButton getPlayButton() {
-        return this.playButton;
+    public SwingButton getPlayPauseButton() {
+        return this.playPauseButton;
     }
 
-    public JButton getPauseButton() {
-        return this.pauseButton;
-    }
-
-    public JButton getRewindButton() {
+    public SwingButton getRewindButton() {
         return this.rewindButton;
+    }
+
+    public SwingButton getForwardButton() {
+        return this.forwardButton;
+    }
+
+    public void setPlayPauseState(boolean isPlaying) {
+        playPauseButton.setText(isPlaying ? "Play" : "Pause");
+        playPauseButton.setIcon(isPlaying ? playIcon : pauseIcon);
     }
 }
