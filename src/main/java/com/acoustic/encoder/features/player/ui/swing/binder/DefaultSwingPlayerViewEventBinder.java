@@ -53,7 +53,8 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
         this.comps = components;
 
         bindPlayPauseButton(controller);
-        bindRewindButton(controller);
+        bindSkipBackwardButton(controller);
+        bindSkipForwardButton(controller);
         bindSaveButton(frame, controller);
         bindPlaybackSeekBar(comps.footerComponent().getPlaybackSeekBar(), controller);
 
@@ -90,8 +91,14 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
         });
     }
 
-    private void bindRewindButton(AudioPlayerController controller) {
-        comps.controlsComponent().getRewindButton().addActionListener(e -> controller.handleRewindAction());
+    private void bindSkipBackwardButton(AudioPlayerController controller) {
+        comps.controlsComponent().getSkipBackwardButton().addActionListener(e ->
+                controller.handleSkipBackwardAction());
+    }
+
+    private void bindSkipForwardButton(AudioPlayerController controller) {
+        comps.controlsComponent().getSkipForwardButton().addActionListener(e ->
+                controller.handleSkipForwardAction());
     }
 
     private void bindSaveButton(SwingFrame frame, AudioPlayerController controller) {

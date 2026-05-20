@@ -7,6 +7,8 @@ import java.io.File;
 
 public class DefaultAudioPlayerController implements AudioPlayerController {
 
+    private static final double DEFAULT_SKIP_PERCENTAGE = 10.0;
+
     private final AudioPlayerService playerService;
 
     public DefaultAudioPlayerController(AudioPlayerService playerService) {
@@ -24,8 +26,13 @@ public class DefaultAudioPlayerController implements AudioPlayerController {
     }
 
     @Override
-    public void handleRewindAction() {
-        playerService.rewindMusic();
+    public void handleSkipBackwardAction() {
+        playerService.seekRelativeDurationPercent(-DEFAULT_SKIP_PERCENTAGE);
+    }
+
+    @Override
+    public void handleSkipForwardAction() {
+        playerService.seekRelativeDurationPercent(DEFAULT_SKIP_PERCENTAGE);
     }
 
     @Override
@@ -61,5 +68,6 @@ public class DefaultAudioPlayerController implements AudioPlayerController {
             playerService.playMusic();
         }
     }
+
 
 }

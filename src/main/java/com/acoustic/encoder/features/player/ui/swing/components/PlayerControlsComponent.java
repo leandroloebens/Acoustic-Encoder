@@ -10,23 +10,23 @@ import java.awt.*;
 public class PlayerControlsComponent extends JPanel {
 
     private final SwingButton playPauseButton;
-    private final SwingButton rewindButton;
-    private final SwingButton forwardButton;
+    private final SwingButton skipBackwardButton;
+    private final SwingButton skipForwardButton;
 
     private final Icon playIcon;
     private final Icon pauseIcon;
 
     public PlayerControlsComponent(
             SwingButton playPauseButton,
-            SwingButton rewindButton,
-            SwingButton forwardButton,
+            SwingButton skipBackwardButton,
+            SwingButton skipForwardButton,
             Icon playIcon,
             Icon pauseIcon
     ) {
 
         this.playPauseButton = playPauseButton;
-        this.rewindButton = rewindButton;
-        this.forwardButton = forwardButton;
+        this.skipBackwardButton = skipBackwardButton;
+        this.skipForwardButton = skipForwardButton;
 
         this.playIcon = playIcon;
         this.pauseIcon = pauseIcon;
@@ -38,7 +38,7 @@ public class PlayerControlsComponent extends JPanel {
         setLayout(new FlowLayout(FlowLayout.CENTER, 50, 5));
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        SwingUtils.setHandCursor(playPauseButton, rewindButton, forwardButton);
+        SwingUtils.setHandCursor(playPauseButton, skipBackwardButton, skipForwardButton);
 
         //setBackground(Color.RED);
         setBackground(new Color(18,18,18));
@@ -52,27 +52,27 @@ public class PlayerControlsComponent extends JPanel {
         playPauseButton.setContentAreaFilled(false);
         playPauseButton.setBorderPainted(false);
 
-        forwardButton.setContentAreaFilled(false);
-        forwardButton.setBorderPainted(false);
+        skipForwardButton.setContentAreaFilled(false);
+        skipForwardButton.setBorderPainted(false);
 
-        rewindButton.setContentAreaFilled(false);
-        rewindButton.setBorderPainted(false);
+        skipBackwardButton.setContentAreaFilled(false);
+        skipBackwardButton.setBorderPainted(false);
 
-        add(rewindButton);
+        add(skipBackwardButton);
         add(playPauseWrapper);
-        add(forwardButton);
+        add(skipForwardButton);
     }
 
     public SwingButton getPlayPauseButton() {
         return this.playPauseButton;
     }
 
-    public SwingButton getRewindButton() {
-        return this.rewindButton;
+    public SwingButton getSkipBackwardButton() {
+        return this.skipBackwardButton;
     }
 
-    public SwingButton getForwardButton() {
-        return this.forwardButton;
+    public SwingButton getSkipForwardButton() {
+        return this.skipForwardButton;
     }
 
     public void setPlayPauseState(boolean isPlaying) {

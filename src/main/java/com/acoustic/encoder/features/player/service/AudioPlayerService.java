@@ -14,7 +14,7 @@ public interface AudioPlayerService {
 
     void stopMusic();
 
-    void rewindMusic();
+    void seekRelativeDurationPercent(double offset);
 
     void exportMusic(File destination) throws MusicExportException;
 

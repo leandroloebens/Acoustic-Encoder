@@ -10,7 +10,9 @@ public interface AudioPlayerController {
 
     void handlePauseAction();
 
-    void handleRewindAction();
+    void handleSkipBackwardAction();
+
+    void handleSkipForwardAction();
 
     void handleSaveAction(File destination) throws MusicExportException;
 

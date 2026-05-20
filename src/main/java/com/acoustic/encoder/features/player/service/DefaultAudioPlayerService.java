@@ -37,8 +37,22 @@ public class DefaultAudioPlayerService implements AudioPlayerService {
     }
 
     @Override
-    public void rewindMusic() {
-        player.rewind();
+    public void seekRelativeDurationPercent(double offset) {
+
+        offset = Math.clamp(offset, -100.0, 100.0);
+
+        long offsetMicrosec = Math.round(player.getMicrosecDuration() * (offset / 100.0));
+        long newPosition = player.getMicrosecPosition() + offsetMicrosec;
+
+        if (newPosition < 0) {
+            newPosition = 0;
+        }
+        else if (newPosition > player.getMicrosecDuration()) {
+            newPosition = player.getMicrosecDuration();
+        }
+
+        player.seekMusic(newPosition);
+
     }
 
     @Override
