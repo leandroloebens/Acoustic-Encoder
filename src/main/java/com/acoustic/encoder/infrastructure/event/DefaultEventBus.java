@@ -26,9 +26,16 @@ public class DefaultEventBus implements EventBus {
     }
 
     public <T> void subscribe(Class<T> eventType, EventListener<T> listener) {
-
         this.listeners
                 .computeIfAbsent(eventType, k -> new ArrayList<>())
                 .add(listener);
+    }
+
+    public <T> void unsubscribe(Class<T> eventType, EventListener<T> listener) {
+        this.listeners
+                .computeIfPresent(eventType, (k, v) -> {
+                    v.remove(listener);
+                    return v;
+                });
     }
 }

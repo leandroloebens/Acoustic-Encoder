@@ -3,7 +3,7 @@ package com.acoustic.encoder.main.navigation;
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
-import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
+import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
 import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
 import com.acoustic.encoder.features.player.ui.PlayerScreen;
 import com.acoustic.encoder.features.start.event.StartScreenCloseRequestEvent;
@@ -78,7 +78,7 @@ public class DefaultAppNavigator implements AppNavigator {
     private void setEvents() {
         eventBus.subscribe(StartScreenCloseRequestEvent.class, event -> closeApp());
         eventBus.subscribe(ProjectReadyToOpen.class, event -> destroyStartScreen());
-        eventBus.subscribe(ConversionScreenClosedEvent.class, event -> closeApp());
+        eventBus.subscribe(ConversionScreenCloseRequestEvent.class, event -> closeApp());
     }
 
 }

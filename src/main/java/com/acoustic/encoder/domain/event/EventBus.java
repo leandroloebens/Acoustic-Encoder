@@ -4,6 +4,8 @@ public interface EventBus {
 
     <T> void subscribe(Class<T> eventType, EventListener<T> listener);
 
+    <T> void unsubscribe(Class<T> eventType, EventListener<T> listener);
+
     <T> void publish(T event);
 
 }

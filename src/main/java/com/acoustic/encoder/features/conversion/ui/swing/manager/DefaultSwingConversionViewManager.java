@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.conversion.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEvent;
+import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.ui.swing.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.SwingConversionViewEventBinder;
@@ -60,13 +60,6 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
                 FRAME_EXIT_OPERATION
         );
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                eventBus.publish(new ConversionScreenClosedEvent());
-            }
-        });
-
         synchronizer = binder.bind(conversionController, frame, assembler.getComponents());
 
         synchronizer.enableSync();
@@ -75,18 +68,28 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
     @Override
     public void show() {
+        if (frame == null) throw new IllegalStateException("Frame is not assembled!");
+
         frame.setVisible(true);
         SwingUtilities.invokeLater(() -> frame.requestFocusInWindow());
     }
 
     @Override
-    public void hide() { frame.setVisible(false); }
+    public void hide() {
+        if (frame == null) throw new IllegalStateException("Frame is not assembled!");
+
+        frame.setVisible(false);
+    }
 
     @Override
     public void dispose() {
+        if (frame == null) return;
+
         synchronizer.disableSync();
         binder.unbind();
+        synchronizer = null;
         frame.dispose();
+        frame = null;
     }
 
 }

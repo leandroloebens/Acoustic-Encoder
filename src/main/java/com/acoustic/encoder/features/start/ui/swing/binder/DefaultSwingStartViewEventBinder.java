@@ -4,6 +4,7 @@ import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.start.controller.StartController;
+import com.acoustic.encoder.features.start.event.StartScreenCloseRequestEvent;
 import com.acoustic.encoder.features.start.ui.swing.components.dto.StartViewSwingComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
@@ -11,6 +12,8 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,14 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
 
         bindOpenProjectButton(openProjectButton, controller, frame, eventBus);
         bindNewProjectButton(newProjectButton, controller, frame, eventBus);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventBus.publish(new StartScreenCloseRequestEvent());
+                frame.setVisible(false);
+            }
+        });
 
         bound = true;
     }

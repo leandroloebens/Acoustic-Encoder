@@ -48,7 +48,6 @@ public class DefaultSwingStartViewManager implements StartViewManager {
 
     @Override
     public void assemble(StartController controller) {
-
         if (frame != null) return;
 
         this.frame = this.assembler.assembleFrame(
@@ -56,13 +55,6 @@ public class DefaultSwingStartViewManager implements StartViewManager {
                 new Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT),
                 FRAME_EXIT_OPERATION
         );
-
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                eventBus.publish(new StartScreenCloseRequestEvent());
-            }
-        });
 
         binder.bind(controller, frame, assembler.getComponents(), eventBus);
     }
@@ -79,9 +71,11 @@ public class DefaultSwingStartViewManager implements StartViewManager {
 
     @Override
     public void dispose() {
+        if (frame == null) return;
+
         binder.unbind();
         frame.dispose();
-//        eventBus.publish(new StartScreenClosedEvent());
+        frame = null;
     }
 
 }

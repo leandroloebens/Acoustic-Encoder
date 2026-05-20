@@ -3,6 +3,7 @@ package com.acoustic.encoder.features.conversion.ui.swing.binder;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.domain.event.EventListener;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
+import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizerFactory;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
@@ -19,6 +20,8 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +92,8 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
         this.comps = components;
 
+        this.synchronizer = synchronizerFactory.createSynchronizer(comps, parametersService);
+
         bindConvertButton(frame, controller);
         bindLoadTextButton(frame, controller);
         bindSaveTextButton(frame, controller);
@@ -111,14 +116,19 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         this.previousButton = comps.voiceSelector().getSelectedButton();
         bindVoiceSelector(frame);
 
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventBus.publish(new ConversionScreenCloseRequestEvent());
+            }
+        });
+
         EventListener<ProjectReadyToOpen> openListener =
                 event -> synchronizer.syncMusicProject(event.project());
         eventBus.subscribe(ProjectReadyToOpen.class, openListener);
-//        removers.add(() -> eventBus.unsubscribe(ProjectReadyToOpen.class, openListener));
+        removers.add(() -> eventBus.unsubscribe(ProjectReadyToOpen.class, openListener));
 
         bound = true;
-
-        this.synchronizer = synchronizerFactory.createSynchronizer(comps, parametersService);
 
         return this.synchronizer;
     }
@@ -139,7 +149,7 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     }
 
     private boolean validateInstrumentInput(SwingFrame frame) {
-        if (comps.instrumentPanel().getComboBox().finishEditing()) {
+        if (comps.instrumentPanel().isEditorInputValid()) {
             JTextField editor = comps.instrumentPanel().getTextEditor();
             editor.postActionEvent(); // Manually fires the event to update the instrument value
             return true;
