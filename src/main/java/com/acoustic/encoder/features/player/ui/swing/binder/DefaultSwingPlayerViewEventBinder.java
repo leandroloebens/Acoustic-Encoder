@@ -30,8 +30,6 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     private PlayerViewComponentsWrapper comps;
     private SwingPlayerViewSynchronizer synchronizer;
     private boolean bound = false;
-    private boolean isPlaying = false;
-
 
     public DefaultSwingPlayerViewEventBinder(
             EventBus eventBus, SwingPlayerViewSynchronizerFactory synchronizerFactory
@@ -99,15 +97,10 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
 //        });
 
         comps.controlsComponent().getPlayPauseButton().addActionListener(e -> {
-            if (isPlaying) {
-                controller.handlePauseAction();
-                comps.controlsComponent().setPlayPauseState(isPlaying);
-            } else {
-                controller.handlePlayAction();
-                comps.controlsComponent().setPlayPauseState(isPlaying);
-            }
 
-            isPlaying = !isPlaying;
+            controller.handlePlayPauseToggleAction();
+            comps.controlsComponent().setPlayPauseState(controller.isPlayingAudio());
+
         });
     }
 

@@ -59,5 +59,18 @@ public class DefaultAudioPlayerController implements AudioPlayerController {
         playerService.seekMusic(microsecPosition);
     }
 
+    @Override
+    public boolean isPlayingAudio() {
+        return playerService.isPlayingAudio();
+    }
+
+    @Override
+    public void handlePlayPauseToggleAction() {
+        if (playerService.isPlayingAudio()) {
+            playerService.stopMusic();
+        } else {
+            playerService.playMusic();
+        }
+    }
 
 }

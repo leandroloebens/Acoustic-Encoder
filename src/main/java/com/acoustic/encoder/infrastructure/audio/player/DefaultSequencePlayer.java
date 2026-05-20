@@ -58,4 +58,10 @@ public class DefaultSequencePlayer implements SequencePlayer {
     public void setMicrosecPosition(long microsecPosition) {
         this.sequencer.setMicrosecondPosition(microsecPosition);
     }
+
+    @Override
+    public boolean isPlaying() {
+        return this.sequencer.isRunning();
+    }
+
 }

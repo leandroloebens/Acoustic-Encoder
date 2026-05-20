@@ -25,4 +25,6 @@ public interface AudioPlayerService {
     long getMicrosecDuration();
 
     void seekMusic(long microsecPosition);
+
+    boolean isPlayingAudio();
 }

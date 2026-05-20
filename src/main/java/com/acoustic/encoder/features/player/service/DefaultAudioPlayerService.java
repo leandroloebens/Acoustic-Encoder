@@ -65,4 +65,9 @@ public class DefaultAudioPlayerService implements AudioPlayerService {
     public void seekMusic(long microsecPosition) {
         player.seekMusic(microsecPosition);
     }
+
+    @Override
+    public boolean isPlayingAudio() {
+        return player.isPlaying();
+    }
 }

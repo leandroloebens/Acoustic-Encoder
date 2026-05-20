@@ -23,4 +23,8 @@ public interface AudioPlayerController {
 
     void handleSeekAction(long microsecPosition);
 
+    boolean isPlayingAudio();
+
+    void handlePlayPauseToggleAction();
+
 }
