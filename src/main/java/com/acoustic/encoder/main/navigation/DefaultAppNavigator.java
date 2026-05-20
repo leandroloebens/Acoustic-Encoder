@@ -67,7 +67,7 @@ public class DefaultAppNavigator implements AppNavigator {
 
     @Override
     public void displayPlayerScreen() {
-        this.playerScreen.startFrame();
+        this.playerScreen.showWindow();
     }
 
     private void destroyStartScreen() {

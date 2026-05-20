@@ -63,7 +63,6 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
         this.synchronizer = binder.bind(controller, frame, assembler.getComponents());
 
-        showFrame();
     }
 
     @Override
@@ -82,5 +81,11 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
         frame.setVisible(false);
     }
 
-    // void destroyFrame();
+    @Override
+    public void disposeFrame() {
+        synchronizer.stopSync();
+        binder.unbind();
+        frame.dispose();
+
+    }
 }

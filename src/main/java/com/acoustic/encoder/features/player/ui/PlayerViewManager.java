@@ -10,6 +10,6 @@ public interface PlayerViewManager {
 
     void hideFrame();
 
-    // void destroyFrame();
+    void disposeFrame();
 
 }
