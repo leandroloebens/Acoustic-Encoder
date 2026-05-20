@@ -5,6 +5,7 @@ import com.acoustic.encoder.features.player.ui.swing.components.PlayerFooterComp
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingViewConfigWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.IconLoader;
 
@@ -54,7 +55,9 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
 
         return new PlayerFooterComponent(
                 createSaveButton(saveIcon),
-                createSeekBar()
+                createSeekBar(),
+                createCurrentTimeLabel(),
+                createDurationTimeLabel()
         );
     }
 
@@ -73,7 +76,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     private SwingButton createRewindButton(Icon rewindIcon) {
 
         return new SwingButton(
-                config.getString("REWIND_BUTTON_TEXT"),
+                null,
                 null,
                 20,
                 rewindIcon,
@@ -85,7 +88,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     private SwingButton createForwardButton(Icon forwardIcon) {
 
         return new SwingButton(
-                config.getString("FORWARD_BUTTON_TEXT"),
+                null,
                 null,
                 20,
                 forwardIcon,
@@ -97,7 +100,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     private SwingButton createSaveButton(Icon saveIcon) {
 
         return new SwingButton(
-                config.getString("SAVE_BUTTON_TEXT"),
+                null,
                 null,
                 20,
                 saveIcon,
@@ -117,6 +120,26 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 10,
                 1000000,
                 null,
+                null
+        );
+    }
+
+    private SwingLabel createCurrentTimeLabel() {
+
+        return new SwingLabel(
+                null,
+                null,
+                15,
+                null
+        );
+    }
+
+    private SwingLabel createDurationTimeLabel() {
+
+        return new SwingLabel(
+                null,
+                null,
+                15,
                 null
         );
     }

@@ -17,7 +17,7 @@ import java.awt.event.WindowEvent;
 
 public class DefaultSwingConversionViewManager implements ConversionViewManager {
 
-    private final static String WINDOW_TITLE = "Text To Sound";
+    private final static String WINDOW_TITLE = "Acoustic Encoder - Text 2 Sound";
     private final static int WINDOW_MIN_HEIGHT = (int) (600 * SwingUtils.getScreenScaleRatio());
     private final static int WINDOW_MIN_WIDTH = (int) (850 * SwingUtils.getScreenScaleRatio());
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;

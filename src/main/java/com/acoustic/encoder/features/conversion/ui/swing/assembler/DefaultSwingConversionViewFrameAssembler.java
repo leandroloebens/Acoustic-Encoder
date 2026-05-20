@@ -16,8 +16,13 @@ import java.awt.*;
 
 public class DefaultSwingConversionViewFrameAssembler implements SwingConversionViewFrameAssembler {
 
-    private final static int BORDERLAYOUT_HGAP = 10;
-    private final static int BORDERLAYOUT_WGAP = 10;
+    private final static int BORDERLAYOUT_HGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private final static int BORDERLAYOUT_VGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+
+    private final static int BUTTONS_PANEL_TGAP = (int) (0 * SwingUtils.getScreenScaleRatio());
+    private final static int BUTTONS_PANEL_LGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private final static int BUTTONS_PANEL_BGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private final static int BUTTONS_PANEL_RGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
 
     private final static int BUTTONS_VGAP = (int) (7 * SwingUtils.getScreenScaleRatio());
     private final static int BUTTONS_HGAP = (int) (7 * SwingUtils.getScreenScaleRatio());
@@ -63,11 +68,11 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
         SwingFrame frame = new SwingFrame(title, windowInitialSize, frameExitOperation);
 
-        frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
+        frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_VGAP));
 
         SwingPanel buttonsPanel = createButtonsPanel();
 
-        SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
+        SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_VGAP));
         conversionPanel.add(mainTextAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
@@ -128,6 +133,13 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         buttonsPanel.add(converterButton);
 
         buttonsPanel.add(Box.createVerticalStrut(BUTTONS_VGAP));
+
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(
+                BUTTONS_PANEL_TGAP,
+                BUTTONS_PANEL_LGAP,
+                BUTTONS_PANEL_BGAP,
+                BUTTONS_PANEL_RGAP
+        ));
 
         return buttonsPanel;
     }
