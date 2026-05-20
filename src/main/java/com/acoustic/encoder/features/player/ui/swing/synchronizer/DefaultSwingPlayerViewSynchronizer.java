@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.player.ui.swing.synchronizer;
 
+import com.acoustic.encoder.features.player.playback.PlaybackProgressFormatter;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 
@@ -71,11 +72,11 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         if (!isSyncing) return;
 
         syncPlaybackSeekBar();
+        syncProgressTimeLabel();
         syncPlayPauseButton();
     }
 
     private void syncPlaybackSeekBar() {
-
         SwingSeekBar playbackSeekBar = components.footerComponent().getPlaybackSeekBar();
 
         if (playbackSeekBar.getValueIsAdjusting()) {
@@ -85,11 +86,12 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         this.isUpdatingProgrammatically = true;
         try {
             //TODO validade supliers values and handle error cases
-            int newPosition = (int) Math.round(
-                    (double) playbackSeekBar.getMaximum()
-                            * microsecPositionSupplier.getAsLong()
-                            / microsecDurationSupplier.getAsLong()
+            int newPosition = PlaybackProgressFormatter.toSliderValue(
+                    microsecPositionSupplier.getAsLong(),
+                    microsecDurationSupplier.getAsLong(),
+                    playbackSeekBar.getMaximum()
             );
+
             components.footerComponent().getPlaybackSeekBar().setValue(newPosition);
         }
         finally {
@@ -101,5 +103,15 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     private void syncPlayPauseButton() {
         boolean isPlaying = playingStateSupplier.getAsBoolean();
         components.controlsComponent().setPlayPauseState(isPlaying);
+    }
+
+    private void syncProgressTimeLabel() {
+        long current = microsecPositionSupplier.getAsLong();
+        long total = microsecDurationSupplier.getAsLong();
+
+        components.footerComponent().setProgressTimeLabel(
+                PlaybackProgressFormatter.toTimeText(current),
+                PlaybackProgressFormatter.toTimeText(total)
+        );
     }
 }
