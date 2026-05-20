@@ -28,10 +28,13 @@ public class PlayerFooterComponent extends JPanel {
         setLayout(new BorderLayout(10, 0));
         setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        SwingUtils.setHandCursor(saveButton);
+        SwingUtils.setHandCursor(saveButton, playbackSeekBar);
 
         //setBackground(Color.BLUE);
         setBackground(new Color(18,18,18));
+
+        saveButton.setContentAreaFilled(false);
+        saveButton.setBorderPainted(false);
 
         add(playbackSeekBar, BorderLayout.CENTER);
         add(saveButton, BorderLayout.EAST);

@@ -5,6 +5,7 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekB
 
 import javax.swing.*;
 import java.util.Objects;
+import java.util.function.BooleanSupplier;
 import java.util.function.LongSupplier;
 
 public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchronizer {
@@ -17,13 +18,16 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     private final LongSupplier microsecPositionSupplier;
     private final LongSupplier microsecDurationSupplier;
 
+    private final BooleanSupplier playingStateSupplier;
+
     private boolean isSyncing = false;
     private boolean isUpdatingProgrammaticaly = false;
 
     public DefaultSwingPlayerViewSynchronizer(
             PlayerViewComponentsWrapper components,
             LongSupplier microsecPositionSupplier,
-            LongSupplier microsecDurationSupplier
+            LongSupplier microsecDurationSupplier,
+            BooleanSupplier playingStateSupplier
     ) {
         Objects.requireNonNull(components, "Components cannot be null!");
         Objects.requireNonNull(microsecPositionSupplier, "MicrosecPositionSupplier cannot be null!");
@@ -32,6 +36,8 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         this.components = components;
         this.microsecPositionSupplier = microsecPositionSupplier;
         this.microsecDurationSupplier = microsecDurationSupplier;
+
+        this.playingStateSupplier = playingStateSupplier;
 
         this.syncTimer = new Timer(SYNC_MILLISEC_INTERVAL, e -> syncState());
     }
@@ -65,7 +71,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         if (!isSyncing) return;
 
         syncPlaybackSeekBar();
-
+        syncPlayPauseButton();
     }
 
     private void syncPlaybackSeekBar() {
@@ -91,4 +97,8 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
 
     }
 
+    private void syncPlayPauseButton() {
+        boolean isPlaying = playingStateSupplier.getAsBoolean();
+        components.controlsComponent().setPlayPauseState(isPlaying);
+    }
 }
