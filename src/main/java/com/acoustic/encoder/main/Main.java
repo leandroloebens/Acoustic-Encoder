@@ -40,7 +40,7 @@ public class Main {
     void main() throws Exception {
         // Register custom font
         SwingFontUtils.loadFontsToSystem("ui/fonts");
-        SwingFontUtils.printAvailableFonts();
+//        SwingFontUtils.printAvailableFonts();
 
         // Set Look and Feel
         FlatLaf.registerCustomDefaultsSource("themes");

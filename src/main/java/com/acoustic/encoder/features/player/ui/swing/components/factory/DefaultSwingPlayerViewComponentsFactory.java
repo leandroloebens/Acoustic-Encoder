@@ -73,7 +73,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     private SwingButton createRewindButton(Icon rewindIcon) {
 
         return new SwingButton(
-                config.getString("REWIND_BUTTON_TEXT"),
+                null,
                 null,
                 20,
                 rewindIcon,
@@ -85,7 +85,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     private SwingButton createForwardButton(Icon forwardIcon) {
 
         return new SwingButton(
-                config.getString("FORWARD_BUTTON_TEXT"),
+                null,
                 null,
                 20,
                 forwardIcon,
@@ -97,7 +97,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     private SwingButton createSaveButton(Icon saveIcon) {
 
         return new SwingButton(
-                config.getString("SAVE_BUTTON_TEXT"),
+                null,
                 null,
                 20,
                 saveIcon,

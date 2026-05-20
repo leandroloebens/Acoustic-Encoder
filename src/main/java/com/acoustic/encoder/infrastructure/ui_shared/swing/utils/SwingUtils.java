@@ -38,7 +38,6 @@ public class SwingUtils {
         dialog.setVisible(true);
     }
 
-
     public static void showWarningMessage(Component parent, String message) {
         JOptionPane pane = new JOptionPane(message, JOptionPane.WARNING_MESSAGE);
         JDialog dialog = pane.createDialog(parent, "Warning");

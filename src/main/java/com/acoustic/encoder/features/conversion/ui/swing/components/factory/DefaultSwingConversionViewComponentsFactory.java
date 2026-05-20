@@ -45,7 +45,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
     @Override
     public ConversionViewSwingComponentsWrapper createComponents() {
 
-        SwingButton conversionButton = createConverterButton();
+        SwingButton conversionButton = createConversionButton();
 
         SwingButton saveTextButton = createSaveTextButton();
 
@@ -94,10 +94,10 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         textArea.enableUndoRedo();
 
         Border scrollPaneBorder = BorderFactory.createEmptyBorder(
-                config.getInt("MAIN_SCROLL_TEXTAREA_TGAP"),
-                config.getInt("MAIN_SCROLL_TEXTAREA_LGAP"),
-                config.getInt("MAIN_SCROLL_TEXTAREA_BGAP"),
-                config.getInt("MAIN_SCROLL_TEXTAREA_RGAP")
+                config.getScaledInt("MAIN_SCROLL_TEXTAREA_TGAP"),
+                config.getScaledInt("MAIN_SCROLL_TEXTAREA_LGAP"),
+                config.getScaledInt("MAIN_SCROLL_TEXTAREA_BGAP"),
+                config.getScaledInt("MAIN_SCROLL_TEXTAREA_RGAP")
         );
 
         SwingVerticalScrollPane scrollPane = new SwingVerticalScrollPane(
@@ -107,10 +107,10 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         );
 
         Border instructionLabelBorder = BorderFactory.createEmptyBorder(
-                config.getInt("INSTRUCTION_LABEL_TGAP"),
-                config.getInt("INSTRUCTION_LABEL_LGAP"),
-                config.getInt("INSTRUCTION_LABEL_BGAP"),
-                config.getInt("INSTRUCTION_LABEL_RGAP")
+                config.getScaledInt("INSTRUCTION_LABEL_TGAP"),
+                config.getScaledInt("INSTRUCTION_LABEL_LGAP"),
+                config.getScaledInt("INSTRUCTION_LABEL_BGAP"),
+                config.getScaledInt("INSTRUCTION_LABEL_RGAP")
         );
 
         SwingLabel instructionLabel = new SwingLabel(
@@ -126,12 +126,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         );
     }
 
-    private SwingButton createConverterButton() {
-        Dimension conversionButtonSize = new Dimension(
-                config.getInt("CONVERSION_BUTTON_WIDTH"),
-                config.getInt("CONVERSION_BUTTON_HEIGHT")
-        );
-
+    private SwingButton createConversionButton() {
         SwingButton button = new SwingButton(
                 config.getString("CONVERSION_BUTTON_TEXT"),
                 null,
@@ -141,41 +136,30 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 null
         );
 
-        button.putClientProperty("FlatLaf.style",
-                "foreground: #dd0000; hoverBackground: #cc0000; hoverForeground: #222222; hoverBorderColor: #660000;");
+        button.putClientProperty("FlatLaf.style", config.getString("CONVERSION_BUTTON_FLATLAF_STYLE"));
 
         return button;
     }
 
     private SwingButton createSaveTextButton() {
-        Dimension saveButtonSize = new Dimension(
-                config.getInt("SAVE_TEXT_BUTTON_WIDTH"),
-                config.getInt("SAVE_TEXT_BUTTON_HEIGHT")
-        );
-
         return new SwingButton(
                 config.getString("SAVE_TEXT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("SAVE_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null,
-                null
+                config.getScaledDimension("OPTION_BUTTON_PREFERRED_SIZE")
         );
     }
 
     private SwingButton createLoadTextButton() {
-        Dimension loadButtonSize = new Dimension(
-                config.getInt("LOAD_TEXT_BUTTON_WIDTH"),
-                config.getInt("LOAD_TEXT_BUTTON_HEIGHT")
-        );
-
         return new SwingButton(
                 config.getString("LOAD_TEXT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("LOAD_TEXT_BUTTON_FONT_SIZE"),
                 null,
                 null,
-                null
+                config.getScaledDimension("OPTION_BUTTON_PREFERRED_SIZE")
         );
     }
 
@@ -186,7 +170,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getScaledInt("SAVE_PROJECT_BUTTON_FONT_SIZE"),
                 null,
                 null,
-                null
+                config.getScaledDimension("OPTION_BUTTON_PREFERRED_SIZE")
         );
     }
 
@@ -197,7 +181,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getScaledInt("LOAD_PROJECT_BUTTON_FONT_SIZE"),
                 null,
                 null,
-                null
+                config.getScaledDimension("OPTION_BUTTON_PREFERRED_SIZE")
         );
     }
 
