@@ -72,7 +72,8 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
         return new DefaultConversionScreen(
                 new DefaultConversionController(this.conversionService, this.textRepository),
-                managerFactory.createViewManager()
+                managerFactory.createViewManager(),
+                eventBus
         );
     }
 

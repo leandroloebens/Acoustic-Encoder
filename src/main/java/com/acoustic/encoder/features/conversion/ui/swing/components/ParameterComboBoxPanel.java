@@ -51,4 +51,8 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
         return (JTextField) this.comboBox.getEditor().getEditorComponent();
     }
 
+    public boolean isEditorInputValid() {
+        return comboBox.finishEditing();
+    }
+
 }

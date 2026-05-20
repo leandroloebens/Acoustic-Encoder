@@ -89,11 +89,13 @@ public class MusicParametersState {
 
     @Override
     public String toString() {
-        String text = "MusicParametersState{" + "\n\tbpm=" + bpm;
+        String text = "MusicParametersState {" + "\n\t" + bpm;
 
         for (int i = 0; i < getNumberOfVoices(); i++) {
             text = text.concat("\n\tVoice " + i + ": " + voices.get(i));
         }
+
+        text = text.concat("\n}");
 
         return text;
     }

@@ -55,6 +55,6 @@ public class VoiceParametersState {
 
     @Override
     public String toString() {
-        return "instrument=" + instrument + ", volume=" + volume + ", octave=" + octave;
+        return instrument + ", " + volume + ", " + octave;
     }
 }
