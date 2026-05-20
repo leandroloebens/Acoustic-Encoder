@@ -1,4 +1,4 @@
-package com.acoustic.encoder.infrastructure.ui_shared;
+package com.acoustic.encoder.infrastructure.ui_shared.config;
 
 import java.io.IOException;
 import java.io.InputStream;

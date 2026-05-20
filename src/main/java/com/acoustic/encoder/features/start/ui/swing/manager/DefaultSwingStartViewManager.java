@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.start.ui.swing;
+package com.acoustic.encoder.features.start.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.start.controller.StartController;
@@ -18,8 +18,8 @@ public class DefaultSwingStartViewManager implements StartViewManager {
 
     private static final String WINDOW_TITLE = "Acoustic Encoder";
 
-    private static final int WINDOW_MIN_HEIGHT = (int) (750 * SwingUtils.getScreenScaleRatio());
-    private static final int WINDOW_MIN_WIDTH = (int) (850 * SwingUtils.getScreenScaleRatio());
+    private static final int WINDOW_MIN_HEIGHT = (int) (500 * SwingUtils.getScreenScaleRatio());
+    private static final int WINDOW_MIN_WIDTH = (int) (750 * SwingUtils.getScreenScaleRatio());
 
     private static final int FRAME_EXIT_OPERATION = JFrame.DO_NOTHING_ON_CLOSE;
 

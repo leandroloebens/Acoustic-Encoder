@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.start.controller;
 
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.ports.TextRepository;
 import com.acoustic.encoder.features.start.service.StartService;
 
@@ -25,7 +25,7 @@ public class DefaultStartController implements StartController {
     }
 
     @Override
-    public UserConversionInput handleOpenProjectAction(File file) {
+    public MusicProject handleOpenProjectAction(File file) {
 
         if (file == null) throw new IllegalArgumentException(NULL_FILE_ARGUMENT_MSG);
         return textRepository.loadProject(file);
@@ -33,7 +33,7 @@ public class DefaultStartController implements StartController {
     }
 
     @Override
-    public UserConversionInput handleNewProjectAction() {
+    public MusicProject handleNewProjectAction() {
         return startService.getDefaultMusicProject();
     }
 

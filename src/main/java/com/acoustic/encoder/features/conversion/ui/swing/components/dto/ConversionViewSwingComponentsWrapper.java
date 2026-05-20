@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.conversion.ui.swing.components.dto;
 
+import com.acoustic.encoder.features.conversion.ui.swing.components.MainTextAreaPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelectorPanel;
@@ -13,8 +14,8 @@ public record ConversionViewSwingComponentsWrapper(
         SwingButton saveTextButton,
         SwingButton loadTextButton,
         SwingButton saveProjectButton,
-        SwingVerticalScrollPane scrollPane,
-        SwingLabel instructionLabel,
+        SwingButton loadProjectButton,
+        MainTextAreaPanel mainTextAreaPanel,
         VoiceSelectorPanel voiceSelector,
         ParameterSliderPanel volumePanel,
         ParameterSliderPanel octavePanel,

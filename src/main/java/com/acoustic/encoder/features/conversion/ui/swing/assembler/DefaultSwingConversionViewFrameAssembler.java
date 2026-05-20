@@ -2,6 +2,7 @@
 package com.acoustic.encoder.features.conversion.ui.swing.assembler;
 
 
+import com.acoustic.encoder.features.conversion.ui.swing.components.MainTextAreaPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelectorPanel;
@@ -31,8 +32,8 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
     private final SwingButton saveTextButton;
     private final SwingButton loadTextButton;
     private final SwingButton saveProjectButton;
-    private final SwingLabel instructionLabel;
-    private final SwingVerticalScrollPane scrollPane;
+    private final SwingButton loadProjectButton;
+    private final MainTextAreaPanel mainTextAreaPanel;
     private final VoiceSelectorPanel voiceSelector;
     private final ParameterSliderPanel volumePanel;
     private final ParameterSliderPanel octavePanel;
@@ -44,8 +45,8 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         this.saveTextButton = components.saveTextButton();
         this.loadTextButton = components.loadTextButton();
         this.saveProjectButton = components.saveProjectButton();
-        this.instructionLabel = components.instructionLabel();
-        this.scrollPane = components.scrollPane();
+        this.loadProjectButton = components.loadProjectButton();
+        this.mainTextAreaPanel = components.mainTextAreaPanel();
         this.voiceSelector = components.voiceSelector();
         this.volumePanel = components.volumePanel();
         this.octavePanel = components.octavePanel();
@@ -65,10 +66,9 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         frame.setLayout(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
 
         SwingPanel buttonsPanel = createButtonsPanel();
-        SwingPanel textAreaPanel = createTextAreaPanel();
 
         SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_WGAP));
-        conversionPanel.add(textAreaPanel, BorderLayout.CENTER);
+        conversionPanel.add(mainTextAreaPanel, BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
         SwingPanel configPanel = createConfigPanel();
@@ -76,7 +76,6 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         configPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         configPanel.setMaximumSize(new Dimension(CONFIG_PANEL_MAX_WIDTH, Integer.MAX_VALUE));
 
-        instrumentPanel.getComboBox().sortItemsAscending();
         SwingPanel configWrapper = new SwingPanel(new GridBagLayout());
         configWrapper.add(configPanel);
 
@@ -99,8 +98,8 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
                 saveTextButton,
                 loadTextButton,
                 saveProjectButton,
-                scrollPane,
-                instructionLabel,
+                loadProjectButton,
+                mainTextAreaPanel,
                 voiceSelector,
                 volumePanel,
                 octavePanel,
@@ -109,24 +108,11 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         );
     }
 
-    private SwingPanel createTextAreaPanel() {
-        SwingPanel textAreaPanel = new SwingPanel();
-        textAreaPanel.setLayout(new BoxLayout(textAreaPanel, BoxLayout.Y_AXIS));
-
-        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-        instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        textAreaPanel.add(instructionLabel);
-        textAreaPanel.add(Box.createVerticalStrut(10));
-        textAreaPanel.add(scrollPane);
-
-        return textAreaPanel;
-    }
-
     private SwingPanel createButtonsPanel() {
         SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, BUTTONS_HGAP, BUTTONS_VGAP));
         fileButtonsPanel.add(loadTextButton);
         fileButtonsPanel.add(saveTextButton);
+        fileButtonsPanel.add(loadProjectButton);
         fileButtonsPanel.add(saveProjectButton);
 
         fileButtonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);

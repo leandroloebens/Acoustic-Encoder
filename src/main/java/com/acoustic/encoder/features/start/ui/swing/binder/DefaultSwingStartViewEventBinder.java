@@ -2,7 +2,7 @@ package com.acoustic.encoder.features.start.ui.swing.binder;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.start.controller.StartController;
 import com.acoustic.encoder.features.start.ui.swing.components.dto.StartViewSwingComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
@@ -78,7 +78,7 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
             );
 
             if (fileToLoad != null) {
-                UserConversionInput project = controller.handleOpenProjectAction(fileToLoad);
+                MusicProject project = controller.handleOpenProjectAction(fileToLoad);
 
                 if (project != null)
                     eventBus.publish(new ProjectReadyToOpen(project));
@@ -102,7 +102,7 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
             EventBus eventBus
     ) {
         ActionListener newProjectListener = event -> {
-            UserConversionInput project = controller.handleNewProjectAction();
+            MusicProject project = controller.handleNewProjectAction();
             eventBus.publish(new ProjectReadyToOpen(project));
         };
 

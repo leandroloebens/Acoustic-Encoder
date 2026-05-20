@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.ports;
 
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.features.conversion.dto.MusicProject;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ public interface TextRepository {
 
     String loadText(File file) throws IOException;
 
-    void saveProject(UserConversionInput input, File file);
+    void saveProject(MusicProject input, File file);
 
-    UserConversionInput loadProject(File file);
+    MusicProject loadProject(File file);
 }

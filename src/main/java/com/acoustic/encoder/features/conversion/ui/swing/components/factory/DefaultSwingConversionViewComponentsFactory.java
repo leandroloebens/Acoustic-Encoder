@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.conversion.ui.swing.components.factory;
 
+import com.acoustic.encoder.features.conversion.ui.swing.components.MainTextAreaPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.domain.music.InstrumentOption;
@@ -52,10 +53,45 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         SwingButton saveProjectButton = createSaveProjectButton();
 
-        SwingUtils.setHandCursor(conversionButton, saveTextButton, loadTextButton, saveProjectButton);
+        SwingButton loadProjectButton = createLoadProjectButton();
 
+        SwingUtils.setHandCursor(
+                conversionButton, saveTextButton, loadTextButton, saveProjectButton, loadProjectButton);
+
+        MainTextAreaPanel mainTextAreaPanel = createMainTextAreaPanel();
+
+        ParameterSliderPanel bpmPanel = createBpmPanel();
+
+        VoiceSelectorPanel voiceSelector = createVoiceSelector();
+
+        ParameterSliderPanel volumePanel = createVolumePanel();
+
+        ParameterSliderPanel octavePanel = createOctavePanel();
+
+        SwingUtils.setHandCursor(volumePanel.getSlider(), octavePanel.getSlider(), bpmPanel.getSlider());
+
+        ParameterComboBoxPanel<InstrumentOption> instrumentPanel = createInstrumentPanel();
+
+        return new ConversionViewSwingComponentsWrapper(
+                conversionButton,
+                saveTextButton,
+                loadTextButton,
+                saveProjectButton,
+                loadProjectButton,
+                mainTextAreaPanel,
+                voiceSelector,
+                volumePanel,
+                octavePanel,
+                instrumentPanel,
+                bpmPanel
+        );
+    }
+
+    private MainTextAreaPanel createMainTextAreaPanel() {
         SwingTextArea textArea =
                 new SwingTextArea(null, config.getScaledInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"), null);
+
+        textArea.enableUndoRedo();
 
         Border scrollPaneBorder = BorderFactory.createEmptyBorder(
                 config.getInt("MAIN_SCROLL_TEXTAREA_TGAP"),
@@ -76,6 +112,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("INSTRUCTION_LABEL_BGAP"),
                 config.getInt("INSTRUCTION_LABEL_RGAP")
         );
+
         SwingLabel instructionLabel = new SwingLabel(
                 config.getString("INSTRUCTION_LABEL_TEXT"),
                 null,
@@ -83,30 +120,9 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 instructionLabelBorder
         );
 
-        ParameterSliderPanel bpmPanel = createBpmPanel();
-
-        VoiceSelectorPanel voiceSelector = createVoiceSelector();
-
-        ParameterSliderPanel volumePanel = createVolumePanel();
-
-        ParameterSliderPanel octavePanel = createOctavePanel();
-
-        SwingUtils.setHandCursor(volumePanel.getSlider(), octavePanel.getSlider(), bpmPanel.getSlider());
-
-        ParameterComboBoxPanel<InstrumentOption> instrumentPanel = createInstrumentPanel();
-
-        return new ConversionViewSwingComponentsWrapper(
-                conversionButton,
-                saveTextButton,
-                loadTextButton,
-                saveProjectButton,
+        return new MainTextAreaPanel(
                 scrollPane,
-                instructionLabel,
-                voiceSelector,
-                volumePanel,
-                octavePanel,
-                instrumentPanel,
-                bpmPanel
+                instructionLabel
         );
     }
 
@@ -120,6 +136,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getString("CONVERSION_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("CONVERSION_BUTTON_FONT_SIZE"),
+                null,
                 null,
                 null
         );
@@ -136,6 +153,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 null,
                 config.getScaledInt("SAVE_TEXT_BUTTON_FONT_SIZE"),
                 null,
+                null,
                 null
         );
     }
@@ -151,6 +169,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 null,
                 config.getScaledInt("LOAD_TEXT_BUTTON_FONT_SIZE"),
                 null,
+                null,
                 null
         );
     }
@@ -160,6 +179,18 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getString("SAVE_PROJECT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("SAVE_PROJECT_BUTTON_FONT_SIZE"),
+                null,
+                null,
+                null
+        );
+    }
+
+    private SwingButton createLoadProjectButton() {
+        return new SwingButton(
+                config.getString("LOAD_PROJECT_BUTTON_TEXT"),
+                null,
+                config.getScaledInt("LOAD_PROJECT_BUTTON_FONT_SIZE"),
+                null,
                 null,
                 null
         );

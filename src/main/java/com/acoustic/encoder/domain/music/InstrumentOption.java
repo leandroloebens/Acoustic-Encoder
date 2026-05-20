@@ -13,7 +13,7 @@ public record InstrumentOption(String name, int id) {
 
     @Override
     public String toString() {
-        return name;
+        return id + " - " + name;
     }
 
 }

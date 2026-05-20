@@ -64,7 +64,7 @@ public class MusicParametersState {
         }
     }
 
-    public VoiceParametersState getIndexedVoice(int index) {
+    public VoiceParametersState getSelectedVoice(int index) {
         if (index < 0 || index >= getNumberOfVoices()) {
             throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
         }
@@ -79,7 +79,7 @@ public class MusicParametersState {
 
     public void setAllVoices(List<VoiceParametersState> voiceParameters) { this.voices = voiceParameters; }
 
-    public void setIndexedVoice(int index, VoiceParametersState voiceParameters) {
+    public void setSelectedVoice(int index, VoiceParametersState voiceParameters) {
         if (index >= 0 && index < getNumberOfVoices())
             voices.set(index, voiceParameters);
         else throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);

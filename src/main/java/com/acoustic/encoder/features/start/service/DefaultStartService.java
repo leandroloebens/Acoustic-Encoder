@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.start.service;
 
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.start.config.MusicProjectConfigLoader;
 
 public class DefaultStartService implements StartService {
@@ -15,7 +15,7 @@ public class DefaultStartService implements StartService {
     }
 
     @Override
-    public UserConversionInput getDefaultMusicProject() {
+    public MusicProject getDefaultMusicProject() {
         MusicProjectConfigLoader configLoader = new MusicProjectConfigLoader(defaultMusicProjectPath);
 
         return configLoader.loadMusicProject();

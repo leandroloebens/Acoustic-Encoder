@@ -14,7 +14,7 @@ public class SwingUtils {
     private static final int DEFAULT_FILE_CHOOSER_HEIGHT = 400;
     private static final int DEFAULT_FILE_CHOOSER_FONT_SIZE = 14;
 
-    private static final float DEFAULT_SCREEN_HEIGHT = 1080;
+    private static final int DEFAULT_SCREEN_HEIGHT = 1080;
 
     private static final String INVALID_FILE_OPERATION_MSG =
             "Operation must be either SAVE_FILE_OPERATION or LOAD_FILE_OPERATION!";
@@ -29,7 +29,29 @@ public class SwingUtils {
         for (Component component : components) {
             component.setCursor(hand);
         }
-}
+    }
+
+    public static void showMessage(Component parent, String message) {
+        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = pane.createDialog(parent, "Message");
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+
+
+    public static void showWarningMessage(Component parent, String message) {
+        JOptionPane pane = new JOptionPane(message, JOptionPane.WARNING_MESSAGE);
+        JDialog dialog = pane.createDialog(parent, "Warning");
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
+
+    public static void showErrorMessage(Component parent, String message) {
+        JOptionPane pane = new JOptionPane(message, JOptionPane.ERROR_MESSAGE);
+        JDialog dialog = pane.createDialog(parent, "Error");
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+    }
 
     public static File getFileFromChooser(
             int operation,

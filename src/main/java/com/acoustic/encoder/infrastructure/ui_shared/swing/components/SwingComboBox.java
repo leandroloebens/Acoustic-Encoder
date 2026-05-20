@@ -155,7 +155,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
         return ITEM_NOT_FOUND_INDEX;
     }
 
-    public void setSelectedOriginalIndex(int index) {
+    public void setSelectedByOriginalIndex(int index) {
         if (index < 0 || index >= this.originalItems.size()) {
             return;
         }
@@ -212,7 +212,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
         }
     }
 
-    public boolean isEditorInputValid() {
+    private boolean isEditorInputValid() {
         String text = getEditorText();
 
         for (T item : originalItems) {
@@ -223,7 +223,15 @@ public class SwingComboBox<T> extends JComboBox<T> {
         return false;
     }
 
-    public void commitEditorInput() {
+    private int getOriginalIndex(T item) {
+        if (originalItems.contains(item)) {
+            return originalItems.indexOf(item);
+        }
+        else
+            return ITEM_NOT_FOUND_INDEX;
+    }
+
+    private void commitEditorInput() {
         String text = getEditorText();
 
         for (T item : originalItems) {
@@ -239,7 +247,7 @@ public class SwingComboBox<T> extends JComboBox<T> {
         }
     }
 
-    public void restoreLastValidInput() {
+    private void restoreLastValidInput() {
         updatingModel = true;
 
         JTextField editor = (JTextField) this.getEditor().getEditorComponent();
@@ -271,6 +279,11 @@ public class SwingComboBox<T> extends JComboBox<T> {
         for (T item : originalItems) {
             if (item.toString().toLowerCase().startsWith(text.toLowerCase()))
                 filteredItems.add(item);
+            else {
+                String substring = parseAfterFirstDash(item.toString());
+                if (substring.toLowerCase().startsWith(text.toLowerCase()))
+                    filteredItems.add(item);
+            }
         }
 
         filteredItems = sortItems(filteredItems);
@@ -333,5 +346,12 @@ public class SwingComboBox<T> extends JComboBox<T> {
             });
 
         updatingModel = false;
+    }
+
+    public static String parseAfterFirstDash(String text) {
+        if (text == null) return "";
+        int dashIndex = text.indexOf('-');
+        if (dashIndex == -1 || dashIndex == text.length() - 1) return "";
+        return text.substring(dashIndex + 1).trim();
     }
 }

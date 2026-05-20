@@ -1,6 +1,5 @@
 package com.acoustic.encoder.main;
 
-
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
@@ -21,6 +20,8 @@ import com.acoustic.encoder.infrastructure.audio.player.command.DefaultMidiComma
 import com.acoustic.encoder.infrastructure.audio.player.track.DefaultTrackWriter;
 import com.acoustic.encoder.infrastructure.event.DefaultEventBus;
 import com.acoustic.encoder.infrastructure.file.FileTextRepository;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingFontUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 import com.acoustic.encoder.main.factory.DefaultScreenFactory;
 import com.acoustic.encoder.main.navigation.DefaultAppNavigator;
 import com.acoustic.encoder.main.navigation.listener.NavigationConversionCompletedListener;
@@ -36,13 +37,22 @@ import javax.sound.midi.MidiSystem;
 public class Main {
 
     void main() throws Exception {
+        // Register custom font
+        SwingFontUtils.loadFontsToSystem("ui/fonts");
+        SwingFontUtils.printAvailableFonts();
+
         // Set Look and Feel
         FlatLaf.registerCustomDefaultsSource("themes");
+        System.setProperty(
+                "flatlaf.uiScale",
+                String.format(java.util.Locale.US, "%.2fx", SwingUtils.getScreenScaleRatio())
+        );
         FlatDarkLaf.setup();
 //        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 //        FlatLightLaf.setup();
 //        FlatDarculaLaf.setup();
 //        FlatIntelliJLaf.setup();
+
 
         // Event Bus
         var eventBus = new DefaultEventBus();

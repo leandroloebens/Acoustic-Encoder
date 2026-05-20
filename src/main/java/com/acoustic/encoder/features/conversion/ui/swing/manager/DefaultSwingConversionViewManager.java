@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.ui.swing;
+package com.acoustic.encoder.features.conversion.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
@@ -6,6 +6,7 @@ import com.acoustic.encoder.features.conversion.event.ConversionScreenClosedEven
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.ui.swing.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.SwingConversionViewEventBinder;
+import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
@@ -17,13 +18,15 @@ import java.awt.event.WindowEvent;
 public class DefaultSwingConversionViewManager implements ConversionViewManager {
 
     private final static String WINDOW_TITLE = "Text To Sound";
-    private final static int WINDOW_MIN_HEIGHT = (int) (750 * SwingUtils.getScreenScaleRatio());
+    private final static int WINDOW_MIN_HEIGHT = (int) (600 * SwingUtils.getScreenScaleRatio());
     private final static int WINDOW_MIN_WIDTH = (int) (850 * SwingUtils.getScreenScaleRatio());
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
     private final SwingConversionViewFrameAssembler assembler;
 
     private final SwingConversionViewEventBinder binder;
+
+    private SwingConversionViewSynchronizer synchronizer;
 
     private final EventBus eventBus;
 
@@ -64,18 +67,24 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
             }
         });
 
-        binder.bind(conversionController, frame, assembler.getComponents());
+        synchronizer = binder.bind(conversionController, frame, assembler.getComponents());
+
+        synchronizer.enableSync();
 
     }
 
     @Override
-    public void show() { frame.setVisible(true); }
+    public void show() {
+        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> frame.requestFocusInWindow());
+    }
 
     @Override
     public void hide() { frame.setVisible(false); }
 
     @Override
     public void dispose() {
+        synchronizer.disableSync();
         binder.unbind();
         frame.dispose();
     }

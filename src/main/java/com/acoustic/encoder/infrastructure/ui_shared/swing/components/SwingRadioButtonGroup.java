@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SwingRadioButtonGroup extends ButtonGroup {
 
@@ -44,8 +45,7 @@ public class SwingRadioButtonGroup extends ButtonGroup {
 
                 button.setIcon(scaledIcon);
 
-                if (selectedIcon != null) button.setSelectedIcon(selectedIcon);
-                else button.setSelectedIcon(scaledIcon);
+                button.setSelectedIcon(Objects.requireNonNullElse(selectedIcon, scaledIcon));
 
                 button.setVerticalTextPosition(SwingConstants.BOTTOM);
                 button.setHorizontalTextPosition(SwingConstants.CENTER);

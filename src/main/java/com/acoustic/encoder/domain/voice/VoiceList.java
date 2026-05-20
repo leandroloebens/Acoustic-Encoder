@@ -15,7 +15,7 @@ public final class VoiceList {
         Objects.requireNonNull(voice, "Voice cannot be null!");
 
         if (voices.size() >= MAX_VOICES) {
-            throw new IllegalStateException("Maximum number of voices reached!");
+            throw new IllegalStateException("Maximum number of voices reached: " + MAX_VOICES);
         }
 
         voices.add(voice);

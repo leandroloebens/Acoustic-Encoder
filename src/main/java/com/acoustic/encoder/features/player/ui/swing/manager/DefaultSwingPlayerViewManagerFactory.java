@@ -10,7 +10,7 @@ import com.acoustic.encoder.features.player.ui.swing.binder.DefaultSwingPlayerVi
 import com.acoustic.encoder.features.player.ui.swing.binder.SwingPlayerViewEventBinder;
 import com.acoustic.encoder.features.player.ui.swing.components.factory.DefaultSwingPlayerViewComponentsFactory;
 import com.acoustic.encoder.features.player.ui.swing.components.factory.SwingPlayerViewComponentsFactory;
-import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.config.ViewConfigLoader;
 
 public class DefaultSwingPlayerViewManagerFactory implements PlayerViewManagerFactory {
 

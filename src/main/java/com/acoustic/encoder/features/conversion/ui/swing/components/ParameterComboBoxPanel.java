@@ -28,7 +28,6 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
 
         if (preferredSize != null) this.setPreferredSize(preferredSize);
         if (maxSize != null) this.setMaximumSize(maxSize);
-
     }
 
     public SwingComboBox<T> getComboBox() {
@@ -40,8 +39,12 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
         return (index >= 0) ? this.comboBox.getItemAt(index) : null;
     }
 
-    public void setSelectedItem(int index) {
-        this.comboBox.setSelectedOriginalIndex(index);
+    public void setSelectedItemByIndex(int index) {
+        this.comboBox.setSelectedByOriginalIndex(index);
+    }
+
+    public void setSelectedItem(T item) {
+        this.comboBox.setSelectedItem(item);
     }
 
     public JTextField getTextEditor() {

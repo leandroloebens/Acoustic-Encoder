@@ -5,7 +5,7 @@ import com.acoustic.encoder.domain.shared.InstrumentId;
 import com.acoustic.encoder.domain.shared.Octave;
 import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
+import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.ports.TextRepository;
 
 import java.io.*;
@@ -48,7 +48,7 @@ public class FileTextRepository implements TextRepository {
     }
 
     @Override
-    public void saveProject(UserConversionInput input, File file) {
+    public void saveProject(MusicProject input, File file) {
 
         try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
             out.writeUTF(input.text());
@@ -67,7 +67,7 @@ public class FileTextRepository implements TextRepository {
     }
 
     @Override
-    public UserConversionInput loadProject(File file) {
+    public MusicProject loadProject(File file) {
 
         try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             String text = in.readUTF();
@@ -83,7 +83,7 @@ public class FileTextRepository implements TextRepository {
                 ));
             }
 
-            return new UserConversionInput(text, bpm, voices);
+            return new MusicProject(text, bpm, voices);
         }
         catch (EOFException e) {
             System.out.println(ERROR_EOF_MSG + file.getAbsolutePath());

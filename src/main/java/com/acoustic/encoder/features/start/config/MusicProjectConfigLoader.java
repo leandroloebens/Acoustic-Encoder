@@ -7,8 +7,8 @@ import com.acoustic.encoder.domain.shared.InstrumentId;
 import com.acoustic.encoder.domain.shared.Octave;
 import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
-import com.acoustic.encoder.features.conversion.dto.UserConversionInput;
-import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
+import com.acoustic.encoder.features.conversion.dto.MusicProject;
+import com.acoustic.encoder.infrastructure.ui_shared.config.ViewConfigLoader;
 
 import java.io.*;
 import java.util.*;
@@ -32,7 +32,7 @@ public class MusicProjectConfigLoader {
 
     }
 
-    public UserConversionInput loadMusicProject() {
+    public MusicProject loadMusicProject() {
         List<VoiceConfig> voices = new ArrayList<>();
 
         HashMap<String, String> map = loadConfigMap();
@@ -63,7 +63,7 @@ public class MusicProjectConfigLoader {
         if (map.get("TEXT") == null)
             throw new IllegalArgumentException(MISSING_VALUE_ERROR_MSG + "TEXT");
 
-        return new UserConversionInput(map.get("TEXT"), new Bpm(Integer.parseInt(map.get("UNIVERSAL_BPM"))), voices);
+        return new MusicProject(map.get("TEXT"), new Bpm(Integer.parseInt(map.get("UNIVERSAL_BPM"))), voices);
 
     }
 

@@ -6,7 +6,7 @@ import com.acoustic.encoder.domain.voice.VoiceConfig;
 
 import java.util.List;
 
-public record UserConversionInput(
+public record MusicProject(
         String text,
         Bpm bpm,
         List<VoiceConfig> voiceConfigList

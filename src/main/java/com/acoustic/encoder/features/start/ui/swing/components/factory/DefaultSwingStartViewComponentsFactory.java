@@ -33,6 +33,7 @@ public class DefaultSwingStartViewComponentsFactory implements SwingStartViewCom
                 null,
                 config.getScaledInt("OPEN_PROJECT_BUTTON_FONT_SIZE"),
                 null,
+                null,
                 null
         );
 
@@ -40,6 +41,7 @@ public class DefaultSwingStartViewComponentsFactory implements SwingStartViewCom
                 config.getString("NEW_PROJECT_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("NEW_PROJECT_BUTTON_FONT_SIZE"),
+                null,
                 null,
                 null
         );

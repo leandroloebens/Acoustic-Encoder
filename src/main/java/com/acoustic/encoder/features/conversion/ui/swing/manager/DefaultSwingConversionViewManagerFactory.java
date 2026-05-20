@@ -1,19 +1,20 @@
-package com.acoustic.encoder.features.conversion.ui.swing.factory;
+package com.acoustic.encoder.features.conversion.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
 import com.acoustic.encoder.features.conversion.service.mapper.DefaultConversionParametersService;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
-import com.acoustic.encoder.features.conversion.ui.factory.ConversionViewManagerFactory;
-import com.acoustic.encoder.features.conversion.ui.swing.DefaultSwingConversionViewManager;
+import com.acoustic.encoder.features.conversion.ui.ConversionViewManagerFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.assembler.DefaultSwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.ui.swing.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.DefaultSwingConversionViewEventBinder;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.SwingConversionViewEventBinder;
 import com.acoustic.encoder.features.conversion.ui.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.components.factory.SwingConversionViewComponentsFactory;
+import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.DefaultSwingConversionViewSynchronizer;
+import com.acoustic.encoder.features.player.ui.swing.binder.DefaultSwingPlayerViewEventBinder;
 import com.acoustic.encoder.infrastructure.audio.export.MidiInstrumentListProvider;
-import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.config.ViewConfigLoader;
 
 
 public class DefaultSwingConversionViewManagerFactory implements ConversionViewManagerFactory {
@@ -37,7 +38,9 @@ public class DefaultSwingConversionViewManagerFactory implements ConversionViewM
         ConversionParametersService parametersService = new DefaultConversionParametersService();
 
         SwingConversionViewEventBinder conversionViewBinder =
-                new DefaultSwingConversionViewEventBinder(eventBus, parametersService);
+                new DefaultSwingConversionViewEventBinder(
+                        eventBus, parametersService, DefaultSwingConversionViewSynchronizer::new
+                );
 
         return new DefaultSwingConversionViewManager(conversionViewAssembler, conversionViewBinder, eventBus);
     }

@@ -1,15 +1,14 @@
-package com.acoustic.encoder.features.start.ui.swing.factory;
+package com.acoustic.encoder.features.start.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.start.ui.StartViewManager;
-import com.acoustic.encoder.features.start.ui.factory.StartViewManagerFactory;
-import com.acoustic.encoder.features.start.ui.swing.DefaultSwingStartViewManager;
+import com.acoustic.encoder.features.start.ui.StartViewManagerFactory;
 import com.acoustic.encoder.features.start.ui.swing.components.factory.DefaultSwingStartViewComponentsFactory;
 import com.acoustic.encoder.features.start.ui.swing.components.factory.SwingStartViewComponentsFactory;
 import com.acoustic.encoder.features.start.ui.swing.assembler.DefaultSwingStartViewFrameAssembler;
 import com.acoustic.encoder.features.start.ui.swing.assembler.SwingStartViewFrameAssembler;
 import com.acoustic.encoder.features.start.ui.swing.binder.DefaultSwingStartViewEventBinder;
-import com.acoustic.encoder.infrastructure.ui_shared.ViewConfigLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.config.ViewConfigLoader;
 
 
 public class DefaultSwingStartViewManagerFactory implements StartViewManagerFactory {
