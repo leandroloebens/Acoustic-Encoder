@@ -32,7 +32,8 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     private boolean bound = false;
 
     public DefaultSwingPlayerViewEventBinder(
-            EventBus eventBus, SwingPlayerViewSynchronizerFactory synchronizerFactory
+            EventBus eventBus,
+            SwingPlayerViewSynchronizerFactory synchronizerFactory
     ) {
         Objects.requireNonNull(eventBus, NULL_EVENT_BUS_ERROR_MSG);
         Objects.requireNonNull(synchronizerFactory, "SynchronizerFactory cannot be null!");
