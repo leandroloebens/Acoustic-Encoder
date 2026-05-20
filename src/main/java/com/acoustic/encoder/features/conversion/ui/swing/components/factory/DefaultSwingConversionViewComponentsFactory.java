@@ -132,7 +132,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getInt("CONVERSION_BUTTON_HEIGHT")
         );
 
-        return new SwingButton(
+        SwingButton button = new SwingButton(
                 config.getString("CONVERSION_BUTTON_TEXT"),
                 null,
                 config.getScaledInt("CONVERSION_BUTTON_FONT_SIZE"),
@@ -140,6 +140,11 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 null,
                 null
         );
+
+        button.putClientProperty("FlatLaf.style",
+                "foreground: #dd0000; hoverBackground: #cc0000; hoverForeground: #222222; hoverBorderColor: #660000;");
+
+        return button;
     }
 
     private SwingButton createSaveTextButton() {
@@ -324,6 +329,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 config.getScaledDimension("PARAMETER_PANEL_MAX_SIZE")
         );
         instrumentComboBox.enableFiltering();
+        instrumentComboBox.putClientProperty("FlatLaf.style", "focusedBorderColor: #aaaaaa;");
 
         SwingLabel instrumentLabel = new SwingLabel(
                 config.getString("INSTRUMENT_LABEL_TEXT"),

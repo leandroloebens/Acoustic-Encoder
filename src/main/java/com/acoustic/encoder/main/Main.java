@@ -33,6 +33,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 
 import javax.sound.midi.MidiSystem;
+import javax.swing.*;
 
 public class Main {
 
@@ -47,6 +48,7 @@ public class Main {
                 "flatlaf.uiScale",
                 String.format(java.util.Locale.US, "%.2fx", SwingUtils.getScreenScaleRatio())
         );
+
         FlatDarkLaf.setup();
 //        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 //        FlatLightLaf.setup();

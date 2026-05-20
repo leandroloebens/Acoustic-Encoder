@@ -25,7 +25,6 @@ public class SwingFontUtils {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font[] fonts = ge.getAllFonts();
 
-
         Arrays.stream(fonts)
                 .sorted(Comparator.comparing(Font::getFontName, String.CASE_INSENSITIVE_ORDER))
                 .forEach(font -> System.out.println(font.getFontName()));

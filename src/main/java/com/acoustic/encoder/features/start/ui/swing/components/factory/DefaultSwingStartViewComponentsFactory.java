@@ -6,6 +6,7 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButto
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class DefaultSwingStartViewComponentsFactory implements SwingStartViewComponentsFactory {
@@ -21,9 +22,16 @@ public class DefaultSwingStartViewComponentsFactory implements SwingStartViewCom
 
     @Override
     public StartViewSwingComponentsWrapper createComponents() {
+
+        Font titleFont = new Font(
+                config.getString("TITLE_LABEL_FONT"),
+                Font.ITALIC,
+                config.getScaledInt("TITLE_LABEL_FONT_SIZE")
+        );
+
         SwingLabel titleLabel = new SwingLabel(
                 config.getString("TITLE_LABEL_TEXT"),
-                null,
+                titleFont,
                 config.getScaledInt("TITLE_LABEL_FONT_SIZE"),
                 null
         );

@@ -5,16 +5,19 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ScaledFlatRadioButtonIcon implements Icon {
-    private final FlatRadioButtonIcon delegate;
+    private FlatRadioButtonIcon delegate;
     private final float scale;
 
     public ScaledFlatRadioButtonIcon(float scale) {
-        this.delegate = new FlatRadioButtonIcon();
         this.scale = scale;
     }
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
+        if (delegate == null) {
+            delegate = new FlatRadioButtonIcon();
+        }
+
         Graphics2D g2 = (Graphics2D) g.create();
         try {
             int scaledWidth = (int) (getIconWidth() * scale);
@@ -31,11 +34,13 @@ public class ScaledFlatRadioButtonIcon implements Icon {
 
     @Override
     public int getIconWidth() {
+        if (delegate == null) delegate = new FlatRadioButtonIcon();
         return (int) (delegate.getIconWidth() * scale);
     }
 
     @Override
     public int getIconHeight() {
+        if (delegate == null) delegate = new FlatRadioButtonIcon();
         return (int) (delegate.getIconHeight() * scale);
     }
 }

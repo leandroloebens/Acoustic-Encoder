@@ -28,8 +28,6 @@ public class SwingRadioButtonGroup extends ButtonGroup {
             if (startingOption != null && !startingOption.isEmpty() && !options.contains(startingOption))
                 throw new IllegalArgumentException(ILLEGAL_STARTING_OPTION_MSG);
 
-            Icon scaledIcon = new ScaledFlatRadioButtonIcon(SwingUtils.getScreenScaleRatio());
-
             for (String option : options) {
                 JRadioButton button;
 
@@ -43,13 +41,20 @@ public class SwingRadioButtonGroup extends ButtonGroup {
                 if (fontSize > 0)
                     button.setFont(new Font(button.getFont().getName(), button.getFont().getStyle(), fontSize));
 
-                button.setIcon(scaledIcon);
+                button.putClientProperty("FlatLaf.style",
+                        "icon.background: #222222; icon.hoverBorderColor: #aaaaaa; icon.pressedBorderColor: #aaaaaa;");
 
-                button.setSelectedIcon(Objects.requireNonNullElse(selectedIcon, scaledIcon));
+                Icon scaledIcon = new ScaledFlatRadioButtonIcon(SwingUtils.getScreenScaleRatio());
+
+//                button.setIcon(scaledIcon);
+//
+//                button.setSelectedIcon(Objects.requireNonNullElse(selectedIcon, scaledIcon));
 
                 button.setVerticalTextPosition(SwingConstants.BOTTOM);
                 button.setHorizontalTextPosition(SwingConstants.CENTER);
                 button.setIconTextGap(ICON_TEXT_GAP);
+
+                button.setFocusPainted(false);
 
                 this.add(button);
                 buttons.add(button);
