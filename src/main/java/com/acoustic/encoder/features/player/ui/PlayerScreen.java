@@ -2,9 +2,12 @@ package com.acoustic.encoder.features.player.ui;
 
 public interface PlayerScreen {
 
-    void startFrame();
+    void initialize();
 
-    void closeFrame();
+    void showWindow();
 
-//    void loadMusic(MusicModel musicModel);
+    void hideWindow();
+
+    void closeWindow();
+
 }
