@@ -23,7 +23,7 @@ public class MidiUtils {
         Objects.requireNonNull(note, "Note cannot be null!");
 
         // Music note is represented by MIDI note number
-        return 12*(note.octave().value()-1) + (note.pitch().getValue());
+        return 12*(note.octave().value()) + (note.pitch().getValue());
 
     }
 
