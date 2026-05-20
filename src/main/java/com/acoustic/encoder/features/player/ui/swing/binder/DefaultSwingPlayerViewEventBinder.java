@@ -61,7 +61,8 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
         this.synchronizer = synchronizerFactory.createSynchronizer(
                 comps,
                 controller::getMicrosecPosition,
-                controller::getMicrosecDuration
+                controller::getMicrosecDuration,
+                controller::isPlayingAudio
         );
 
         return synchronizer;
@@ -82,25 +83,9 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     }
 
     private void bindPlayPauseButton(AudioPlayerController controller) {
-//        comps.controlsComponent().getPlayPauseButton().addActionListener(e -> {
-//            if (isPlaying) {
-//                controller.handlePauseAction();
-//                comps.controlsComponent().getPlayPauseButton().setText("Play");
-//                comps.controlsComponent().getPlayPauseButton().setIcon(playIcon);
-//            } else {
-//                controller.handlePlayAction();
-//                comps.controlsComponent().getPlayPauseButton().setText("Pause");
-//                comps.controlsComponent().getPlayPauseButton().setIcon(pauseIcon);
-//            }
-//
-//            isPlaying = !isPlaying;
-//        });
-
         comps.controlsComponent().getPlayPauseButton().addActionListener(e -> {
-
             controller.handlePlayPauseToggleAction();
             comps.controlsComponent().setPlayPauseState(controller.isPlayingAudio());
-
         });
     }
 
@@ -131,7 +116,6 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     }
 
     private void bindPlaybackSeekBar(SwingSeekBar playbackSeekBar, AudioPlayerController controller) {
-
         playbackSeekBar.addChangeListener(e -> {
 
             if (synchronizer != null && synchronizer.isUpdatingProgrammaticaly()) {
@@ -149,7 +133,5 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
             }
 
         });
-
-
     }
 }
