@@ -21,7 +21,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     private final BooleanSupplier playingStateSupplier;
 
     private boolean isSyncing = false;
-    private boolean isUpdatingProgrammaticaly = false;
+    private boolean isUpdatingProgrammatically = false;
 
     public DefaultSwingPlayerViewSynchronizer(
             PlayerViewComponentsWrapper components,
@@ -32,11 +32,11 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         Objects.requireNonNull(components, "Components cannot be null!");
         Objects.requireNonNull(microsecPositionSupplier, "MicrosecPositionSupplier cannot be null!");
         Objects.requireNonNull(microsecDurationSupplier, "MicrosecDurationSupplier cannot be null!");
+        Objects.requireNonNull(playingStateSupplier, "PlayingStateSupplier cannot be null!");
 
         this.components = components;
         this.microsecPositionSupplier = microsecPositionSupplier;
         this.microsecDurationSupplier = microsecDurationSupplier;
-
         this.playingStateSupplier = playingStateSupplier;
 
         this.syncTimer = new Timer(SYNC_MILLISEC_INTERVAL, e -> syncState());
@@ -45,7 +45,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     @Override
     public void startSync() {
         if (isSyncing) {
-            throw new IllegalStateException("Error in startSync: sync is already started!");
+            return;
         }
 
         syncTimer.start();
@@ -55,7 +55,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     @Override
     public void stopSync() {
         if (!isSyncing) {
-            throw new IllegalStateException("Error in stopSync: sync is already stopped!");
+            return;
         }
 
         syncTimer.stop();
@@ -63,8 +63,8 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     }
 
     @Override
-    public boolean isUpdatingProgrammaticaly() {
-        return isUpdatingProgrammaticaly;
+    public boolean isUpdatingProgrammatically() {
+        return isUpdatingProgrammatically;
     }
 
     private void syncState() {
@@ -82,8 +82,9 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
             return;
         }
 
-        this.isUpdatingProgrammaticaly = true;
+        this.isUpdatingProgrammatically = true;
         try {
+            //TODO validade supliers values and handle error cases
             int newPosition = (int) Math.round(
                     (double) playbackSeekBar.getMaximum()
                             * microsecPositionSupplier.getAsLong()
@@ -92,7 +93,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
             components.footerComponent().getPlaybackSeekBar().setValue(newPosition);
         }
         finally {
-            this.isUpdatingProgrammaticaly = false;
+            this.isUpdatingProgrammatically = false;
         }
 
     }

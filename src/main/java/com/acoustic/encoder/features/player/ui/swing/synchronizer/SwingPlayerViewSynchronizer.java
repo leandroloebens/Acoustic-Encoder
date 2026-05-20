@@ -6,5 +6,5 @@ public interface SwingPlayerViewSynchronizer {
 
         void stopSync();
 
-        boolean isUpdatingProgrammaticaly();
+        boolean isUpdatingProgrammatically();
 }

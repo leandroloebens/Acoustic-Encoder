@@ -118,7 +118,7 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     private void bindPlaybackSeekBar(SwingSeekBar playbackSeekBar, AudioPlayerController controller) {
         playbackSeekBar.addChangeListener(e -> {
 
-            if (synchronizer != null && synchronizer.isUpdatingProgrammaticaly()) {
+            if (synchronizer != null && synchronizer.isUpdatingProgrammatically()) {
                 return;
             }
 
