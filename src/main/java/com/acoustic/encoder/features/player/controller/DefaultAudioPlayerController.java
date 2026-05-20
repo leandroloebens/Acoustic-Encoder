@@ -1,10 +1,8 @@
 package com.acoustic.encoder.features.player.controller;
 
 import com.acoustic.encoder.features.player.exception.MusicExportException;
-import com.acoustic.encoder.domain.music.MusicModel;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
 
-import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
 
 public class DefaultAudioPlayerController implements AudioPlayerController {
@@ -13,15 +11,6 @@ public class DefaultAudioPlayerController implements AudioPlayerController {
 
     public DefaultAudioPlayerController(AudioPlayerService playerService) {
         this.playerService = playerService;
-    }
-
-    @Override
-    public void handleLoadAction(MusicModel musicModel) {
-        try {
-            this.playerService.setPlayerMusic(musicModel);
-        } catch (InvalidMidiDataException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.acoustic.encoder.features.player.controller;
 
 import com.acoustic.encoder.features.player.exception.MusicExportException;
-import com.acoustic.encoder.domain.music.MusicModel;
 
 import java.io.File;
 
 public interface AudioPlayerController {
-
-    void handleLoadAction(MusicModel musicModel);
 
     void handlePlayAction();
 
