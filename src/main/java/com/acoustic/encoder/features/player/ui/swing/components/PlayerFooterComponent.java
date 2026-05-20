@@ -1,5 +1,6 @@
 package com.acoustic.encoder.features.player.ui.swing.components;
 
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.ProgressSliderUI;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
@@ -52,13 +53,24 @@ public class PlayerFooterComponent extends JPanel {
         progressPanel.add(playbackSeekBar, BorderLayout.CENTER);
         progressPanel.add(timePanel, BorderLayout.SOUTH);
 
-        saveButton.setContentAreaFilled(false);
-        saveButton.setBorderPainted(false);
-
 //        add(playbackSeekBar, BorderLayout.CENTER);
         add(progressPanel, BorderLayout.CENTER);
         add(saveButton, BorderLayout.EAST);
 
+        initializeSaveButton();
+        initializeSeekBar();
+    }
+
+    private void initializeSaveButton() {
+        saveButton.setContentAreaFilled(false);
+        saveButton.setBorderPainted(false);
+    }
+
+    private void initializeSeekBar() {
+        playbackSeekBar.setUI(new ProgressSliderUI());
+        playbackSeekBar.setPaintTicks(false);
+        playbackSeekBar.setPaintLabels(false);
+        playbackSeekBar.setOpaque(false);
     }
 
     public SwingButton getSaveButton() {

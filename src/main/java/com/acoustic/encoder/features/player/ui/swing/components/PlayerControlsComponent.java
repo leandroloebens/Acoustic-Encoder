@@ -49,18 +49,28 @@ public class PlayerControlsComponent extends JPanel {
         //playPauseWrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         playPauseWrapper.add(playPauseButton);
 
-        playPauseButton.setContentAreaFilled(false);
-        playPauseButton.setBorderPainted(false);
-
-        forwardButton.setContentAreaFilled(false);
-        forwardButton.setBorderPainted(false);
-
-        rewindButton.setContentAreaFilled(false);
-        rewindButton.setBorderPainted(false);
-
         add(rewindButton);
         add(playPauseWrapper);
         add(forwardButton);
+
+        initializePlayPauseButton();
+        initializeRewindButton();
+        initializeForwardButton();
+    }
+
+    private void initializePlayPauseButton() {
+        playPauseButton.setContentAreaFilled(false);
+        playPauseButton.setBorderPainted(false);
+    }
+
+    private void initializeRewindButton() {
+        forwardButton.setContentAreaFilled(false);
+        forwardButton.setBorderPainted(false);
+    }
+
+    private void initializeForwardButton() {
+        rewindButton.setContentAreaFilled(false);
+        rewindButton.setBorderPainted(false);
     }
 
     public SwingButton getPlayPauseButton() {
