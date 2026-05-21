@@ -36,7 +36,7 @@ public class ProgressSliderUI extends FlatSliderUI {
 
         int filledWidth = thumbRect.x + thumbRect.width / 2 - startX;
 
-        g2.setColor(new Color(255, 255, 255));
+        g2.setColor(new Color(0, 209, 228));
         g2.fillRoundRect(startX, centerY - TRACK_HEIGHT / 2, filledWidth, TRACK_HEIGHT, TRACK_HEIGHT, TRACK_HEIGHT);
 
         g2.dispose();
