@@ -51,7 +51,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     }
 
     private PlayerFooterComponent createFooterComponent() {
-        Icon saveIcon = IconLoader.load("/ui/icons/download_24_B3B3B3.png");
+        Icon saveIcon = IconLoader.load("/ui/icons/download_32_B3B3B3.png");
 
         return new PlayerFooterComponent(
                 createSaveButton(saveIcon),

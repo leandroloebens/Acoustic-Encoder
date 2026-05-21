@@ -71,7 +71,7 @@ public class SwingFontUtils {
                             if (!isFontAlreadyRegistered(font))
                                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
 
-                            System.out.println(LOADED_FONT_MSG + font.getFontName());
+//                            System.out.println(LOADED_FONT_MSG + font.getFontName());
                         } catch (Exception e) {
                             System.err.println(FAILED_TO_LOAD_FONT_MSG + path + ": " + e.getMessage());
                         }

@@ -12,16 +12,18 @@ public class DefaultStartScreen implements StartScreen {
 
     private final StartController controller;
 
-    private final StartViewManager manager;
+    private final StartViewManagerFactory managerFactory;
+
+    private StartViewManager manager;
 
     private final EventBus eventBus;
 
-    public DefaultStartScreen(StartController controller, StartViewManager manager, EventBus eventBus) {
+    public DefaultStartScreen(StartController controller, StartViewManagerFactory managerFactory, EventBus eventBus) {
         if (controller == null) throw new IllegalArgumentException(ILLEGAL_FILE_SERVICE_ARGUMENT);
         this.controller = controller;
 
-        if (manager == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
-        this.manager = manager;
+        if (managerFactory == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
+        this.managerFactory = managerFactory;
 
         if (eventBus == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
         this.eventBus = eventBus;
@@ -34,7 +36,7 @@ public class DefaultStartScreen implements StartScreen {
 
     @Override
     public void initialize() {
-        manager.assemble(this.controller);
+        this.manager = managerFactory.createViewManager(controller);;
     }
 
     @Override

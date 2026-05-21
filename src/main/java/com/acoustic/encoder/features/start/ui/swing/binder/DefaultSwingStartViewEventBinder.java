@@ -26,11 +26,16 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
     private static final String LOAD_FILE_ERROR_MSG = "Error loading file: ";
     private static final String LOAD_FILE_ERROR_TITLE = "LOAD ERROR";
 
+    private final EventBus eventBus;
+
     private boolean bound;
 
     private final List<Runnable> removers = new ArrayList<>();
 
-    public DefaultSwingStartViewEventBinder() {
+    public DefaultSwingStartViewEventBinder(EventBus eventBus) {
+        if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
+        this.eventBus = eventBus;
+
         this.bound = false;
     }
 
@@ -38,24 +43,17 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
     public void bind(
             StartController controller,
             SwingFrame frame,
-            StartViewSwingComponentsWrapper components,
-            EventBus eventBus
+            StartViewSwingComponentsWrapper components
     ) {
         if (bound) return;
 
         SwingButton openProjectButton = components.openProjectButton();
         SwingButton newProjectButton = components.newProjectButton();
 
-        bindOpenProjectButton(openProjectButton, controller, frame, eventBus);
-        bindNewProjectButton(newProjectButton, controller, frame, eventBus);
+        bindOpenProjectButton(openProjectButton, controller, frame);
+        bindNewProjectButton(newProjectButton, controller);
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                eventBus.publish(new StartScreenCloseRequestEvent());
-                frame.setVisible(false);
-            }
-        });
+        bindFrameExit(frame);
 
         bound = true;
     }
@@ -73,11 +71,23 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
         bound = false;
     }
 
+    private void bindFrameExit(SwingFrame frame) {
+        WindowAdapter windowListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventBus.publish(new StartScreenCloseRequestEvent());
+                frame.setVisible(false);
+            }
+        };
+
+        frame.addWindowListener(windowListener);
+        removers.add(() -> frame.removeWindowListener(windowListener));
+    }
+
     private void bindOpenProjectButton(
             SwingButton button,
             StartController controller,
-            SwingFrame frame,
-            EventBus eventBus
+            SwingFrame frame
     ) {
         ActionListener openProjectListener = event -> {
             File fileToLoad = SwingUtils.getFileFromChooser(
@@ -108,9 +118,7 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
 
     private void bindNewProjectButton(
             SwingButton button,
-            StartController controller,
-            SwingFrame frame,
-            EventBus eventBus
+            StartController controller
     ) {
         ActionListener newProjectListener = event -> {
             MusicProject project = controller.handleNewProjectAction();

@@ -1,6 +1,7 @@
 package com.acoustic.encoder.features.conversion.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
+import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
 import com.acoustic.encoder.features.conversion.service.mapper.DefaultConversionParametersService;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
@@ -12,7 +13,6 @@ import com.acoustic.encoder.features.conversion.ui.swing.binder.SwingConversionV
 import com.acoustic.encoder.features.conversion.ui.swing.components.factory.DefaultSwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.components.factory.SwingConversionViewComponentsFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.DefaultSwingConversionViewSynchronizer;
-import com.acoustic.encoder.features.player.ui.swing.binder.DefaultSwingPlayerViewEventBinder;
 import com.acoustic.encoder.infrastructure.audio.export.MidiInstrumentListProvider;
 import com.acoustic.encoder.infrastructure.ui_shared.config.ViewConfigLoader;
 
@@ -32,7 +32,7 @@ public class DefaultSwingConversionViewManagerFactory implements ConversionViewM
     }
 
     @Override
-    public ConversionViewManager createViewManager() {
+    public ConversionViewManager createViewManager(ConversionController controller) {
         SwingConversionViewFrameAssembler conversionViewAssembler = getConversionViewAssembler();
 
         ConversionParametersService parametersService = new DefaultConversionParametersService();
@@ -42,7 +42,8 @@ public class DefaultSwingConversionViewManagerFactory implements ConversionViewM
                         eventBus, parametersService, DefaultSwingConversionViewSynchronizer::new
                 );
 
-        return new DefaultSwingConversionViewManager(conversionViewAssembler, conversionViewBinder, eventBus);
+        return new DefaultSwingConversionViewManager(
+                controller, conversionViewAssembler, conversionViewBinder);
     }
 
     private SwingConversionViewFrameAssembler getConversionViewAssembler() {

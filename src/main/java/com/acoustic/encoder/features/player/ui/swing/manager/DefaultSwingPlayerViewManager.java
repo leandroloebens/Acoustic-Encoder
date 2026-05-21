@@ -1,8 +1,6 @@
 package com.acoustic.encoder.features.player.ui.swing.manager;
 
-import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
-import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.ui.PlayerViewManager;
 import com.acoustic.encoder.features.player.ui.swing.assembler.SwingPlayerViewAssembler;
 import com.acoustic.encoder.features.player.ui.swing.binder.SwingPlayerViewEventBinder;
@@ -10,8 +8,6 @@ import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerVie
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Objects;
 
 public class DefaultSwingPlayerViewManager implements PlayerViewManager {
@@ -23,50 +19,43 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
     private final SwingPlayerViewAssembler assembler;
     private final SwingPlayerViewEventBinder binder;
-    private final EventBus eventBus;
 
     private SwingPlayerViewSynchronizer synchronizer;
     private SwingFrame frame;
 
     public DefaultSwingPlayerViewManager(
+            AudioPlayerController controller,
             SwingPlayerViewAssembler assembler,
-            SwingPlayerViewEventBinder binder,
-            EventBus eventBus
+            SwingPlayerViewEventBinder binder
     ) {
         Objects.requireNonNull(assembler, "Assembler cannot be null!");
         Objects.requireNonNull(binder, "Binder cannot be null!");
-        Objects.requireNonNull(eventBus, "EventBus cannot be null!");
 
         this.assembler = assembler;
+
         this.binder = binder;
 
-        this.eventBus = eventBus;
-
+        this.frame = assemble(controller);
     }
 
-    @Override
-    public void startFrame(AudioPlayerController controller) {
-        frame = assembler.assembleFrame(
+    private SwingFrame assemble(AudioPlayerController controller) {
+        if (frame != null) return this.frame;
+
+        SwingFrame frame = assembler.assembleFrame(
                 WINDOW_TITLE,
                 WINDOW_WIDTH,
                 WINDOW_HEIGHT,
                 FRAME_EXIT_OPERATION
         );
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                hideFrame();
-                eventBus.publish(new PlayerClosedEvent());
-            }
-        });
-
         this.synchronizer = binder.bind(controller, frame, assembler.getComponents());
 
+        return frame;
     }
 
     @Override
     public void showFrame() {
+        if (frame == null) throw new IllegalStateException("Frame is not initialized!");
 
         synchronizer.startSync();
 
@@ -75,6 +64,7 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
     @Override
     public void hideFrame() {
+        if (frame == null) throw new IllegalStateException("Frame is not initialized!");
 
         synchronizer.stopSync();
 
@@ -83,9 +73,12 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
     @Override
     public void disposeFrame() {
+        if (frame == null) return;
+
         synchronizer.stopSync();
+        synchronizer = null;
         binder.unbind();
         frame.dispose();
-
+        frame = null;
     }
 }

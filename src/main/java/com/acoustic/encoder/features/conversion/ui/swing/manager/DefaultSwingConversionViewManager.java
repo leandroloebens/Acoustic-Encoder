@@ -1,8 +1,6 @@
 package com.acoustic.encoder.features.conversion.ui.swing.manager;
 
-import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.ui.swing.assembler.SwingConversionViewFrameAssembler;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.SwingConversionViewEventBinder;
@@ -12,8 +10,6 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class DefaultSwingConversionViewManager implements ConversionViewManager {
 
@@ -28,14 +24,12 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
     private SwingConversionViewSynchronizer synchronizer;
 
-    private final EventBus eventBus;
-
     private SwingFrame frame;
 
     public DefaultSwingConversionViewManager(
+            ConversionController controller,
             SwingConversionViewFrameAssembler assembler,
-            SwingConversionViewEventBinder binder,
-            EventBus eventBus
+            SwingConversionViewEventBinder binder
     ) {
 
         if (assembler == null) throw new IllegalArgumentException("Assembler cannot be null!");
@@ -44,17 +38,15 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
         if (binder == null) throw new IllegalArgumentException("Binder cannot be null!");
         this.binder = binder;
 
-        if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
-        this.eventBus = eventBus;
+        this.frame = assemble(controller);
 
     }
 
-    @Override
-    public void assemble(ConversionController conversionController) {
+    private SwingFrame assemble(ConversionController conversionController) {
 
-        if (frame != null) return;
+        if (frame != null) return this.frame;
 
-        frame = assembler.assembleFrame(
+        SwingFrame frame = assembler.assembleFrame(
                 WINDOW_TITLE,
                 new Dimension(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT),
                 FRAME_EXIT_OPERATION
@@ -64,11 +56,14 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
         synchronizer.enableSync();
 
+        return frame;
     }
 
     @Override
     public void show() {
-        if (frame == null) throw new IllegalStateException("Frame is not assembled!");
+        if (frame == null) throw new IllegalStateException("Frame is not initialized!");
+
+        synchronizer.enableSync();
 
         frame.setVisible(true);
         SwingUtilities.invokeLater(() -> frame.requestFocusInWindow());
@@ -76,7 +71,9 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
 
     @Override
     public void hide() {
-        if (frame == null) throw new IllegalStateException("Frame is not assembled!");
+        if (frame == null) throw new IllegalStateException("Frame is not initialized!");
+
+        synchronizer.disableSync();
 
         frame.setVisible(false);
     }
@@ -86,8 +83,8 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
         if (frame == null) return;
 
         synchronizer.disableSync();
-        binder.unbind();
         synchronizer = null;
+        binder.unbind();
         frame.dispose();
         frame = null;
     }

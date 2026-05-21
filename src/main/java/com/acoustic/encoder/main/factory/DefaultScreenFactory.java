@@ -61,7 +61,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
         return new DefaultStartScreen(
                 new DefaultStartController(this.startService, this.textRepository),
-                managerFactory.createViewManager(),
+                managerFactory,
                 eventBus
         );
     }
@@ -72,7 +72,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
         return new DefaultConversionScreen(
                 new DefaultConversionController(this.conversionService, this.textRepository),
-                managerFactory.createViewManager(),
+                managerFactory,
                 eventBus
         );
     }
@@ -87,7 +87,8 @@ public class DefaultScreenFactory implements ScreenFactory  {
 
         return new DefaultPlayerScreen(
                 playerController,
-                managerFactory.createViewManager()
+                managerFactory,
+                eventBus
         );
     }
 }

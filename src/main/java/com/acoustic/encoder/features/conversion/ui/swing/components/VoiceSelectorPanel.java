@@ -57,5 +57,4 @@ public class VoiceSelectorPanel extends SwingPanel {
     public JRadioButton getSelectedButton() {
         return this.buttonGroup.getButtons().get(this.buttonGroup.getSelectedIndex());
     }
-
 }

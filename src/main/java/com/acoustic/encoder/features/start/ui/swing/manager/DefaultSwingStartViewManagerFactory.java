@@ -1,6 +1,7 @@
 package com.acoustic.encoder.features.start.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
+import com.acoustic.encoder.features.start.controller.StartController;
 import com.acoustic.encoder.features.start.ui.StartViewManager;
 import com.acoustic.encoder.features.start.ui.StartViewManagerFactory;
 import com.acoustic.encoder.features.start.ui.swing.components.factory.DefaultSwingStartViewComponentsFactory;
@@ -23,11 +24,11 @@ public class DefaultSwingStartViewManagerFactory implements StartViewManagerFact
     }
 
     @Override
-    public StartViewManager createViewManager() {
+    public StartViewManager createViewManager(StartController controller) {
         return new DefaultSwingStartViewManager(
+                controller,
                 getStartViewAssembler(),
-                new DefaultSwingStartViewEventBinder(),
-                eventBus
+                new DefaultSwingStartViewEventBinder(eventBus)
         );
     }
 

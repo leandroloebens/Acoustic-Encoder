@@ -16,7 +16,7 @@ public class MainTextAreaPanel extends SwingPanel {
 
     private static final int VERTICAL_STRUT = 10;
 
-    private SwingTextArea textArea;
+    private final SwingTextArea textArea;
 
     public MainTextAreaPanel(SwingVerticalScrollPane scrollPane, SwingLabel label) {
         if (scrollPane == null) throw new IllegalArgumentException(NULL_SCROLL_PANE_ERROR_MSG);

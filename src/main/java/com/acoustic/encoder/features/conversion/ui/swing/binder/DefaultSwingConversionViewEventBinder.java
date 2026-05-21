@@ -116,12 +116,7 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         this.previousButton = comps.voiceSelector().getSelectedButton();
         bindVoiceSelector(frame);
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                eventBus.publish(new ConversionScreenCloseRequestEvent());
-            }
-        });
+        bindFrameExit(frame);
 
         EventListener<ProjectReadyToOpen> openListener =
                 event -> synchronizer.syncMusicProject(event.project());
@@ -148,6 +143,18 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         bound = false;
     }
 
+    private void bindFrameExit(SwingFrame frame) {
+        WindowAdapter windowAdapter = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventBus.publish(new ConversionScreenCloseRequestEvent());
+            }
+        };
+
+        frame.addWindowListener(windowAdapter);
+        removers.add(() -> frame.removeWindowListener(windowAdapter));
+    }
+
     private boolean validateInstrumentInput(SwingFrame frame) {
         if (comps.instrumentPanel().isEditorInputValid()) {
             JTextField editor = comps.instrumentPanel().getTextEditor();
@@ -166,7 +173,8 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
                 if (comps.mainTextAreaPanel().isTextEmpty()) throw new IllegalArgumentException();
                 else if (validateInstrumentInput(frame)) {
                     controller.handleConvertAction(parametersService.wrapMusicProject(
-                            comps.mainTextAreaPanel().getText(), synchronizer.getParameters()));
+                            comps.mainTextAreaPanel().getText(), synchronizer.getParameters())
+                    );
                     System.out.println(synchronizer.getParameters().toString());
                 }
             } catch (IllegalArgumentException e) {

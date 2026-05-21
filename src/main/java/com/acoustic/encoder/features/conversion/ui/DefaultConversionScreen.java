@@ -9,21 +9,23 @@ public class DefaultConversionScreen implements ConversionScreen {
 
     private final ConversionController conversionController;
 
-    private final ConversionViewManager manager;
+    private final ConversionViewManagerFactory managerFactory;
+
+    private ConversionViewManager manager;
 
     private final EventBus eventBus;
 
     public DefaultConversionScreen(
             ConversionController conversionController,
-            ConversionViewManager manager,
+            ConversionViewManagerFactory managerFactory,
             EventBus eventBus)
     {
 
         if (conversionController == null) throw new IllegalArgumentException("Controller cannot be null!");
         this.conversionController = conversionController;
 
-        if (manager == null) throw new IllegalArgumentException("Manager cannot be null!");
-        this.manager = manager;
+        if (managerFactory == null) throw new IllegalArgumentException("Manager factory cannot be null!");
+        this.managerFactory = managerFactory;
 
         if (eventBus == null) throw new IllegalArgumentException("EventBus cannot be null!");
         this.eventBus = eventBus;
@@ -36,7 +38,7 @@ public class DefaultConversionScreen implements ConversionScreen {
 
     @Override
     public void initialize() {
-        this.manager.assemble(this.conversionController);
+        this.manager = managerFactory.createViewManager(conversionController);
     }
 
     @Override
