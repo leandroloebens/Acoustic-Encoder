@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class ParameterComboBoxPanel<T> extends SwingPanel {
 
-    private SwingComboBox<T> comboBox;
+    private final SwingComboBox<T> comboBox;
 
     public ParameterComboBoxPanel(
             SwingComboBox<T> comboBox,
@@ -18,8 +18,9 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
             Dimension maxSize
     ) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        if (comboBox != null) this.comboBox = comboBox;
-        
+        if (comboBox == null) throw new IllegalArgumentException("ComboBox cannot be null");
+        this.comboBox = comboBox;
+
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.comboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -47,12 +48,24 @@ public class ParameterComboBoxPanel<T> extends SwingPanel {
         this.comboBox.setSelectedItem(item);
     }
 
+    public void setInitialItem(T initialItem) {
+        this.comboBox.setInitialItem(initialItem);
+    }
+
+    public void resetItems() {
+        this.comboBox.resetItems();
+    }
+
     public JTextField getTextEditor() {
         return (JTextField) this.comboBox.getEditor().getEditorComponent();
     }
 
-    public boolean isEditorInputValid() {
+    public boolean isTextEditorInputValid() {
         return comboBox.finishEditing();
+    }
+
+    public void fireTextEditorActions() {
+        getTextEditor().postActionEvent();
     }
 
 }

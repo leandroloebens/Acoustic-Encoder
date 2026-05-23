@@ -22,7 +22,6 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
     private final static String ILLEGAL_CONFIG_ARGUMENT_MESSAGE = "Illegal config argument!";
     private final static String ILLEGAL_INSTRUMENT_PROVIDER_ARGUMENT_MESSAGE = "Illegal instrument provider argument!";
-    private final static String INSTRUMENT_PROVIDER_FAILED_MSG = "Instrument provider failed!";
 
     private final static int SCROLL_PANE_MAX_WIDTH = (int) (Toolkit.getDefaultToolkit().getScreenSize().width * 0.6);
 
@@ -53,10 +52,10 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
         SwingButton saveProjectButton = createSaveProjectButton();
 
-        SwingButton loadProjectButton = createLoadProjectButton();
+        SwingButton openProjectButton = createOpenProjectButton();
 
         SwingUtils.setHandCursor(
-                conversionButton, saveTextButton, loadTextButton, saveProjectButton, loadProjectButton);
+                conversionButton, saveTextButton, loadTextButton, saveProjectButton, openProjectButton);
 
         MainTextAreaPanel mainTextAreaPanel = createMainTextAreaPanel();
 
@@ -77,7 +76,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
                 saveTextButton,
                 loadTextButton,
                 saveProjectButton,
-                loadProjectButton,
+                openProjectButton,
                 mainTextAreaPanel,
                 voiceSelector,
                 volumePanel,
@@ -89,7 +88,12 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
 
     private MainTextAreaPanel createMainTextAreaPanel() {
         SwingTextArea textArea =
-                new SwingTextArea(null, config.getScaledInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"), null);
+                new SwingRoundedTextArea(
+                        null,
+                        config.getScaledInt("MAIN_SCROLL_TEXTAREA_FONT_SIZE"),
+                        null,
+                        config.getScaledInt("MAIN_SCROLL_TEXTAREA_ARC")
+                );
 
         textArea.enableUndoRedo();
 
@@ -174,11 +178,11 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         );
     }
 
-    private SwingButton createLoadProjectButton() {
+    private SwingButton createOpenProjectButton() {
         return new SwingButton(
-                config.getString("LOAD_PROJECT_BUTTON_TEXT"),
+                config.getString("OPEN_PROJECT_BUTTON_TEXT"),
                 null,
-                config.getScaledInt("LOAD_PROJECT_BUTTON_FONT_SIZE"),
+                config.getScaledInt("OPEN_PROJECT_BUTTON_FONT_SIZE"),
                 null,
                 null,
                 config.getScaledDimension("OPTION_BUTTON_PREFERRED_SIZE")

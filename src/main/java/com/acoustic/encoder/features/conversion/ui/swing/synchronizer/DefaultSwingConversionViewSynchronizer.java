@@ -15,8 +15,6 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
     private static final String NULL_PARAMETERS_SERVICE_ERROR_MSG = "Parameters service cannot be null!";
     private static final String NULL_COMPONENTS_ERROR_MSG = "Components cannot be null!";
 
-    private static final int INITIAL_VOICE = 0;
-
     private MusicParametersState parameters = new MusicParametersState();
 
     private final ConversionViewSwingComponentsWrapper comps;
@@ -26,7 +24,8 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
     private boolean isSyncEnabled = false;
 
     public DefaultSwingConversionViewSynchronizer(
-            ConversionViewSwingComponentsWrapper components, ConversionParametersService parametersService
+            ConversionViewSwingComponentsWrapper components,
+            ConversionParametersService parametersService
     ) {
         if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
         this.comps = components;
@@ -60,7 +59,7 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
     @Override
     public void syncBpm() {
         if (!isSyncEnabled) return;
-        parameters.setBpm(new Bpm(comps.bpmPanel().getSlider().getValue()));
+        parameters.setBpm(new Bpm(comps.bpmPanel().getValue()));
     }
 
     @Override
@@ -68,7 +67,7 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
         if (!isSyncEnabled) return;
         parameters.setVoiceVolume(
                 comps.voiceSelector().getSelectedIndex(),
-                new Volume(comps.volumePanel().getSlider().getValue())
+                new Volume(comps.volumePanel().getValue())
         );
     }
 
@@ -77,7 +76,7 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
         if (!isSyncEnabled) return;
         parameters.setVoiceOctave(
                 comps.voiceSelector().getSelectedIndex(),
-                new Octave(comps.octavePanel().getSlider().getValue())
+                new Octave(comps.octavePanel().getValue())
         );
     }
 
@@ -96,23 +95,24 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
         VoiceParametersState track =
                 parameters.getSelectedVoice(comps.voiceSelector().getSelectedIndex());
 
-        comps.volumePanel().getSlider().setValue(track.getVolume().value());
-        comps.octavePanel().getSlider().setValue(track.getOctave().value());
+        comps.volumePanel().setValue(track.getVolume().value());
+        comps.octavePanel().setValue(track.getOctave().value());
         comps.instrumentPanel().setSelectedItemByIndex(track.getInstrument().value());
-        comps.instrumentPanel().getComboBox().finishEditing();
+        if (!comps.instrumentPanel().isTextEditorInputValid())
+            comps.instrumentPanel().resetItems();
     }
 
     private void syncInitialVoicesValues() {
         VoiceParametersState track = parameters.getSelectedVoice(comps.voiceSelector().getSelectedIndex());
 
-        comps.volumePanel().getSlider().setValue(track.getVolume().value());
+        comps.volumePanel().setValue(track.getVolume().value());
 
-        comps.octavePanel().getSlider().setValue(track.getOctave().value());
+        comps.octavePanel().setValue(track.getOctave().value());
 
-        comps.bpmPanel().getSlider().setValue(parameters.getBpm().value());
+        comps.bpmPanel().setValue(parameters.getBpm().value());
 
         comps.instrumentPanel().setSelectedItemByIndex(track.getInstrument().value());
-        comps.instrumentPanel().getComboBox().setInitialItem(comps.instrumentPanel().getSelectedItem());
+        comps.instrumentPanel().setInitialItem(comps.instrumentPanel().getSelectedItem());
     }
 
 }

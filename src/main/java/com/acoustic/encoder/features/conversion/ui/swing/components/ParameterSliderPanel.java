@@ -39,6 +39,13 @@ public class ParameterSliderPanel extends SwingPanel {
 
     public SwingSlider getSlider() { return this.slider; }
 
+    public int getValue() { return this.slider.getValue(); }
+
+    public void setValue(int value) {
+        this.slider.setValue(value);
+        this.updateLabel();
+    }
+
     public void updateLabel() {
         this.label.setText(this.labelText + this.slider.getValue());
     }

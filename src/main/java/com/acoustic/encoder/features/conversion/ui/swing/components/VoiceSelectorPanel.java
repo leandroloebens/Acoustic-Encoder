@@ -11,6 +11,7 @@ import java.util.List;
 public class VoiceSelectorPanel extends SwingPanel {
 
     private final SwingRadioButtonGroup buttonGroup;
+    private JRadioButton previousButton;
 
     public VoiceSelectorPanel(
             SwingLabel label,
@@ -44,6 +45,8 @@ public class VoiceSelectorPanel extends SwingPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
         this.add(buttonsPanel, gbc);
+
+        previousButton = getSelectedButton();
     }
 
     public int getSelectedIndex() {
@@ -56,5 +59,17 @@ public class VoiceSelectorPanel extends SwingPanel {
 
     public JRadioButton getSelectedButton() {
         return this.buttonGroup.getButtons().get(this.buttonGroup.getSelectedIndex());
+    }
+
+    public JRadioButton getPreviousButton() {
+        return this.previousButton;
+    }
+
+    public void setPreviousButton(JRadioButton button) {
+        if (button == null) throw new IllegalArgumentException("previousButton cannot be null");
+        if (!getButtons().contains(button))
+            throw new IllegalArgumentException("previousButton must be one of the buttons in the group");
+
+        this.previousButton = button;
     }
 }

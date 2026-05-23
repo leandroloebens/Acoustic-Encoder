@@ -50,7 +50,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         this.saveTextButton = components.saveTextButton();
         this.loadTextButton = components.loadTextButton();
         this.saveProjectButton = components.saveProjectButton();
-        this.loadProjectButton = components.loadProjectButton();
+        this.loadProjectButton = components.openProjectButton();
         this.mainTextAreaPanel = components.mainTextAreaPanel();
         this.voiceSelector = components.voiceSelector();
         this.volumePanel = components.volumePanel();
