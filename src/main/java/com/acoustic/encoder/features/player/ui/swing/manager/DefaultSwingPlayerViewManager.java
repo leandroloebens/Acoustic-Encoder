@@ -6,6 +6,7 @@ import com.acoustic.encoder.features.player.ui.swing.assembler.SwingPlayerViewAs
 import com.acoustic.encoder.features.player.ui.swing.binder.SwingPlayerViewEventBinder;
 import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -13,8 +14,8 @@ import java.util.Objects;
 public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
     private final static String WINDOW_TITLE = "Music Player";
-    private final static int WINDOW_HEIGHT = 200;
-    private final static int WINDOW_WIDTH = 400;
+    private final static int WINDOW_MIN_WIDTH = (int) (380 * SwingUtils.getScreenScaleRatio());
+    private final static int WINDOW_MIN_HEIGHT = (int) (200 * SwingUtils.getScreenScaleRatio());
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;
 
     private final SwingPlayerViewAssembler assembler;
@@ -43,8 +44,8 @@ public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
         SwingFrame frame = assembler.assembleFrame(
                 WINDOW_TITLE,
-                WINDOW_WIDTH,
-                WINDOW_HEIGHT,
+                WINDOW_MIN_WIDTH,
+                WINDOW_MIN_HEIGHT,
                 FRAME_EXIT_OPERATION
         );
 

@@ -103,20 +103,20 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
                 saveIcon,
                 null,
-                null
+                config.getScaledDimension("SAVE_BUTTON_PREFERRED_SIZE")
         );
     }
 
     private SwingSeekBar createSeekBar() {
 
         return new SwingSeekBar(
-                0,
-                0,
-                0,
-                1000000,
-                1000000,
-                10,
-                1000000,
+                config.getScaledInt("SEEKBAR_DIRECTION"),
+                config.getScaledInt("SEEKBAR_MIN"),
+                config.getScaledInt("SEEKBAR_MIN"),
+                config.getScaledInt("SEEKBAR_MAX"),
+                config.getScaledInt("SEEKBAR_MAX"),
+                config.getScaledInt("SEEKBAR_START_VALUE"),
+                config.getScaledInt("SEEKBAR_TICK_SPACING"),
                 null,
                 null
         );

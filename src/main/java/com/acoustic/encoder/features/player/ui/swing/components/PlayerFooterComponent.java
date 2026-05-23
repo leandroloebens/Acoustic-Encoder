@@ -1,15 +1,27 @@
 package com.acoustic.encoder.features.player.ui.swing.components;
 
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.ProgressSliderUI;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.*;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class PlayerFooterComponent extends JPanel {
+
+    private final static int FOOTER_PANEL_HGAP = (int) (12 * SwingUtils.getScreenScaleRatio());
+    private final static int FOOTER_PANEL_VGAP = (int) (0 * SwingUtils.getScreenScaleRatio());
+
+    private final static int FOOTER_PANEL_TGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private final static int FOOTER_PANEL_LGAP = (int) (20 * SwingUtils.getScreenScaleRatio());
+    private final static int FOOTER_PANEL_BGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private final static int FOOTER_PANEL_RGAP = (int) (20 * SwingUtils.getScreenScaleRatio());
+
+    private final static int SAVE_WRAPPER_TGAP = (int) (0 * SwingUtils.getScreenScaleRatio());
+    private final static int SAVE_WRAPPER_LGAP = (int) (8 * SwingUtils.getScreenScaleRatio());
+    private final static int SAVE_WRAPPER_BGAP = (int) (14 * SwingUtils.getScreenScaleRatio());
+    private final static int SAVE_WRAPPER_RGAP = (int) (0 * SwingUtils.getScreenScaleRatio());
+
+    private final static Color BACKGROUND_COLOR = new Color(18, 18, 18);
 
     private final SwingButton saveButton;
     private final SwingSeekBar playbackSeekBar;
@@ -32,30 +44,43 @@ public class PlayerFooterComponent extends JPanel {
     }
 
     private void initializeComponent() {
-        //setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-        setLayout(new BorderLayout(10, 0));
-        setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        setLayout(new BorderLayout(FOOTER_PANEL_HGAP, FOOTER_PANEL_VGAP));
+        setBorder(BorderFactory.createEmptyBorder(
+                FOOTER_PANEL_TGAP,
+                FOOTER_PANEL_LGAP,
+                FOOTER_PANEL_BGAP,
+                FOOTER_PANEL_RGAP
+        ));
 
         SwingUtils.setHandCursor(saveButton, playbackSeekBar);
 
-        //setBackground(Color.BLUE);
-        setBackground(new Color(18,18,18));
+        setBackground(BACKGROUND_COLOR);
 
-        JPanel timePanel = new JPanel(new BorderLayout()); // PROTOTIPO -> ARRUMAR
+        SwingPanel timePanel = new SwingPanel(new BorderLayout());
         timePanel.setOpaque(false);
 
         timePanel.add(currentTimeLabel, BorderLayout.WEST);
         timePanel.add(durationTimeLabel, BorderLayout.EAST);
 
-        JPanel progressPanel = new JPanel(new BorderLayout());
+        SwingPanel progressPanel = new SwingPanel(new BorderLayout());
         progressPanel.setOpaque(false);
 
         progressPanel.add(playbackSeekBar, BorderLayout.CENTER);
         progressPanel.add(timePanel, BorderLayout.SOUTH);
 
-//        add(playbackSeekBar, BorderLayout.CENTER);
+        SwingPanel saveButtonWrapper = new SwingPanel(new GridBagLayout());;
+        saveButtonWrapper.setOpaque(false);
+        saveButtonWrapper.setBorder(BorderFactory.createEmptyBorder(
+                SAVE_WRAPPER_TGAP,
+                SAVE_WRAPPER_LGAP,
+                SAVE_WRAPPER_BGAP,
+                SAVE_WRAPPER_RGAP
+        ));
+
+        saveButtonWrapper.add(saveButton);
+
         add(progressPanel, BorderLayout.CENTER);
-        add(saveButton, BorderLayout.EAST);
+        add(saveButtonWrapper, BorderLayout.EAST);
 
         initializeSaveButton();
         initializeSeekBar();
