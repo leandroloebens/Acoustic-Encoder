@@ -1,6 +1,7 @@
 package com.acoustic.encoder.features.player.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
+import com.acoustic.encoder.features.player.controller.AudioPlayerController;
 import com.acoustic.encoder.features.player.ui.PlayerViewManager;
 import com.acoustic.encoder.features.player.ui.PlayerViewManagerFactory;
 import com.acoustic.encoder.features.player.ui.swing.synchronizer.DefaultSwingPlayerViewSynchronizer;
@@ -25,14 +26,14 @@ public class DefaultSwingPlayerViewManagerFactory implements PlayerViewManagerFa
     }
 
     @Override
-    public PlayerViewManager createViewManager() {
+    public PlayerViewManager createViewManager(AudioPlayerController controller) {
         SwingPlayerViewAssembler playerViewAssembler = getPlayerViewAssembler();
 
         SwingPlayerViewEventBinder playerViewBinder = new DefaultSwingPlayerViewEventBinder(
                 eventBus, DefaultSwingPlayerViewSynchronizer::new
         );
 
-        return new DefaultSwingPlayerViewManager(playerViewAssembler, playerViewBinder, eventBus);
+        return new DefaultSwingPlayerViewManager(controller, playerViewAssembler, playerViewBinder);
     }
 
     private SwingPlayerViewAssembler getPlayerViewAssembler() {

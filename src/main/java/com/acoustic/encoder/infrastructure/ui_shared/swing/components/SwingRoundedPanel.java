@@ -3,7 +3,7 @@ package com.acoustic.encoder.infrastructure.ui_shared.swing.components;
 import javax.swing.*;
 import java.awt.*;
 
-public class SwingRoundedPanel extends JPanel {
+public class SwingRoundedPanel extends SwingPanel {
 
     private final int cornerRadius;
 

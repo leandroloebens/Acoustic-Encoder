@@ -1,9 +1,7 @@
 package com.acoustic.encoder.features.conversion.ui.swing.components;
 
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingPanel;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingTextArea;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingVerticalScrollPane;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.updater.TextAreaUpdater;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.*;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
@@ -16,7 +14,7 @@ public class MainTextAreaPanel extends SwingPanel {
 
     private static final int VERTICAL_STRUT = 10;
 
-    private SwingTextArea textArea;
+    private final SwingTextArea textArea;
 
     public MainTextAreaPanel(SwingVerticalScrollPane scrollPane, SwingLabel label) {
         if (scrollPane == null) throw new IllegalArgumentException(NULL_SCROLL_PANE_ERROR_MSG);
@@ -38,12 +36,16 @@ public class MainTextAreaPanel extends SwingPanel {
         textArea.setText(text);
     }
 
+    public TextAreaUpdater getTextAreaUpdater() {
+        return this::setText;
+    }
+
     public String getText() {
         return textArea.getText();
     }
 
     public boolean isTextEmpty() {
-        return textArea.getText().isEmpty();
+        return getText().trim().isEmpty();
     }
 
 }

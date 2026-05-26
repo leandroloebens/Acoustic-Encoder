@@ -2,25 +2,26 @@ package com.acoustic.encoder.features.conversion.ui.swing.binder;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.domain.event.EventListener;
-import com.acoustic.encoder.features.conversion.dto.MusicProject;
+import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.actions.*;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.handler.ParameterComboBoxChangeBindingHandler;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.handler.ParameterSliderChangeBindingHandler;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.handler.VoiceSelectorClickHandler;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.provider.MainTextAreaInputProvider;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.validator.InstrumentInputValidator;
+import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizerFactory;
-import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
-import com.acoustic.encoder.domain.music.InstrumentOption;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
-import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
-import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSlider;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.BindingHandler;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.ButtonClickBindingHandler;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.FrameWindowBindingHandler;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,22 +31,9 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     private static final String NULL_PARAMETERS_SERVICE_ERROR_MSG = "Parameters service cannot be null!";
     private static final String NULL_SYNCHRONIZER_FACTORY_ERROR_MSG = "Synchronizer factory cannot be null!";
 
-    private final static String EMPTY_TEXT_INPUT_WARNING = "Please enter some text first";
     private final static String INVALID_INSTRUMENT_INPUT_WARNING = "Invalid instrument - Last valid instrument set";
 
     private static final String NULL_COMPONENTS_ERROR_MSG = "Components cannot be null!";
-
-    private static final String LOAD_TEXT_FILE_EXTENSION_FILTER = "txt";
-    private static final String LOAD_TEXT_FILTER_DESCRIPTION = "Text Files (*.txt)";
-    private static final String LOAD_TEXT_DIALOG_TITLE = "Open";
-
-    private static final String SAVE_TEXT_FILE_EXTENSION_FILTER = "txt";
-    private static final String SAVE_TEXT_FILTER_DESCRIPTION = "Text Files (*.txt)";
-    private static final String SAVE_TEXT_DIALOG_TITLE = "Save as";
-
-    private static final String SAVE_PROJECT_FILE_EXTENSION_FILTER = "aef";
-    private static final String SAVE_PROJECT_FILTER_DESCRIPTION = "Acoustic Encoder Format (*.aef)";
-    private static final String SAVE_PROJECT_DIALOG_TITLE = "Save as";
 
     private final EventBus eventBus;
 
@@ -60,8 +48,6 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     private ConversionViewSwingComponentsWrapper comps;
 
     private final List<Runnable> removers = new ArrayList<>();
-
-    private JRadioButton previousButton;
 
     public DefaultSwingConversionViewEventBinder(
             EventBus eventBus,
@@ -89,36 +75,15 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
         this.comps = components;
 
-        bindConvertButton(frame, controller);
-        bindLoadTextButton(frame, controller);
-        bindSaveTextButton(frame, controller);
-        bindLoadProjectButton(frame, controller);
-        bindSaveProjectButton(frame, controller);
+        this.synchronizer = synchronizerFactory.createSynchronizer(comps, parametersService);
+        bindSynchronizer();
 
-        bindParameterSliderPanel(components.bpmPanel(), () -> synchronizer.syncBpm());
-
-        bindParameterSliderPanel(comps.volumePanel(), () -> synchronizer.syncVoiceVolume());
-
-        bindParameterSliderPanel(comps.octavePanel(), () -> synchronizer.syncVoiceOctave());
-
-        bindParameterComboBoxPanel(
-                comps.instrumentPanel(),
-                frame,
-                () -> synchronizer.syncVoiceInstrument(),
-                INVALID_INSTRUMENT_INPUT_WARNING
-        );
-
-        this.previousButton = comps.voiceSelector().getSelectedButton();
-        bindVoiceSelector(frame);
-
-        EventListener<ProjectReadyToOpen> openListener =
-                event -> synchronizer.syncMusicProject(event.project());
-        eventBus.subscribe(ProjectReadyToOpen.class, openListener);
-//        removers.add(() -> eventBus.unsubscribe(ProjectReadyToOpen.class, openListener));
+        List<BindingHandler> bindingHandlers = createBindingHandlers(frame, controller);
+        for (BindingHandler bindingHandler : bindingHandlers) {
+            bindingHandler.bind(removers);
+        }
 
         bound = true;
-
-        this.synchronizer = synchronizerFactory.createSynchronizer(comps, parametersService);
 
         return this.synchronizer;
     }
@@ -132,193 +97,118 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         }
 
         removers.clear();
-
         comps = null;
-
         bound = false;
     }
 
-    private boolean validateInstrumentInput(SwingFrame frame) {
-        if (comps.instrumentPanel().getComboBox().finishEditing()) {
-            JTextField editor = comps.instrumentPanel().getTextEditor();
-            editor.postActionEvent(); // Manually fires the event to update the instrument value
-            return true;
-        }
-        else {
-            SwingUtils.showErrorMessage(frame, INVALID_INSTRUMENT_INPUT_WARNING);
-            return false;
-        }
+    private void bindSynchronizer() {
+        EventListener<ProjectReadyToOpen> openListener =
+                event ->
+                        SwingUtilities.invokeLater(() -> synchronizer.syncMusicProject(event.project()));
+        eventBus.subscribe(ProjectReadyToOpen.class, openListener);
+        removers.add(() -> eventBus.unsubscribe(ProjectReadyToOpen.class, openListener));
     }
 
-    private void bindConvertButton(SwingFrame frame, ConversionController controller){
-        ActionListener convertListener = event -> {
-            try {
-                if (comps.mainTextAreaPanel().isTextEmpty()) throw new IllegalArgumentException();
-                else if (validateInstrumentInput(frame)) {
-                    controller.handleConvertAction(parametersService.wrapMusicProject(
-                            comps.mainTextAreaPanel().getText(), synchronizer.getParameters()));
-                    System.out.println(synchronizer.getParameters().toString());
-                }
-            } catch (IllegalArgumentException e) {
-                SwingUtils.showWarningMessage(frame, EMPTY_TEXT_INPUT_WARNING);
-            } catch (IllegalStateException e) {
-                SwingUtils.showErrorMessage(frame, e.getMessage());
-            }
-        };
-
-        comps.converterButton().addActionListener(convertListener);
-        removers.add(() -> comps.converterButton().removeActionListener(convertListener));
-    }
-
-    private void bindLoadTextButton(SwingFrame frame, ConversionController controller) {
-        ActionListener loadTextListener = event -> {
-            File fileToLoad = SwingUtils.getFileFromChooser(
-                    SwingUtils.LOAD_FILE_OPERATION,
-                    frame,
-                    LOAD_TEXT_FILE_EXTENSION_FILTER,
-                    LOAD_TEXT_FILTER_DESCRIPTION,
-                    LOAD_TEXT_DIALOG_TITLE
-            );
-
-            if (fileToLoad != null) {
-                try {
-                    String text = controller.handleLoadTextAction(fileToLoad);
-                    comps.mainTextAreaPanel().setText(text);
-                } catch (IOException ex) {
-                    SwingUtils.showErrorMessage(frame, "Error loading file: " + ex.getMessage());
-                }
-            }
-        };
-
-        comps.loadTextButton().addActionListener(loadTextListener);
-        removers.add(() -> comps.loadTextButton().removeActionListener(loadTextListener));
-    }
-
-    private void bindSaveTextButton(SwingFrame frame, ConversionController controller){
-        ActionListener saveTextListener = event -> {
-            File fileToSave = SwingUtils.getFileFromChooser(
-                    SwingUtils.SAVE_FILE_OPERATION,
-                    frame,
-                    SAVE_TEXT_FILE_EXTENSION_FILTER,
-                    SAVE_TEXT_FILTER_DESCRIPTION,
-                    SAVE_TEXT_DIALOG_TITLE
-            );
-
-            if (fileToSave != null) {
-                try {
-                    controller.handleSaveTextAction(comps.mainTextAreaPanel().getText(), fileToSave);
-                    SwingUtils.showMessage(frame, "Saved!");
-                } catch (IOException ex) {
-                    SwingUtils.showErrorMessage(frame, "Error saving file: " + ex.getMessage());
-                }
-            }
-        };
-
-        comps.saveTextButton().addActionListener(saveTextListener);
-        removers.add(() -> comps.saveTextButton().removeActionListener(saveTextListener));
-    }
-
-    private void bindLoadProjectButton(SwingFrame frame, ConversionController controller) {
-        ActionListener loadProjectListener = event -> {
-            File fileToLoad = SwingUtils.getFileFromChooser(
-                    SwingUtils.LOAD_FILE_OPERATION,
-                    frame,
-                    SAVE_PROJECT_FILE_EXTENSION_FILTER,
-                    SAVE_PROJECT_FILTER_DESCRIPTION,
-                    SAVE_PROJECT_DIALOG_TITLE
-            );
-
-            if (fileToLoad != null) {
-                try {
-                    MusicProject loadedProject = controller.handleLoadProjectAction(fileToLoad);
-                    synchronizer.syncMusicProject(loadedProject);
-                } catch (IOException e) {
-                    SwingUtils.showErrorMessage(frame, "Error loading project: " + e.getMessage());
-                }
-            }
-        };
-
-        comps.loadProjectButton().addActionListener(loadProjectListener);
-        removers.add(() -> comps.loadProjectButton().removeActionListener(loadProjectListener));
-    }
-
-    private void bindSaveProjectButton(SwingFrame frame, ConversionController controller) {
-        ActionListener saveProjectListener = event -> {
-            File fileToSave = SwingUtils.getFileFromChooser(
-                    SwingUtils.SAVE_FILE_OPERATION,
-                    frame,
-                    SAVE_PROJECT_FILE_EXTENSION_FILTER,
-                    SAVE_PROJECT_FILTER_DESCRIPTION,
-                    SAVE_PROJECT_DIALOG_TITLE
-            );
-
-            if (fileToSave != null) {
-                try {
-                    MusicProject project = parametersService.wrapMusicProject(
-                            comps.mainTextAreaPanel().getText(), synchronizer.getParameters());
-                    controller.handleSaveProjectAction(project, fileToSave);
-                    SwingUtils.showMessage(frame, "Saved!");
-                } catch (IOException ex) {
-                    SwingUtils.showErrorMessage(frame, "Error saving project file: " + ex.getMessage());
-                }
-            }
-        };
-
-        comps.saveProjectButton().addActionListener(saveProjectListener);
-        removers.add(() -> comps.saveProjectButton().removeActionListener(saveProjectListener));
-    }
-
-    private void bindParameterSliderPanel(ParameterSliderPanel panel, Runnable action) {
-        ChangeListener listener = event -> {
-            SwingSlider slider = panel.getSlider();
-            int value = slider.getValue();
-
-            if (value < slider.getMinToShow()) slider.setValue(slider.getMinToShow());
-            else if (value > slider.getMaxToShow()) slider.setValue(slider.getMaxToShow());
-
-            panel.updateLabel();
-            action.run();
-        };
-
-        panel.getSlider().addChangeListener(listener);
-        removers.add(() -> panel.getSlider().removeChangeListener(listener));
-    }
-
-    private void bindParameterComboBoxPanel(
-            ParameterComboBoxPanel<InstrumentOption> panel,
+    private List<BindingHandler> createBindingHandlers(
             SwingFrame frame,
-            Runnable action,
-            String warningMessage
+            ConversionController controller
     ) {
-        ActionListener listener = event -> {
-            if (frame.isVisible() && panel.getComboBox().finishEditing())
-                action.run();
-            else
-                SwingUtils.showWarningMessage(frame, warningMessage);
-        };
+        List<BindingHandler> handlers = new ArrayList<>();
+        handlers.add(new FrameWindowBindingHandler(frame, getFrameExitAction()));
+        handlers.addAll(createButtonsBindingHandlers(frame, controller));
+        handlers.addAll(createParametersBindingHandlers(frame));
 
-        JTextField comboBoxTextEditor = panel.getTextEditor();
-        comboBoxTextEditor.addActionListener(listener);
-        removers.add(() -> comboBoxTextEditor.removeActionListener(listener));
+        for (JRadioButton button : comps.voiceSelector().getButtons()) {
+            handlers.add(new VoiceSelectorClickHandler(
+                    button,
+                    getVoiceSelectionAction(button, comps.voiceSelector(), frame))
+            );
+        }
+
+        return handlers;
     }
 
-    private void bindVoiceSelector(SwingFrame frame) {
-        for (JRadioButton button : comps.voiceSelector().getButtons()) {
-            ActionListener listener = event -> {
-                previousButton.setSelected(true);
-                button.setSelected(false);
+    private List<BindingHandler> createParametersBindingHandlers(
+            SwingFrame frame
+    ) {
+        return List.of(
+                new ParameterSliderChangeBindingHandler(comps.bpmPanel(), getBpmChangeAction()),
+                new ParameterSliderChangeBindingHandler(comps.volumePanel(), getVolumeChangeAction()),
+                new ParameterSliderChangeBindingHandler(comps.octavePanel(), getOctaveChangeAction()),
+                new ParameterComboBoxChangeBindingHandler(
+                        frame,
+                        comps.instrumentPanel(),
+                        getInstrumentChangeAction(),
+                        INVALID_INSTRUMENT_INPUT_WARNING
+                )
+        );
+    }
 
-                if (validateInstrumentInput(frame)) {
-                    previousButton.setSelected(false);
-                    button.setSelected(true);
-                    previousButton = button;
+    private List<BindingHandler> createButtonsBindingHandlers(
+            SwingFrame frame,
+            ConversionController controller
+    ) {
+        return List.of(
+                new ButtonClickBindingHandler(comps.converterButton(), getConvertAction(frame, controller)),
+                new ButtonClickBindingHandler(comps.saveTextButton(), getSaveTextAction(frame, controller)),
+                new ButtonClickBindingHandler(comps.loadTextButton(), getLoadTextAction(frame, controller)),
+                new ButtonClickBindingHandler(comps.openProjectButton(), getOpenProjectAction(frame, controller)),
+                new ButtonClickBindingHandler(comps.saveProjectButton(), getSaveProjectAction(frame, controller))
+        );
+    }
 
-                    synchronizer.syncVoiceSelector();
-                }
-            };
+    private Runnable getFrameExitAction() {
+        return () -> eventBus.publish(new ConversionScreenCloseRequestEvent());
+    }
 
-            button.addActionListener(listener);
-            removers.add(() -> button.removeActionListener(listener));
-        }
+    private Runnable getConvertAction(SwingFrame frame, ConversionController controller) {
+        return new ConvertAction(
+                frame,
+                controller,
+                synchronizer,
+                parametersService,
+                new MainTextAreaInputProvider(comps.mainTextAreaPanel()),
+                new InstrumentInputValidator(comps.instrumentPanel())
+        );
+    }
+
+    private Runnable getLoadTextAction(SwingFrame frame, ConversionController controller) {
+        return new LoadTextAction(frame, controller, comps.mainTextAreaPanel().getTextAreaUpdater());
+    }
+
+    private Runnable getSaveTextAction(SwingFrame frame, ConversionController controller) {
+        return new SaveTextAction(frame, controller, new MainTextAreaInputProvider(comps.mainTextAreaPanel()));
+    }
+
+    private Runnable getOpenProjectAction(SwingFrame frame, ConversionController controller) {
+        return new OpenProjectAction(frame, controller, synchronizer);
+    }
+
+    private Runnable getSaveProjectAction(SwingFrame frame, ConversionController controller) {
+        return new SaveProjectAction(
+                frame,
+                controller,
+                parametersService,
+                synchronizer,
+                new MainTextAreaInputProvider(comps.mainTextAreaPanel())
+        );
+    }
+
+    private Runnable getBpmChangeAction() { return () -> synchronizer.syncBpm(); }
+
+    private Runnable getVolumeChangeAction() { return () -> synchronizer.syncVoiceVolume(); }
+
+    private Runnable getOctaveChangeAction() { return () -> synchronizer.syncVoiceOctave(); }
+
+    private Runnable getInstrumentChangeAction() { return () -> synchronizer.syncVoiceInstrument(); }
+
+    private Runnable getVoiceSelectionAction(JRadioButton button, VoiceSelectorPanel panel, SwingFrame frame) {
+        return new VoiceSelectionAction(
+                button,
+                panel,
+                frame,
+                synchronizer,
+                new InstrumentInputValidator(comps.instrumentPanel())
+        );
     }
 }

@@ -17,8 +17,6 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
 
     private final static String ILLEGAL_CONFIG_ARGUMENT_MESSAGE = "Illegal config argument!";
 
-    private final int lado = 40;
-
     private final SwingViewConfigWrapper config;
 
     public DefaultSwingPlayerViewComponentsFactory(HashMap<String, String> configMap) {
@@ -36,10 +34,10 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     }
 
     private PlayerControlsComponent createControlsComponent() {
-        Icon playIcon = IconLoader.load("/ui/icons/play_filled_32.png");
-        Icon pauseIcon = IconLoader.load("/ui/icons/pause_filled_32.png");
-        Icon rewindIcon = IconLoader.load("/ui/icons/fast_rewind_B3B3B3.png");
-        Icon forwardIcon = IconLoader.load("/ui/icons/fast_forward_B3B3B3.png");
+        Icon playIcon = IconLoader.load(config.getString("PLAY_BUTTON_ICON_PATH"));
+        Icon pauseIcon = IconLoader.load(config.getString("PAUSE_BUTTON_ICON_PATH"));
+        Icon rewindIcon = IconLoader.load(config.getString("REWIND_BUTTON_ICON_PATH"));
+        Icon forwardIcon = IconLoader.load(config.getString("FORWARD_BUTTON_ICON_PATH"));
 
         return new PlayerControlsComponent(
                 createPlayPauseButton(playIcon),
@@ -51,7 +49,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     }
 
     private PlayerFooterComponent createFooterComponent() {
-        Icon saveIcon = IconLoader.load("/ui/icons/download_24_B3B3B3.png");
+        Icon saveIcon = IconLoader.load(config.getString("SAVE_BUTTON_ICON_PATH"));
 
         return new PlayerFooterComponent(
                 createSaveButton(saveIcon),
@@ -66,10 +64,10 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         return new SwingButton(
                 null,
                 null,
-                20,
+                config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
                 playIcon,
                 null,
-                new Dimension(50, 50)
+                config.getScaledDimension("PLAY_PAUSE_BUTTON_PREFERRED_SIZE")
         );
     }
 
@@ -78,10 +76,10 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         return new SwingButton(
                 null,
                 null,
-                20,
+                config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
                 rewindIcon,
                 null,
-                new Dimension(lado, lado)
+                config.getScaledDimension("SKIP_BUTTONS_PREFERRED_SIZE")
         );
     }
 
@@ -90,10 +88,10 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         return new SwingButton(
                 null,
                 null,
-                20,
+                config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
                 forwardIcon,
                 null,
-                new Dimension(lado, lado)
+                config.getScaledDimension("SKIP_BUTTONS_PREFERRED_SIZE")
         );
     }
 
@@ -102,23 +100,23 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         return new SwingButton(
                 null,
                 null,
-                20,
+                config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
                 saveIcon,
                 null,
-                null
+                config.getScaledDimension("SAVE_BUTTON_PREFERRED_SIZE")
         );
     }
 
     private SwingSeekBar createSeekBar() {
 
         return new SwingSeekBar(
-                0,
-                0,
-                0,
-                1000000,
-                1000000,
-                10,
-                1000000,
+                config.getScaledInt("SEEKBAR_DIRECTION"),
+                config.getScaledInt("SEEKBAR_MIN"),
+                config.getScaledInt("SEEKBAR_MIN"),
+                config.getScaledInt("SEEKBAR_MAX"),
+                config.getScaledInt("SEEKBAR_MAX"),
+                config.getScaledInt("SEEKBAR_START_VALUE"),
+                config.getScaledInt("SEEKBAR_TICK_SPACING"),
                 null,
                 null
         );
@@ -129,7 +127,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         return new SwingLabel(
                 null,
                 null,
-                15,
+                config.getScaledInt("PROGRESS_TIME_LABEL_FONT_SIZE"),
                 null
         );
     }
@@ -139,7 +137,7 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
         return new SwingLabel(
                 null,
                 null,
-                15,
+                config.getScaledInt("PROGRESS_TIME_LABEL_FONT_SIZE"),
                 null
         );
     }

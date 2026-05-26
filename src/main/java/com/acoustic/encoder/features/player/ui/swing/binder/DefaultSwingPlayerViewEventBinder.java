@@ -2,6 +2,7 @@ package com.acoustic.encoder.features.player.ui.swing.binder;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
+import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
 import com.acoustic.encoder.features.player.exception.MusicExportException;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizer;
@@ -11,6 +12,10 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekB
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +63,7 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
         bindSaveButton(frame, controller);
         bindPlaybackSeekBar(comps.footerComponent().getPlaybackSeekBar(), controller);
 
-        bound = true;
+        bindFrameExit(frame);
 
         this.synchronizer = synchronizerFactory.createSynchronizer(
                 comps,
@@ -66,6 +71,8 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
                 controller::getMicrosecDuration,
                 controller::isPlayingAudio
         );
+
+        bound = true;
 
         return synchronizer;
     }
@@ -80,15 +87,32 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
 
         removers.clear();
         comps = null;
+        synchronizer = null;
 
         bound = false;
     }
 
+    private void bindFrameExit(SwingFrame frame) {
+        WindowAdapter windowAdapter = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.setVisible(false);
+                eventBus.publish(new PlayerClosedEvent());
+            }
+        };
+
+        frame.addWindowListener(windowAdapter);
+        removers.add(() -> frame.removeWindowListener(windowAdapter));
+    }
+
     private void bindPlayPauseButton(AudioPlayerController controller) {
-        comps.controlsComponent().getPlayPauseButton().addActionListener(e -> {
+        ActionListener pauseListener = event -> {
             controller.handlePlayPauseToggleAction();
             comps.controlsComponent().setPlayPauseState(controller.isPlayingAudio());
-        });
+        };
+
+        comps.controlsComponent().getPlayPauseButton().addActionListener(pauseListener);
+        removers.add(() -> comps.controlsComponent().getPlayPauseButton().removeActionListener(pauseListener));
     }
 
     private void bindSkipBackwardButton(AudioPlayerController controller) {
@@ -102,7 +126,7 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     }
 
     private void bindSaveButton(SwingFrame frame, AudioPlayerController controller) {
-        comps.footerComponent().getSaveButton().addActionListener(e -> {
+        ActionListener saveListener = event -> {
             File fileToSave = SwingUtils.getFileFromChooser(
                     SwingUtils.SAVE_FILE_OPERATION,
                     frame,
@@ -116,21 +140,23 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
                 try {
                     controller.handleSaveAction(fileToSave);
                 } catch (MusicExportException ex) {
-                    throw new RuntimeException(ex);
+                    SwingUtils.showErrorMessage(frame, ex.getMessage());
                 }
 
             }
-        });
+        };
+
+        comps.footerComponent().getSaveButton().addActionListener(saveListener);
+        removers.add(() -> comps.footerComponent().getSaveButton().removeActionListener(saveListener));
     }
 
     private void bindPlaybackSeekBar(SwingSeekBar playbackSeekBar, AudioPlayerController controller) {
-        playbackSeekBar.addChangeListener(e -> {
-
+        ChangeListener changeListener = event -> {
             if (synchronizer != null && synchronizer.isUpdatingProgrammatically()) {
                 return;
             }
 
-            JSlider source = (JSlider) e.getSource();
+            JSlider source = (JSlider) event.getSource();
 
             if (source.hasFocus() && !playbackSeekBar.getValueIsAdjusting()) {
                 source.transferFocus();
@@ -139,7 +165,9 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
                 long microsecPosition = (long) (percentage * controller.getMicrosecDuration());
                 controller.handleSeekAction(microsecPosition);
             }
+        };
 
-        });
+        playbackSeekBar.addChangeListener(changeListener);
+        removers.add(() -> playbackSeekBar.removeChangeListener(changeListener));
     }
 }

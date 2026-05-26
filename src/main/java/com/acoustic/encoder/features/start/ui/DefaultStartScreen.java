@@ -4,6 +4,7 @@ import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
 import com.acoustic.encoder.features.start.controller.StartController;
+import com.acoustic.encoder.features.start.event.StartScreenCloseRequestEvent;
 
 public class DefaultStartScreen implements StartScreen {
     private static final String ILLEGAL_FILE_SERVICE_ARGUMENT = "File service cannot be null";
@@ -11,22 +12,23 @@ public class DefaultStartScreen implements StartScreen {
 
     private final StartController controller;
 
-    private final StartViewManager manager;
+    private final StartViewManagerFactory managerFactory;
+
+    private StartViewManager manager;
 
     private final EventBus eventBus;
 
-    public DefaultStartScreen(StartController controller, StartViewManager manager, EventBus eventBus) {
+    public DefaultStartScreen(StartController controller, StartViewManagerFactory managerFactory, EventBus eventBus) {
         if (controller == null) throw new IllegalArgumentException(ILLEGAL_FILE_SERVICE_ARGUMENT);
         this.controller = controller;
 
-        if (manager == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
-        this.manager = manager;
+        if (managerFactory == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
+        this.managerFactory = managerFactory;
 
         if (eventBus == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
         this.eventBus = eventBus;
 
-        eventBus.subscribe(AppShutdownEvent.class, event -> closeWindow());
-        eventBus.subscribe(ProjectReadyToOpen.class, event -> closeWindow());
+        setEvents();
 
         initialize();
 
@@ -34,7 +36,7 @@ public class DefaultStartScreen implements StartScreen {
 
     @Override
     public void initialize() {
-        manager.assemble(this.controller);
+        this.manager = managerFactory.createViewManager(controller);;
     }
 
     @Override
@@ -50,6 +52,12 @@ public class DefaultStartScreen implements StartScreen {
     @Override
     public void closeWindow() {
         manager.dispose();
+    }
+
+    private void setEvents() {
+        eventBus.subscribe(AppShutdownEvent.class, event -> closeWindow());
+        eventBus.subscribe(StartScreenCloseRequestEvent.class, event -> closeWindow());
+        eventBus.subscribe(ProjectReadyToOpen.class, event -> closeWindow());
     }
 
 }
