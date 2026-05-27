@@ -2,8 +2,7 @@ package com.acoustic.encoder.features.conversion.ui.swing.binder;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.domain.event.EventListener;
-import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
-import com.acoustic.encoder.features.conversion.ui.swing.binder.actions.*;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.action.*;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.handler.ParameterComboBoxChangeBindingHandler;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.handler.ParameterSliderChangeBindingHandler;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.handler.VoiceSelectorClickHandler;
@@ -33,20 +32,15 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
 
     private final static String INVALID_INSTRUMENT_INPUT_WARNING = "Invalid instrument - Last valid instrument set";
 
-    private static final String NULL_COMPONENTS_ERROR_MSG = "Components cannot be null!";
+    private static final String NULL_COMPONENTS_ERROR_MSG = "Conversion view components cannot be null!";
 
     private final EventBus eventBus;
-
     private final ConversionParametersService parametersService;
-
     private final SwingConversionViewSynchronizerFactory synchronizerFactory;
 
     private SwingConversionViewSynchronizer synchronizer;
-
     private boolean bound = false;
-
     private ConversionViewSwingComponentsWrapper comps;
-
     private final List<Runnable> removers = new ArrayList<>();
 
     public DefaultSwingConversionViewEventBinder(
@@ -158,7 +152,7 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     }
 
     private Runnable getFrameExitAction() {
-        return () -> eventBus.publish(new ConversionScreenCloseRequestEvent());
+        return new ConversionFrameExitAction(eventBus);
     }
 
     private Runnable getConvertAction(SwingFrame frame, ConversionController controller) {

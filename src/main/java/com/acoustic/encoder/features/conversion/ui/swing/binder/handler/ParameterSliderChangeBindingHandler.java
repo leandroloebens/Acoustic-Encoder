@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.ui.swing.binder.handler;
 
-import com.acoustic.encoder.features.conversion.ui.swing.binder.actions.ChangeParameterSliderAction;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.action.ChangeParameterSliderAction;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterSliderPanel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.BindingHandler;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.SliderChangeBindingHandler;

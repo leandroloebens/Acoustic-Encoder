@@ -2,31 +2,25 @@ package com.acoustic.encoder.features.player.ui.swing.binder;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
-import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
-import com.acoustic.encoder.features.player.exception.MusicExportException;
+import com.acoustic.encoder.features.player.ui.swing.binder.action.*;
+import com.acoustic.encoder.features.player.ui.swing.binder.handler.ProgressBarManualChangeBindingHandler;
+import com.acoustic.encoder.features.player.ui.swing.components.MusicProgressBarPanel;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizer;
 import com.acoustic.encoder.features.player.ui.swing.synchronizer.SwingPlayerViewSynchronizerFactory;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.BindingHandler;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.ButtonClickBindingHandler;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.FrameWindowBindingHandler;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBinder {
     private static final String NULL_EVENT_BUS_ERROR_MSG = "EventBus cannot be null!";
-
-    private static final String ONSAVE_FILE_EXTENSION_FILTER = "mid";
-    private static final String ONSAVE_FILTER_DESCRIPTION = "MID Files (*.mid)";
-    private static final String ONSAVE_DIALOG_TITLE = "Save as";
+    private static final String NULL_COMPONENTS_ERROR_MSG = "Player view components cannot be null!";
 
     private final EventBus eventBus;
     private final SwingPlayerViewSynchronizerFactory synchronizerFactory;
@@ -55,15 +49,8 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
     ) {
         if (bound) return this.synchronizer;
 
+        if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
         this.comps = components;
-
-        bindPlayPauseButton(controller);
-        bindSkipBackwardButton(controller);
-        bindSkipForwardButton(controller);
-        bindSaveButton(frame, controller);
-        bindPlaybackSeekBar(comps.footerComponent().getPlaybackSeekBar(), controller);
-
-        bindFrameExit(frame);
 
         this.synchronizer = synchronizerFactory.createSynchronizer(
                 comps,
@@ -71,6 +58,11 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
                 controller::getMicrosecDuration,
                 controller::isPlayingAudio
         );
+
+        List<BindingHandler> bindingHandlers = createBindingHandlers(frame, controller);
+        for (BindingHandler bindingHandler : bindingHandlers) {
+            bindingHandler.bind(removers);
+        }
 
         bound = true;
 
@@ -92,82 +84,50 @@ public class DefaultSwingPlayerViewEventBinder implements SwingPlayerViewEventBi
         bound = false;
     }
 
-    private void bindFrameExit(SwingFrame frame) {
-        WindowAdapter windowAdapter = new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                frame.setVisible(false);
-                eventBus.publish(new PlayerClosedEvent());
-            }
-        };
-
-        frame.addWindowListener(windowAdapter);
-        removers.add(() -> frame.removeWindowListener(windowAdapter));
+    private List<BindingHandler> createBindingHandlers(SwingFrame frame, AudioPlayerController controller) {
+        return List.of(
+                new FrameWindowBindingHandler(frame, getFrameExitAction()),
+                new ButtonClickBindingHandler(
+                        comps.skipMusicBackwardButton(), getSkipBackwardAction(controller)),
+                new ButtonClickBindingHandler(
+                        comps.skipMusicForwardButton(), getSkipForwardAction(controller)),
+                new ButtonClickBindingHandler(
+                        comps.saveMusicButton(), getSaveMusicAction(frame, controller)
+                ),
+                new ButtonClickBindingHandler(
+                        comps.playPauseButton(), getPlayPauseAction(controller)
+                ),
+                new ProgressBarManualChangeBindingHandler(
+                        comps.progressBarPanel(),
+                        getProgressBarManualChangeAction(comps.progressBarPanel(), controller)
+                )
+        );
     }
 
-    private void bindPlayPauseButton(AudioPlayerController controller) {
-        ActionListener pauseListener = event -> {
-            controller.handlePlayPauseToggleAction();
-            comps.controlsComponent().setPlayPauseState(controller.isPlayingAudio());
-        };
-
-        comps.controlsComponent().getPlayPauseButton().addActionListener(pauseListener);
-        removers.add(() -> comps.controlsComponent().getPlayPauseButton().removeActionListener(pauseListener));
+    private Runnable getFrameExitAction() {
+        return new PlayerFrameExitAction(eventBus);
     }
 
-    private void bindSkipBackwardButton(AudioPlayerController controller) {
-        comps.controlsComponent().getSkipBackwardButton().addActionListener(e ->
-                controller.handleSkipBackwardAction());
+    private Runnable getSkipForwardAction(AudioPlayerController controller) {
+        return new SkipMusicForwardAction(controller);
     }
 
-    private void bindSkipForwardButton(AudioPlayerController controller) {
-        comps.controlsComponent().getSkipForwardButton().addActionListener(e ->
-                controller.handleSkipForwardAction());
+    private Runnable getSkipBackwardAction(AudioPlayerController controller) {
+        return new SkipMusicBackwardAction(controller);
     }
 
-    private void bindSaveButton(SwingFrame frame, AudioPlayerController controller) {
-        ActionListener saveListener = event -> {
-            File fileToSave = SwingUtils.getFileFromChooser(
-                    SwingUtils.SAVE_FILE_OPERATION,
-                    frame,
-                    ONSAVE_FILE_EXTENSION_FILTER,
-                    ONSAVE_FILTER_DESCRIPTION,
-                    ONSAVE_DIALOG_TITLE
-            );
-
-            if (fileToSave != null) {
-
-                try {
-                    controller.handleSaveAction(fileToSave);
-                } catch (MusicExportException ex) {
-                    SwingUtils.showErrorMessage(frame, ex.getMessage());
-                }
-
-            }
-        };
-
-        comps.footerComponent().getSaveButton().addActionListener(saveListener);
-        removers.add(() -> comps.footerComponent().getSaveButton().removeActionListener(saveListener));
+    private Runnable getSaveMusicAction(SwingFrame frame, AudioPlayerController controller) {
+        return new SaveMusicAction(frame, controller);
     }
 
-    private void bindPlaybackSeekBar(SwingSeekBar playbackSeekBar, AudioPlayerController controller) {
-        ChangeListener changeListener = event -> {
-            if (synchronizer != null && synchronizer.isUpdatingProgrammatically()) {
-                return;
-            }
+    private Runnable getPlayPauseAction(AudioPlayerController controller) {
+        return new PlayPauseMusicAction(comps.playPauseButton(), controller);
+    }
 
-            JSlider source = (JSlider) event.getSource();
-
-            if (source.hasFocus() && !playbackSeekBar.getValueIsAdjusting()) {
-                source.transferFocus();
-
-                double percentage = (double) playbackSeekBar.getValue() / playbackSeekBar.getMaximum();
-                long microsecPosition = (long) (percentage * controller.getMicrosecDuration());
-                controller.handleSeekAction(microsecPosition);
-            }
-        };
-
-        playbackSeekBar.addChangeListener(changeListener);
-        removers.add(() -> playbackSeekBar.removeChangeListener(changeListener));
+    private Runnable getProgressBarManualChangeAction(
+            MusicProgressBarPanel progressPanel,
+            AudioPlayerController controller
+    ) {
+        return new ProgressBarManualChangeAction(progressPanel, controller, synchronizer);
     }
 }

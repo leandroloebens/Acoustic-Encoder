@@ -2,7 +2,6 @@ package com.acoustic.encoder.features.player.ui.swing.synchronizer;
 
 import com.acoustic.encoder.features.player.playback.PlaybackProgressFormatter;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 
 import javax.swing.*;
 import java.util.Objects;
@@ -40,7 +39,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         this.microsecDurationSupplier = microsecDurationSupplier;
         this.playingStateSupplier = playingStateSupplier;
 
-        this.syncTimer = new Timer(SYNC_MILLISEC_INTERVAL, e -> syncState());
+        this.syncTimer = new Timer(SYNC_MILLISEC_INTERVAL, _ -> syncState());
     }
 
     @Override
@@ -71,15 +70,13 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
     private void syncState() {
         if (!isSyncing) return;
 
-        syncPlaybackSeekBar();
+        syncProgressBar();
         syncProgressTimeLabel();
         syncPlayPauseButton();
     }
 
-    private void syncPlaybackSeekBar() {
-        SwingSeekBar playbackSeekBar = components.footerComponent().getPlaybackSeekBar();
-
-        if (playbackSeekBar.getValueIsAdjusting()) {
+    private void syncProgressBar() {
+        if (components.progressBarPanel().getValueIsAdjusting()) {
             return;
         }
 
@@ -89,10 +86,10 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
             int newPosition = PlaybackProgressFormatter.toSliderValue(
                     microsecPositionSupplier.getAsLong(),
                     microsecDurationSupplier.getAsLong(),
-                    playbackSeekBar.getMaximum()
+                    components.progressBarPanel().getMaximum()
             );
 
-            components.footerComponent().getPlaybackSeekBar().setValue(newPosition);
+            components.progressBarPanel().setValue(newPosition);
         }
         finally {
             this.isUpdatingProgrammatically = false;
@@ -102,14 +99,14 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
 
     private void syncPlayPauseButton() {
         boolean isPlaying = playingStateSupplier.getAsBoolean();
-        components.controlsComponent().setPlayPauseState(isPlaying);
+        components.playPauseButton().setPlayPauseState(isPlaying);
     }
 
     private void syncProgressTimeLabel() {
         long current = microsecPositionSupplier.getAsLong();
         long total = microsecDurationSupplier.getAsLong();
 
-        components.footerComponent().setProgressTimeLabel(
+        components.progressBarPanel().setProgressTimeLabel(
                 PlaybackProgressFormatter.toTimeText(current),
                 PlaybackProgressFormatter.toTimeText(total)
         );

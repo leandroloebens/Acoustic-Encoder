@@ -1,11 +1,11 @@
-package com.acoustic.encoder.features.conversion.ui.swing.binder.actions;
+package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.ui.swing.binder.validator.InputValidator;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.validator.ValidationResult;
 import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 
 import javax.swing.*;
 
@@ -53,6 +53,6 @@ public class VoiceSelectionAction implements Runnable {
 
             synchronizer.syncVoiceSelector();
         }
-        else SwingUtils.showWarningMessage(frame, result.feedbackMessage());
+        else SwingMessageUtils.showWarningMessage(frame, result.feedbackMessage());
     }
 }

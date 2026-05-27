@@ -1,8 +1,8 @@
-package com.acoustic.encoder.features.conversion.ui.swing.binder.actions;
+package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 
 public class ChangeParameterComboBoxAction implements Runnable {
 
@@ -36,6 +36,6 @@ public class ChangeParameterComboBoxAction implements Runnable {
 
         if (panel.isTextEditorInputValid())
             parameterSyncAction.run();
-        else SwingUtils.showWarningMessage(frame, warningMessage);
+        else SwingMessageUtils.showWarningMessage(frame, warningMessage);
     }
 }

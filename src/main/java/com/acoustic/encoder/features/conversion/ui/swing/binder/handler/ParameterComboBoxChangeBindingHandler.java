@@ -1,6 +1,6 @@
 package com.acoustic.encoder.features.conversion.ui.swing.binder.handler;
 
-import com.acoustic.encoder.features.conversion.ui.swing.binder.actions.ChangeParameterComboBoxAction;
+import com.acoustic.encoder.features.conversion.ui.swing.binder.action.ChangeParameterComboBoxAction;
 import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.BindingHandler;

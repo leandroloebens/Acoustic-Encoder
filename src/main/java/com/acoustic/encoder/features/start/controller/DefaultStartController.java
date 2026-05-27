@@ -5,6 +5,7 @@ import com.acoustic.encoder.features.conversion.ports.TextRepository;
 import com.acoustic.encoder.features.start.service.StartService;
 
 import java.io.File;
+import java.io.IOException;
 
 public class DefaultStartController implements StartController {
 
@@ -25,11 +26,9 @@ public class DefaultStartController implements StartController {
     }
 
     @Override
-    public MusicProject handleOpenProjectAction(File file) {
-
+    public MusicProject handleOpenProjectAction(File file) throws IOException, IllegalArgumentException {
         if (file == null) throw new IllegalArgumentException(NULL_FILE_ARGUMENT_MSG);
         return textRepository.loadProject(file);
-
     }
 
     @Override

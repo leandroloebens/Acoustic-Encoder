@@ -1,10 +1,9 @@
 package com.acoustic.encoder.features.start.ui.swing.binder;
 
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
-import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.start.controller.StartController;
-import com.acoustic.encoder.features.start.event.StartScreenCloseRequestEvent;
+import com.acoustic.encoder.features.start.ui.swing.binder.action.NewProjectAction;
+import com.acoustic.encoder.features.start.ui.swing.binder.action.StartFrameExitAction;
 import com.acoustic.encoder.features.start.ui.swing.components.dto.StartViewSwingComponentsWrapper;
 import com.acoustic.encoder.features.start.ui.swing.binder.action.OpenProjectAction;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
@@ -66,17 +65,14 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
             SwingFrame frame
     ) {
         return List.of(
-                new FrameWindowBindingHandler(frame, getFrameExitAction(frame)),
+                new FrameWindowBindingHandler(frame, getFrameExitAction()),
                 new ButtonClickBindingHandler(comps.newProjectButton(), getNewProjectButtonAction(controller)),
                 new ButtonClickBindingHandler(comps.openProjectButton(), getOpenProjectAction(controller, frame))
         );
     }
 
-    private Runnable getFrameExitAction(SwingFrame frame) {
-        return () -> {
-            eventBus.publish(new StartScreenCloseRequestEvent());
-            frame.setVisible(false);
-        };
+    private Runnable getFrameExitAction() {
+        return new StartFrameExitAction(eventBus);
     }
 
     private Runnable getOpenProjectAction(StartController controller, SwingFrame frame) {
@@ -84,9 +80,6 @@ public class DefaultSwingStartViewEventBinder implements SwingStartViewEventBind
     }
 
     private Runnable getNewProjectButtonAction(StartController controller) {
-        return () -> {
-            MusicProject project = controller.handleNewProjectAction();
-            eventBus.publish(new ProjectReadyToOpen(project));
-        };
+        return new NewProjectAction(controller, eventBus);
     }
 }

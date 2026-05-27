@@ -11,10 +11,10 @@ public interface ConversionController {
 
     void handleSaveTextAction(String textInput, File file) throws IOException;
 
-    String handleLoadTextAction(File file) throws IOException;
+    String handleLoadTextAction(File file) throws IOException, IllegalArgumentException;
 
     void handleSaveProjectAction(MusicProject input, File file) throws IOException;
 
-    MusicProject handleLoadProjectAction(File file) throws IOException;
+    MusicProject handleLoadProjectAction(File file) throws IOException, IllegalArgumentException;
 
 }

@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.ui.swing.binder.actions;
+package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
@@ -7,7 +7,7 @@ import com.acoustic.encoder.features.conversion.ui.swing.binder.validator.InputV
 import com.acoustic.encoder.features.conversion.ui.swing.binder.validator.ValidationResult;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
-import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 
 public class ConvertAction implements Runnable {
 
@@ -50,7 +50,7 @@ public class ConvertAction implements Runnable {
     @Override
     public void run() {
         try {
-            String cleanedText = textInputProvider.getTextInput().stripTrailing();
+            String cleanedText = textInputProvider.getTextInput().replaceAll("\\R+$", "");
 
             if (!cleanedText.trim().isEmpty()) {
                 ValidationResult result = instrumentValidator.validate();
@@ -60,11 +60,11 @@ public class ConvertAction implements Runnable {
                     );
                     System.out.println(synchronizer.getParameters().toString());
                 }
-                else SwingUtils.showWarningMessage(frame, result.feedbackMessage());
+                else SwingMessageUtils.showWarningMessage(frame, result.feedbackMessage());
             }
-            else SwingUtils.showWarningMessage(frame, EMPTY_TEXT_INPUT_WARNING);
+            else SwingMessageUtils.showWarningMessage(frame, EMPTY_TEXT_INPUT_WARNING);
         } catch (IllegalStateException e) {
-            SwingUtils.showErrorMessage(frame, e.getMessage());
+            SwingMessageUtils.showErrorMessage(frame, e.getMessage());
         }
     }
 }

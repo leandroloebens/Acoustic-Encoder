@@ -1,8 +1,9 @@
-package com.acoustic.encoder.features.conversion.ui.swing.binder.actions;
+package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.provider.TextInputProvider;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import java.io.File;
@@ -42,9 +43,9 @@ public class SaveTextAction implements Runnable {
         if (fileToSave != null) {
             try {
                 controller.handleSaveTextAction(textProvider.getTextInput(), fileToSave);
-                SwingUtils.showMessage(frame, "Saved!");
+                SwingMessageUtils.showMessage(frame, "Saved!");
             } catch (IOException ex) {
-                SwingUtils.showErrorMessage(frame, "Error saving file: " + ex.getMessage());
+                SwingMessageUtils.showErrorMessage(frame, "Error saving file: " + ex.getMessage());
             }
         }
     }

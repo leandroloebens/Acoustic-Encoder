@@ -1,16 +1,17 @@
 package com.acoustic.encoder.features.player.ui.swing.components.factory;
 
-import com.acoustic.encoder.features.player.ui.swing.components.PlayerControlsComponent;
-import com.acoustic.encoder.features.player.ui.swing.components.PlayerFooterComponent;
+import com.acoustic.encoder.features.player.ui.swing.components.MusicProgressBarPanel;
+import com.acoustic.encoder.features.player.ui.swing.components.PlayPauseButton;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingViewConfigWrapper;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.components.ProgressSliderUI;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingButton;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingLabel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingSeekBar;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.IconLoader;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.HashMap;
 
 public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewComponentsFactory {
@@ -27,53 +28,50 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     @Override
     public PlayerViewComponentsWrapper createComponents() {
 
+        PlayPauseButton playPauseButton = createPlayPauseButton(
+                IconLoader.load(config.getString("PLAY_BUTTON_ICON_PATH")),
+                IconLoader.load(config.getString("PAUSE_BUTTON_ICON_PATH"))
+        );
+
+        SwingButton forwardButton =
+                createForwardButton(IconLoader.load(config.getString("FORWARD_BUTTON_ICON_PATH")));
+
+        SwingButton backwardButton =
+                createBackwardButton(IconLoader.load(config.getString("REWIND_BUTTON_ICON_PATH")));
+
+        SwingButton saveMusicButton =
+                createSaveMusicButton(IconLoader.load(config.getString("SAVE_BUTTON_ICON_PATH")));
+
+        SwingUtils.setHandCursor(playPauseButton, forwardButton, backwardButton, saveMusicButton);
+
         return new PlayerViewComponentsWrapper(
-                createControlsComponent(),
-                createFooterComponent()
+                playPauseButton,
+                forwardButton,
+                backwardButton,
+                createProgressBar(),
+                saveMusicButton
         );
     }
 
-    private PlayerControlsComponent createControlsComponent() {
-        Icon playIcon = IconLoader.load(config.getString("PLAY_BUTTON_ICON_PATH"));
-        Icon pauseIcon = IconLoader.load(config.getString("PAUSE_BUTTON_ICON_PATH"));
-        Icon rewindIcon = IconLoader.load(config.getString("REWIND_BUTTON_ICON_PATH"));
-        Icon forwardIcon = IconLoader.load(config.getString("FORWARD_BUTTON_ICON_PATH"));
-
-        return new PlayerControlsComponent(
-                createPlayPauseButton(playIcon),
-                createRewindButton(rewindIcon),
-                createForwardButton(forwardIcon),
-                playIcon,
-                pauseIcon
-        );
-    }
-
-    private PlayerFooterComponent createFooterComponent() {
-        Icon saveIcon = IconLoader.load(config.getString("SAVE_BUTTON_ICON_PATH"));
-
-        return new PlayerFooterComponent(
-                createSaveButton(saveIcon),
-                createSeekBar(),
-                createCurrentTimeLabel(),
-                createDurationTimeLabel()
-        );
-    }
-
-    private SwingButton createPlayPauseButton(Icon playIcon) {
-
-        return new SwingButton(
+    private PlayPauseButton createPlayPauseButton(Icon playIcon, Icon pauseIcon) {
+        PlayPauseButton button = new PlayPauseButton(
                 null,
                 null,
                 config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
-                playIcon,
                 null,
-                config.getScaledDimension("PLAY_PAUSE_BUTTON_PREFERRED_SIZE")
+                config.getScaledDimension("PLAY_PAUSE_BUTTON_PREFERRED_SIZE"),
+                playIcon,
+                pauseIcon
         );
+
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+
+        return button;
     }
 
-    private SwingButton createRewindButton(Icon rewindIcon) {
-
-        return new SwingButton(
+    private SwingButton createBackwardButton(Icon rewindIcon) {
+        SwingButton button = new SwingButton(
                 null,
                 null,
                 config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
@@ -81,11 +79,15 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 null,
                 config.getScaledDimension("SKIP_BUTTONS_PREFERRED_SIZE")
         );
+
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+
+        return button;
     }
 
     private SwingButton createForwardButton(Icon forwardIcon) {
-
-        return new SwingButton(
+        SwingButton button = new SwingButton(
                 null,
                 null,
                 config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
@@ -93,11 +95,15 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 null,
                 config.getScaledDimension("SKIP_BUTTONS_PREFERRED_SIZE")
         );
+
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+
+        return button;
     }
 
-    private SwingButton createSaveButton(Icon saveIcon) {
-
-        return new SwingButton(
+    private SwingButton createSaveMusicButton(Icon saveIcon) {
+        SwingButton button = new SwingButton(
                 null,
                 null,
                 config.getScaledInt("NULL_TEXT_BUTTON_FONT_SIZE"),
@@ -105,10 +111,38 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 null,
                 config.getScaledDimension("SAVE_BUTTON_PREFERRED_SIZE")
         );
+
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+
+        return button;
+    }
+
+    private MusicProgressBarPanel createProgressBar() {
+        SwingSeekBar progressBar = createSeekBar();
+        progressBar.setUI(new ProgressSliderUI());
+        progressBar.setPaintTicks(false);
+        progressBar.setPaintLabels(false);
+        progressBar.setOpaque(false);
+
+        SwingLabel currentTimeLabel = new SwingLabel(
+                null,
+                null,
+                config.getScaledInt("PROGRESS_TIME_LABEL_FONT_SIZE"),
+                null
+        );
+
+        SwingLabel totalTimeLabel = new SwingLabel(
+                null,
+                null,
+                config.getScaledInt("PROGRESS_TIME_LABEL_FONT_SIZE"),
+                null
+        );
+
+        return new MusicProgressBarPanel(progressBar, currentTimeLabel, totalTimeLabel);
     }
 
     private SwingSeekBar createSeekBar() {
-
         return new SwingSeekBar(
                 config.getScaledInt("SEEKBAR_DIRECTION"),
                 config.getScaledInt("SEEKBAR_MIN"),
@@ -118,26 +152,6 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                 config.getScaledInt("SEEKBAR_START_VALUE"),
                 config.getScaledInt("SEEKBAR_TICK_SPACING"),
                 null,
-                null
-        );
-    }
-
-    private SwingLabel createCurrentTimeLabel() {
-
-        return new SwingLabel(
-                null,
-                null,
-                config.getScaledInt("PROGRESS_TIME_LABEL_FONT_SIZE"),
-                null
-        );
-    }
-
-    private SwingLabel createDurationTimeLabel() {
-
-        return new SwingLabel(
-                null,
-                null,
-                config.getScaledInt("PROGRESS_TIME_LABEL_FONT_SIZE"),
                 null
         );
     }

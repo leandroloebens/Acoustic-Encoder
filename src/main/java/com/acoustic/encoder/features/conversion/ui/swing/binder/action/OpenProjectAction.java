@@ -1,9 +1,10 @@
-package com.acoustic.encoder.features.conversion.ui.swing.binder.actions;
+package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import java.io.File;
@@ -48,8 +49,8 @@ public class OpenProjectAction implements Runnable {
             try {
                 MusicProject loadedProject = controller.handleLoadProjectAction(fileToLoad);
                 synchronizer.syncMusicProject(loadedProject);
-            } catch (IOException e) {
-                SwingUtils.showErrorMessage(frame, "Error loading project: " + e.getMessage());
+            } catch (IOException | IllegalArgumentException e) {
+                SwingMessageUtils.showErrorMessage(frame, "Error while loading project: " + e.getMessage());
             }
         }
     }

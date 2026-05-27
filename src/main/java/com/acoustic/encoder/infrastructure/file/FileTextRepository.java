@@ -9,9 +9,11 @@ import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.ports.TextRepository;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class FileTextRepository implements TextRepository {
 
@@ -22,33 +24,36 @@ public class FileTextRepository implements TextRepository {
     public FileTextRepository() {}
 
     @Override
-    public void saveText(String text, File file) {
+    public void saveText(String text, File file) throws IOException {
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write(text);
         }
         catch (IOException e) {
-            System.out.println(ERROR_WRITING_FILE_MSG + file.getAbsolutePath());
+            throw new IOException(ERROR_WRITING_FILE_MSG + file.getAbsolutePath(), e);
         }
 
     }
 
     @Override
-    public String loadText(File file) {
+    public String loadText(File file) throws IOException {
+
+        if (!file.getName().toLowerCase(Locale.ROOT).endsWith(".txt")) {
+            throw new IllegalArgumentException("only .txt files are supported");
+        }
 
         try {
-            return Files.readString(file.toPath());
+            return Files.readString(file.toPath(), StandardCharsets.UTF_8);
         }
         catch (IOException e) {
             System.out.println(ERROR_READING_FILE_MSG + file.getAbsolutePath());
+            throw new IOException(ERROR_READING_FILE_MSG + file.getAbsolutePath(), e);
         }
-
-        return null;
 
     }
 
     @Override
-    public void saveProject(MusicProject input, File file) {
+    public void saveProject(MusicProject input, File file) throws IOException {
 
         try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)))) {
             out.writeUTF(input.text());
@@ -61,13 +66,17 @@ public class FileTextRepository implements TextRepository {
             }
         }
         catch (IOException e) {
-            System.out.println(ERROR_WRITING_FILE_MSG + file.getAbsolutePath());
+            throw new  IOException(ERROR_WRITING_FILE_MSG + file.getAbsolutePath(), e);
         }
 
     }
 
     @Override
-    public MusicProject loadProject(File file) {
+    public MusicProject loadProject(File file) throws IOException {
+
+        if (!file.getName().toLowerCase(Locale.ROOT).endsWith(".aef")) {
+            throw new IllegalArgumentException("only .aef files are supported");
+        }
 
         try (DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             String text = in.readUTF();
@@ -86,15 +95,8 @@ public class FileTextRepository implements TextRepository {
             return new MusicProject(text, bpm, voices);
         }
         catch (EOFException e) {
-            System.out.println(ERROR_EOF_MSG + file.getAbsolutePath());
+            throw new IOException(ERROR_EOF_MSG + file.getAbsolutePath(), e);
         }
-        catch (IOException e) {
-            System.out.println(ERROR_READING_FILE_MSG + file.getAbsolutePath());
-        }
-
-        return null;
-
     }
 
 }
-

@@ -53,7 +53,7 @@ public class DefaultPlayerScreen implements PlayerScreen {
 
     @Override
     public void closeWindow() {
-        //this.frame.dispose();
+        //this.frame.disposeFrame();
         this.manager.disposeFrame();
     }
 

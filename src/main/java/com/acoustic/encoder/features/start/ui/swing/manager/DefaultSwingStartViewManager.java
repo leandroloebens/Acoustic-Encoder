@@ -54,21 +54,21 @@ public class DefaultSwingStartViewManager implements StartViewManager {
     }
 
     @Override
-    public void show() {
+    public void showFrame() {
         if (frame == null) throw new IllegalStateException("Frame is not initialized!");
 
         this.frame.setVisible(true);
     }
 
     @Override
-    public void hide() {
+    public void hideFrame() {
         if (frame == null) throw new IllegalStateException("Frame is not initialized!");
 
         this.frame.setVisible(false);
     }
 
     @Override
-    public void dispose() {
+    public void disposeFrame() {
         if (frame == null) return;
 
         binder.unbind();

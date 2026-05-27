@@ -9,9 +9,9 @@ public interface TextRepository {
 
     void saveText(String text, File file) throws IOException;
 
-    String loadText(File file) throws IOException;
+    String loadText(File file) throws IOException, IllegalArgumentException;
 
-    void saveProject(MusicProject input, File file);
+    void saveProject(MusicProject input, File file) throws IOException;
 
-    MusicProject loadProject(File file);
+    MusicProject loadProject(File file) throws IOException, IllegalArgumentException;
 }

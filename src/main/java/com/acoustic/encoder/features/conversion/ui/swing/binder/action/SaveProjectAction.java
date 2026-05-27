@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.ui.swing.binder.actions;
+package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
@@ -6,6 +6,7 @@ import com.acoustic.encoder.features.conversion.service.mapper.ConversionParamet
 import com.acoustic.encoder.features.conversion.ui.swing.binder.provider.TextInputProvider;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import java.io.File;
@@ -64,9 +65,9 @@ public class SaveProjectAction implements Runnable {
 
                 controller.handleSaveProjectAction(project, fileToSave);
 
-                SwingUtils.showMessage(frame, "Saved!");
+                SwingMessageUtils.showMessage(frame, "Saved!");
             } catch (IOException ex) {
-                SwingUtils.showErrorMessage(frame, "Error saving project file: " + ex.getMessage());
+                SwingMessageUtils.showErrorMessage(frame, "Error saving project file: " + ex.getMessage());
             }
         }
     }

@@ -46,22 +46,27 @@ public class DefaultConversionController implements ConversionController {
     }
 
     @Override
-    public String handleLoadTextAction(File file) throws IOException {
+    public String handleLoadTextAction(File file) throws IOException, IllegalArgumentException {
 
         return this.textRepository.loadText(file);
 
     }
 
     @Override
-    public void handleSaveProjectAction(MusicProject project, File file) throws IOException{
+    public void handleSaveProjectAction(MusicProject project, File file) throws IOException {
 
         this.textRepository.saveProject(project, file);
 
     }
 
     @Override
-    public MusicProject handleLoadProjectAction(File file) throws IOException{
-        return this.textRepository.loadProject(file);
+    public MusicProject handleLoadProjectAction(File file) throws IOException, IllegalArgumentException {
+
+        MusicProject project = this.textRepository.loadProject(file);
+        if (project == null) throw new IllegalArgumentException("Loaded project is null!");
+
+        return project;
+
     }
 
 }

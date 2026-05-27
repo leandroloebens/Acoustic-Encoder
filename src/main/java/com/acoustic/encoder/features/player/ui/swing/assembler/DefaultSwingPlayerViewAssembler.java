@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.player.ui.swing.assembler;
 
-import com.acoustic.encoder.features.player.ui.swing.components.PlayerControlsComponent;
-import com.acoustic.encoder.features.player.ui.swing.components.PlayerFooterComponent;
+import com.acoustic.encoder.features.player.ui.swing.assembler.model.PlayerControlPanelModel;
+import com.acoustic.encoder.features.player.ui.swing.assembler.model.PlayerFooterPanelModel;
 import com.acoustic.encoder.features.player.ui.swing.components.dto.PlayerViewComponentsWrapper;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingPanel;
@@ -20,12 +20,11 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
 
     private final static Color BACKGROUND_COLOR = new Color(18, 18, 18);
 
-    private final PlayerControlsComponent controlsComponent;
-    private final PlayerFooterComponent footerComponent;
+    private final PlayerViewComponentsWrapper comps;
 
     public DefaultSwingPlayerViewAssembler(PlayerViewComponentsWrapper components) {
-        this.controlsComponent = components.controlsComponent();
-        this.footerComponent = components.footerComponent();
+        if (components == null) throw new IllegalArgumentException("PlayerViewComponentsWrapper cannot be null");
+        this.comps = components;
     }
 
     @Override
@@ -50,18 +49,28 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
 
         mainContainer.setPreferredSize(new Dimension(BASE_MAIN_CONTAINER_WIDTH, BASE_MAIN_CONTAINER_HEIGHT));
 
-        controlsComponent.setAlignmentX(Component.CENTER_ALIGNMENT);
-        footerComponent.setAlignmentX(Component.CENTER_ALIGNMENT);
+        SwingPanel controlsPanel = new PlayerControlPanelModel(
+                comps.playPauseButton(),
+                comps.skipMusicBackwardButton(),
+                comps.skipMusicForwardButton()
+        );
 
-        mainContainer.add(controlsComponent);
-        mainContainer.add(footerComponent);
+        SwingPanel footerPanel = new PlayerFooterPanelModel(
+                comps.saveMusicButton(),
+                comps.progressBarPanel()
+        );
+
+        controlsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        footerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        mainContainer.add(controlsPanel);
+        mainContainer.add(footerPanel);
 
         mainContainer.setBackground(BACKGROUND_COLOR);
 
         centerPanel.add(mainContainer);
         frame.add(centerPanel, BorderLayout.CENTER);
 
-        // Centering the frame
         frame.setLocationRelativeTo(null);
 
         return frame;
@@ -69,9 +78,6 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
 
     @Override
     public PlayerViewComponentsWrapper getComponents() {
-        return new PlayerViewComponentsWrapper(
-                controlsComponent,
-                footerComponent
-        );
+        return comps;
     }
 }

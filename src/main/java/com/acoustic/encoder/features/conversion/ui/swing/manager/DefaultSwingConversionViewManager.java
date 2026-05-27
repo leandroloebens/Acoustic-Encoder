@@ -60,7 +60,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     }
 
     @Override
-    public void show() {
+    public void showFrame() {
         if (frame == null) throw new IllegalStateException("Frame is not initialized!");
 
         synchronizer.enableSync();
@@ -70,7 +70,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     }
 
     @Override
-    public void hide() {
+    public void hideFrame() {
         if (frame == null) throw new IllegalStateException("Frame is not initialized!");
 
         synchronizer.disableSync();
@@ -79,7 +79,7 @@ public class DefaultSwingConversionViewManager implements ConversionViewManager 
     }
 
     @Override
-    public void dispose() {
+    public void disposeFrame() {
         if (frame == null) return;
 
         synchronizer.disableSync();

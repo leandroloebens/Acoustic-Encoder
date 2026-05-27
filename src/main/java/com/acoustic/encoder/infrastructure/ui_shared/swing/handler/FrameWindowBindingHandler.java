@@ -25,6 +25,7 @@ public class FrameWindowBindingHandler implements BindingHandler {
         WindowListener listener = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                frame.setVisible(false);
                 action.run();
             }
         };

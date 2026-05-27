@@ -41,17 +41,17 @@ public class DefaultStartScreen implements StartScreen {
 
     @Override
     public void showWindow() {
-        manager.show();
+        manager.showFrame();
     }
 
     @Override
     public void hideWindow() {
-        manager.hide();
+        manager.hideFrame();
     }
 
     @Override
     public void closeWindow() {
-        manager.dispose();
+        manager.disposeFrame();
     }
 
     private void setEvents() {

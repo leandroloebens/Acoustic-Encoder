@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.util.Locale;
+import java.util.Objects;
 
 public class SwingUtils {
 
@@ -15,13 +17,16 @@ public class SwingUtils {
     private static final int DEFAULT_FILE_CHOOSER_FONT_SIZE = 14;
 
     private static final int DEFAULT_SCREEN_HEIGHT = 1080;
+    private static final float MIN_SCREEN_RATIO = 1.0f;
 
     private static final String INVALID_FILE_OPERATION_MSG =
             "Operation must be either SAVE_FILE_OPERATION or LOAD_FILE_OPERATION!";
 
     public static float getScreenScaleRatio() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        return (float)(screenSize.getHeight() / DEFAULT_SCREEN_HEIGHT);
+        float ratio = (float)(screenSize.getHeight() / DEFAULT_SCREEN_HEIGHT);
+
+        return Math.max(MIN_SCREEN_RATIO, ratio);
     }
 
     public static void setHandCursor(Component... components) {
@@ -31,27 +36,6 @@ public class SwingUtils {
         }
     }
 
-    public static void showMessage(Component parent, String message) {
-        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
-        JDialog dialog = pane.createDialog(parent, "Message");
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
-    }
-
-    public static void showWarningMessage(Component parent, String message) {
-        JOptionPane pane = new JOptionPane(message, JOptionPane.WARNING_MESSAGE);
-        JDialog dialog = pane.createDialog(parent, "Warning");
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
-    }
-
-    public static void showErrorMessage(Component parent, String message) {
-        JOptionPane pane = new JOptionPane(message, JOptionPane.ERROR_MESSAGE);
-        JDialog dialog = pane.createDialog(parent, "Error");
-        dialog.setAlwaysOnTop(true);
-        dialog.setVisible(true);
-    }
-
     public static File getFileFromChooser(
             int operation,
             Component parent,
@@ -59,19 +43,7 @@ public class SwingUtils {
             String filterDescription,
             String dialogTitle
     ) {
-
-        JFileChooser fileChooser = new JFileChooser();
-
-        if (extensionFilter != null) {
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(filterDescription, extensionFilter);
-            fileChooser.setFileFilter(filter);
-        }
-
-        fileChooser.setDialogTitle(dialogTitle);
-
-        int width = (int) (DEFAULT_FILE_CHOOSER_WIDTH * getScreenScaleRatio());  // or any ratio you prefer
-        int height = (int) (DEFAULT_FILE_CHOOSER_HEIGHT * getScreenScaleRatio());
-        fileChooser.setPreferredSize(new Dimension(width, height));
+        JFileChooser fileChooser = getFileChooser(extensionFilter, filterDescription, dialogTitle);
 
         Font chooserFont =
                 new Font(Font.SANS_SERIF, Font.PLAIN, (int)(DEFAULT_FILE_CHOOSER_FONT_SIZE * getScreenScaleRatio()));
@@ -86,12 +58,34 @@ public class SwingUtils {
         else
             throw new IllegalArgumentException(INVALID_FILE_OPERATION_MSG);
 
-
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            return getProcessedFile(fileChooser, extensionFilter);
+            return (operation == SAVE_FILE_OPERATION) ?
+                    getProcessedFile(fileChooser, extensionFilter) : fileChooser.getSelectedFile();
         }
-        else
-            return null;
+        else return null;
+    }
+
+    private static JFileChooser getFileChooser(String extensionFilter, String filterDescription, String dialogTitle) {
+        Objects.requireNonNull(dialogTitle, "Dialog title cannot be null!");
+
+        JFileChooser fileChooser = new JFileChooser();
+
+        if (extensionFilter != null) {
+            Objects.requireNonNull(
+                    filterDescription,
+                    "Filter description cannot be null when extension filter is provided!"
+            );
+
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(filterDescription, extensionFilter);
+            fileChooser.setFileFilter(filter);
+        }
+
+        fileChooser.setDialogTitle(dialogTitle);
+
+        int width = (int) (DEFAULT_FILE_CHOOSER_WIDTH * getScreenScaleRatio());
+        int height = (int) (DEFAULT_FILE_CHOOSER_HEIGHT * getScreenScaleRatio());
+        fileChooser.setPreferredSize(new Dimension(width, height));
+        return fileChooser;
     }
 
     private static void setFileChooserFont(Component component, Font font) {
@@ -105,9 +99,12 @@ public class SwingUtils {
 
     private static File getProcessedFile(JFileChooser fileChooser, String extensionFilter) {
         if (extensionFilter != null) {
+            extensionFilter = extensionFilter.toLowerCase(Locale.ROOT);
+            if (!extensionFilter.startsWith(".")) extensionFilter = "." + extensionFilter;
+
             File file = fileChooser.getSelectedFile();
-            if (!file.getName().toLowerCase().endsWith(extensionFilter)) {
-                file = new File(file.getParentFile(), file.getName() + "." + extensionFilter);
+            if (!file.getName().toLowerCase(Locale.ROOT).endsWith(extensionFilter)) {
+                file = new File(file.getParentFile(), file.getName() + extensionFilter);
             }
 
             return file;

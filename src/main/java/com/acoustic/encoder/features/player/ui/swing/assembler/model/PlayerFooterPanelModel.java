@@ -1,12 +1,13 @@
-package com.acoustic.encoder.features.player.ui.swing.components;
+package com.acoustic.encoder.features.player.ui.swing.assembler.model;
 
+import com.acoustic.encoder.features.player.ui.swing.components.MusicProgressBarPanel;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.*;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class PlayerFooterComponent extends JPanel {
+public class PlayerFooterPanelModel extends SwingPanel {
 
     private final static int FOOTER_PANEL_HGAP = (int) (12 * SwingUtils.getScreenScaleRatio());
     private final static int FOOTER_PANEL_VGAP = (int) (0 * SwingUtils.getScreenScaleRatio());
@@ -24,26 +25,19 @@ public class PlayerFooterComponent extends JPanel {
     private final static Color BACKGROUND_COLOR = new Color(18, 18, 18);
 
     private final SwingButton saveButton;
-    private final SwingSeekBar playbackSeekBar;
+    private final MusicProgressBarPanel progressPanel;
 
-    private final SwingLabel currentTimeLabel;
-    private final SwingLabel durationTimeLabel;
-
-    public PlayerFooterComponent(
+    public PlayerFooterPanelModel(
             SwingButton saveButton,
-            SwingSeekBar playbackSeekBar,
-            SwingLabel currentTimeLabel,
-            SwingLabel durationTimeLabel
+            MusicProgressBarPanel progressBarPanel
     ) {
         this.saveButton = saveButton;
-        this.playbackSeekBar = playbackSeekBar;
-        this.currentTimeLabel = currentTimeLabel;
-        this.durationTimeLabel = durationTimeLabel;
+        this.progressPanel = progressBarPanel;
 
-        initializeComponent();
+        assemblePanel();
     }
 
-    private void initializeComponent() {
+    private void assemblePanel() {
         setLayout(new BorderLayout(FOOTER_PANEL_HGAP, FOOTER_PANEL_VGAP));
         setBorder(BorderFactory.createEmptyBorder(
                 FOOTER_PANEL_TGAP,
@@ -52,23 +46,9 @@ public class PlayerFooterComponent extends JPanel {
                 FOOTER_PANEL_RGAP
         ));
 
-        SwingUtils.setHandCursor(saveButton, playbackSeekBar);
-
         setBackground(BACKGROUND_COLOR);
 
-        SwingPanel timePanel = new SwingPanel(new BorderLayout());
-        timePanel.setOpaque(false);
-
-        timePanel.add(currentTimeLabel, BorderLayout.WEST);
-        timePanel.add(durationTimeLabel, BorderLayout.EAST);
-
-        SwingPanel progressPanel = new SwingPanel(new BorderLayout());
-        progressPanel.setOpaque(false);
-
-        progressPanel.add(playbackSeekBar, BorderLayout.CENTER);
-        progressPanel.add(timePanel, BorderLayout.SOUTH);
-
-        SwingPanel saveButtonWrapper = new SwingPanel(new GridBagLayout());;
+        SwingPanel saveButtonWrapper = new SwingPanel(new GridBagLayout());
         saveButtonWrapper.setOpaque(false);
         saveButtonWrapper.setBorder(BorderFactory.createEmptyBorder(
                 SAVE_WRAPPER_TGAP,
@@ -81,33 +61,5 @@ public class PlayerFooterComponent extends JPanel {
 
         add(progressPanel, BorderLayout.CENTER);
         add(saveButtonWrapper, BorderLayout.EAST);
-
-        initializeSaveButton();
-        initializeSeekBar();
-    }
-
-    private void initializeSaveButton() {
-        saveButton.setContentAreaFilled(false);
-        saveButton.setBorderPainted(false);
-    }
-
-    private void initializeSeekBar() {
-        playbackSeekBar.setUI(new ProgressSliderUI());
-        playbackSeekBar.setPaintTicks(false);
-        playbackSeekBar.setPaintLabels(false);
-        playbackSeekBar.setOpaque(false);
-    }
-
-    public SwingButton getSaveButton() {
-        return this.saveButton;
-    }
-
-    public SwingSeekBar getPlaybackSeekBar() {
-        return this.playbackSeekBar;
-    }
-
-    public void setProgressTimeLabel(String currentTime, String totalTime) {
-        currentTimeLabel.setText(currentTime);
-        durationTimeLabel.setText(totalTime);
     }
 }

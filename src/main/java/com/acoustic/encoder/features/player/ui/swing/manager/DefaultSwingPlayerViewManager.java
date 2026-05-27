@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class DefaultSwingPlayerViewManager implements PlayerViewManager {
 
-    private final static String WINDOW_TITLE = "Music Player";
+    private final static String WINDOW_TITLE = "Acoustic Encoder - Music Player";
     private final static int WINDOW_MIN_WIDTH = (int) (380 * SwingUtils.getScreenScaleRatio());
     private final static int WINDOW_MIN_HEIGHT = (int) (200 * SwingUtils.getScreenScaleRatio());
     private final static int FRAME_EXIT_OPERATION = JFrame.DISPOSE_ON_CLOSE;

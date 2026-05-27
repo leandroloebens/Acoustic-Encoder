@@ -1,8 +1,9 @@
-package com.acoustic.encoder.features.conversion.ui.swing.binder.actions;
+package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.updater.TextAreaUpdater;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +43,8 @@ public class LoadTextAction implements Runnable {
             try {
                 String text = controller.handleLoadTextAction(fileToLoad);
                 textUpdater.setText(text);
-            } catch (IOException ex) {
-                SwingUtils.showErrorMessage(frame, "Error loading file: " + ex.getMessage());
+            } catch (IOException | IllegalArgumentException ex) {
+                SwingMessageUtils.showErrorMessage(frame, "Error while loading text file: " + ex.getMessage());
             }
         }
     }
