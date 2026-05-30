@@ -1,23 +1,18 @@
 
 package com.acoustic.encoder.features.conversion.ui.swing.assembler;
 
-
-import com.acoustic.encoder.features.conversion.ui.swing.components.MainTextAreaPanel;
-import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterComboBoxPanel;
-import com.acoustic.encoder.features.conversion.ui.swing.components.ParameterSliderPanel;
-import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelectorPanel;
 import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
-import com.acoustic.encoder.domain.music.InstrumentOption;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.*;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class DefaultSwingConversionViewFrameAssembler implements SwingConversionViewFrameAssembler {
 
-    private final static int BORDERLAYOUT_HGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
-    private final static int BORDERLAYOUT_VGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private static final int BORDERLAYOUT_HGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
+    private static final int BORDERLAYOUT_VGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
 
     private final static int BUTTONS_PANEL_TGAP = (int) (0 * SwingUtils.getScreenScaleRatio());
     private final static int BUTTONS_PANEL_LGAP = (int) (10 * SwingUtils.getScreenScaleRatio());
@@ -33,30 +28,10 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
     private final static int CONFIG_PANEL_MAX_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width/2;
 
-    private final SwingButton converterButton;
-    private final SwingButton saveTextButton;
-    private final SwingButton loadTextButton;
-    private final SwingButton saveProjectButton;
-    private final SwingButton loadProjectButton;
-    private final MainTextAreaPanel mainTextAreaPanel;
-    private final VoiceSelectorPanel voiceSelector;
-    private final ParameterSliderPanel volumePanel;
-    private final ParameterSliderPanel octavePanel;
-    private final ParameterComboBoxPanel<InstrumentOption> instrumentPanel;
-    private final ParameterSliderPanel bpmPanel;
+    private final ConversionViewSwingComponentsWrapper components;
 
     public DefaultSwingConversionViewFrameAssembler(ConversionViewSwingComponentsWrapper components) {
-        this.converterButton = components.converterButton();
-        this.saveTextButton = components.saveTextButton();
-        this.loadTextButton = components.loadTextButton();
-        this.saveProjectButton = components.saveProjectButton();
-        this.loadProjectButton = components.openProjectButton();
-        this.mainTextAreaPanel = components.mainTextAreaPanel();
-        this.voiceSelector = components.voiceSelector();
-        this.volumePanel = components.volumePanel();
-        this.octavePanel = components.octavePanel();
-        this.instrumentPanel = components.instrumentPanel();
-        this.bpmPanel = components.bpmPanel();
+        this.components = Objects.requireNonNull(components, "Conversion components cannot be null");
     }
 
     @Override
@@ -73,7 +48,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
         SwingPanel buttonsPanel = createButtonsPanel();
 
         SwingPanel conversionPanel = new SwingPanel(new BorderLayout(BORDERLAYOUT_HGAP, BORDERLAYOUT_VGAP));
-        conversionPanel.add(mainTextAreaPanel, BorderLayout.CENTER);
+        conversionPanel.add(components.mainTextAreaPanel(), BorderLayout.CENTER);
         conversionPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
         SwingPanel configPanel = createConfigPanel();
@@ -98,30 +73,18 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
     @Override
     public ConversionViewSwingComponentsWrapper getComponents() {
-        return new ConversionViewSwingComponentsWrapper(
-                converterButton,
-                saveTextButton,
-                loadTextButton,
-                saveProjectButton,
-                loadProjectButton,
-                mainTextAreaPanel,
-                voiceSelector,
-                volumePanel,
-                octavePanel,
-                instrumentPanel,
-                bpmPanel
-        );
+        return this.components.copy();
     }
 
     private SwingPanel createButtonsPanel() {
         SwingPanel fileButtonsPanel = new SwingPanel(new FlowLayout(FlowLayout.CENTER, BUTTONS_HGAP, BUTTONS_VGAP));
-        fileButtonsPanel.add(loadTextButton);
-        fileButtonsPanel.add(saveTextButton);
-        fileButtonsPanel.add(loadProjectButton);
-        fileButtonsPanel.add(saveProjectButton);
+        fileButtonsPanel.add(components.loadTextButton());
+        fileButtonsPanel.add(components.saveTextButton());
+        fileButtonsPanel.add(components.openProjectButton());
+        fileButtonsPanel.add(components.saveProjectButton());
 
         fileButtonsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        converterButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        components.converterButton().setAlignmentX(Component.CENTER_ALIGNMENT);
 
         SwingPanel buttonsPanel = new SwingPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
@@ -130,7 +93,7 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
         buttonsPanel.add(Box.createVerticalStrut(BUTTONS_VGAP));
 
-        buttonsPanel.add(converterButton);
+        buttonsPanel.add(components.converterButton());
 
         buttonsPanel.add(Box.createVerticalStrut(BUTTONS_VGAP));
 
@@ -157,21 +120,21 @@ public class DefaultSwingConversionViewFrameAssembler implements SwingConversion
 
         gbc.gridy = 0;
         gbc.gridx = 1;
-        configPanel.add(bpmPanel, gbc);
+        configPanel.add(components.bpmPanel(), gbc);
 
         gbc.insets = new Insets(0, PARAMETERS_HGAP, 0, PARAMETERS_HGAP);
         gbc.gridy++;
-        configPanel.add(voiceSelector, gbc);
+        configPanel.add(components.voiceSelector(), gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        configPanel.add(volumePanel, gbc);
+        configPanel.add(components.volumePanel(), gbc);
 
         gbc.gridx++;
-        configPanel.add(instrumentPanel, gbc);
+        configPanel.add(components.instrumentPanel(), gbc);
 
         gbc.gridx++;
-        configPanel.add(octavePanel, gbc);
+        configPanel.add(components.octavePanel(), gbc);
 
         configPanel.setBorder(
                 BorderFactory.createEmptyBorder(
