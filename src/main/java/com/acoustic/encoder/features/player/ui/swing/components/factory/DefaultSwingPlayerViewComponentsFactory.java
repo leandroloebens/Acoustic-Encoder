@@ -29,18 +29,37 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
     public PlayerViewComponentsWrapper createComponents() {
 
         PlayPauseButton playPauseButton = createPlayPauseButton(
-                IconLoader.load(config.getString("PLAY_BUTTON_ICON_PATH")),
-                IconLoader.load(config.getString("PAUSE_BUTTON_ICON_PATH"))
+                IconLoader.load(
+                        config.getString("PLAY_BUTTON_ICON_PATH"),
+                        config.getScaledDimension("PLAY_BUTTON_ICON_SIZE")
+                ),
+
+                IconLoader.load(
+                        config.getString("PAUSE_BUTTON_ICON_PATH"),
+                        config.getScaledDimension("PAUSE_BUTTON_ICON_SIZE")
+                )
         );
 
         SwingButton forwardButton =
-                createForwardButton(IconLoader.load(config.getString("FORWARD_BUTTON_ICON_PATH")));
+                createForwardButton(IconLoader.load(
+                        config.getString("FORWARD_BUTTON_ICON_PATH"),
+                        config.getScaledDimension("FORWARD_BUTTON_ICON_SIZE")
+                        )
+                );
 
         SwingButton backwardButton =
-                createBackwardButton(IconLoader.load(config.getString("REWIND_BUTTON_ICON_PATH")));
+                createBackwardButton(IconLoader.load(
+                        config.getString("REWIND_BUTTON_ICON_PATH"),
+                        config.getScaledDimension("REWIND_BUTTON_ICON_SIZE")
+                        )
+                );
 
         SwingButton saveMusicButton =
-                createSaveMusicButton(IconLoader.load(config.getString("SAVE_BUTTON_ICON_PATH")));
+                createSaveMusicButton(IconLoader.load(
+                        config.getString("SAVE_BUTTON_ICON_PATH"),
+                        config.getScaledDimension("SAVE_BUTTON_ICON_SIZE")
+                        )
+                );
 
         SwingUtils.setHandCursor(playPauseButton, forwardButton, backwardButton, saveMusicButton);
 
