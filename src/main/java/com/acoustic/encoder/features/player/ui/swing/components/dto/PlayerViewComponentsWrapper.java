@@ -10,4 +10,14 @@ public record PlayerViewComponentsWrapper(
         SwingButton skipMusicBackwardButton,
         MusicProgressBarPanel progressBarPanel,
         SwingButton saveMusicButton
-) { }
+) {
+    public PlayerViewComponentsWrapper copy() {
+        return new PlayerViewComponentsWrapper(
+                this.playPauseButton,
+                this.skipMusicForwardButton,
+                this.skipMusicBackwardButton,
+                this.progressBarPanel,
+                this.saveMusicButton
+        );
+    }
+}

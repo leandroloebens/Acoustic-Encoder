@@ -19,4 +19,20 @@ public record ConversionViewSwingComponentsWrapper(
         ParameterSliderPanel octavePanel,
         ParameterComboBoxPanel<InstrumentOption> instrumentPanel,
         ParameterSliderPanel bpmPanel
-) { }
+) {
+    public ConversionViewSwingComponentsWrapper copy() {
+        return new ConversionViewSwingComponentsWrapper(
+                this.converterButton(),
+                this.saveTextButton(),
+                this.loadTextButton(),
+                this.saveProjectButton(),
+                this.openProjectButton(),
+                this.mainTextAreaPanel(),
+                this.voiceSelector(),
+                this.volumePanel(),
+                this.octavePanel(),
+                this.instrumentPanel(),
+                this.bpmPanel()
+        );
+    }
+}

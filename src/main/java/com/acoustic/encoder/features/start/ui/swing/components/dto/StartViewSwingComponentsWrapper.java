@@ -7,4 +7,12 @@ public record StartViewSwingComponentsWrapper(
         SwingLabel titleLabel,
         SwingButton openProjectButton,
         SwingButton newProjectButton
-) { }
+) {
+    public StartViewSwingComponentsWrapper copy() {
+        return new StartViewSwingComponentsWrapper(
+                this.titleLabel,
+                this.openProjectButton,
+                this.newProjectButton
+        );
+    }
+}

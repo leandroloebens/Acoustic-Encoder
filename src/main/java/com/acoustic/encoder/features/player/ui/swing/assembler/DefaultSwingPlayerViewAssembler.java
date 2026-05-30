@@ -9,6 +9,7 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler {
 
@@ -20,11 +21,10 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
 
     private final static Color BACKGROUND_COLOR = new Color(18, 18, 18);
 
-    private final PlayerViewComponentsWrapper comps;
+    private final PlayerViewComponentsWrapper components;
 
     public DefaultSwingPlayerViewAssembler(PlayerViewComponentsWrapper components) {
-        if (components == null) throw new IllegalArgumentException("PlayerViewComponentsWrapper cannot be null");
-        this.comps = components;
+        this.components = Objects.requireNonNull(components,  "Components player cannot be null");
     }
 
     @Override
@@ -50,14 +50,14 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
         mainContainer.setPreferredSize(new Dimension(BASE_MAIN_CONTAINER_WIDTH, BASE_MAIN_CONTAINER_HEIGHT));
 
         SwingPanel controlsPanel = new PlayerControlPanelModel(
-                comps.playPauseButton(),
-                comps.skipMusicBackwardButton(),
-                comps.skipMusicForwardButton()
+                components.playPauseButton(),
+                components.skipMusicBackwardButton(),
+                components.skipMusicForwardButton()
         );
 
         SwingPanel footerPanel = new PlayerFooterPanelModel(
-                comps.saveMusicButton(),
-                comps.progressBarPanel()
+                components.saveMusicButton(),
+                components.progressBarPanel()
         );
 
         controlsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -78,6 +78,6 @@ public class DefaultSwingPlayerViewAssembler implements SwingPlayerViewAssembler
 
     @Override
     public PlayerViewComponentsWrapper getComponents() {
-        return comps;
+        return components.copy();
     }
 }
