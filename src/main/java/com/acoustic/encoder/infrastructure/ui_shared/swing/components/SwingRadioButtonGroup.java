@@ -1,13 +1,11 @@
 package com.acoustic.encoder.infrastructure.ui_shared.swing.components;
 
-import com.acoustic.encoder.infrastructure.ui_shared.swing.icons.ScaledFlatRadioButtonIcon;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class SwingRadioButtonGroup extends ButtonGroup {
 
@@ -41,14 +39,10 @@ public class SwingRadioButtonGroup extends ButtonGroup {
                 if (fontSize > 0)
                     button.setFont(new Font(button.getFont().getName(), button.getFont().getStyle(), fontSize));
 
+                if (selectedIcon != null) button.setSelectedIcon(selectedIcon);
+
                 button.putClientProperty("FlatLaf.style",
                         "icon.background: #222222; icon.hoverBorderColor: #aaaaaa; icon.pressedBorderColor: #aaaaaa;");
-
-                Icon scaledIcon = new ScaledFlatRadioButtonIcon(SwingUtils.getScreenScaleRatio());
-
-//                button.setIcon(scaledIcon);
-//
-//                button.setSelectedIcon(Objects.requireNonNullElse(selectedIcon, scaledIcon));
 
                 button.setVerticalTextPosition(SwingConstants.BOTTOM);
                 button.setHorizontalTextPosition(SwingConstants.CENTER);
