@@ -26,10 +26,6 @@ import com.acoustic.encoder.main.factory.DefaultScreenFactory;
 import com.acoustic.encoder.main.navigation.DefaultAppNavigator;
 import com.acoustic.encoder.main.navigation.listener.NavigationConversionCompletedListener;
 import com.formdev.flatlaf.FlatDarkLaf;
-//import com.formdev.flatlaf.FlatDarculaLaf;
-//import com.formdev.flatlaf.FlatDarkLaf;
-//import com.formdev.flatlaf.FlatIntelliJLaf;
-//import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.FlatLaf;
 
 import javax.sound.midi.MidiSystem;
@@ -40,7 +36,6 @@ public class Main {
     void main() throws Exception {
         // Register custom font
         SwingFontUtils.loadFontsToSystem("ui/fonts");
-//        SwingFontUtils.printAvailableFonts();
 
         // Set Look and Feel
         FlatLaf.registerCustomDefaultsSource("themes");
@@ -48,12 +43,7 @@ public class Main {
                 "flatlaf.uiScale",
                 String.format(java.util.Locale.US, "%.2fx", SwingUtils.getScreenScaleRatio())
         );
-
         FlatDarkLaf.setup();
-//        UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//        FlatLightLaf.setup();
-//        FlatDarculaLaf.setup();
-//        FlatIntelliJLaf.setup();
 
 
         // Event Bus
