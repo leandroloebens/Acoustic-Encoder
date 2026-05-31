@@ -61,13 +61,15 @@ public class DefaultSwingPlayerViewComponentsFactory implements SwingPlayerViewC
                         )
                 );
 
-        SwingUtils.setHandCursor(playPauseButton, forwardButton, backwardButton, saveMusicButton);
+        MusicProgressBarPanel progressBarPanel = createProgressBar();
+
+        SwingUtils.setHandCursor(playPauseButton, forwardButton, backwardButton, saveMusicButton, progressBarPanel.getProgressBar());
 
         return new PlayerViewComponentsWrapper(
                 playPauseButton,
                 forwardButton,
                 backwardButton,
-                createProgressBar(),
+                progressBarPanel,
                 saveMusicButton
         );
     }

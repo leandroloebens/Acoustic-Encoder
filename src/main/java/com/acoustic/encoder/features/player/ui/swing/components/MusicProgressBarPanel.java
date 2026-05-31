@@ -57,8 +57,6 @@ public class MusicProgressBarPanel extends SwingPanel {
         return progressBar.getValueIsAdjusting();
     }
 
-
-
     public boolean isAvailableForManualChange () {
         return progressBar.hasFocus() && !progressBar.getValueIsAdjusting();
     }
@@ -82,4 +80,7 @@ public class MusicProgressBarPanel extends SwingPanel {
         progressBar.removeChangeListener(changeListener);
     }
 
+    public SwingSeekBar getProgressBar() {
+        return progressBar;
+    }
 }

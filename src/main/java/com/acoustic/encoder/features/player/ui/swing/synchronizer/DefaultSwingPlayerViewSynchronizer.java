@@ -83,7 +83,7 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         this.isUpdatingProgrammatically = true;
         try {
             //TODO validade supliers values and handle error cases
-            int newPosition = PlaybackProgressFormatter.toSliderValue(
+            int newPosition = PlaybackProgressFormatter.toProgressValue(
                     microsecPositionSupplier.getAsLong(),
                     microsecDurationSupplier.getAsLong(),
                     components.progressBarPanel().getMaximum()
@@ -107,8 +107,8 @@ public class DefaultSwingPlayerViewSynchronizer implements SwingPlayerViewSynchr
         long total = microsecDurationSupplier.getAsLong();
 
         components.progressBarPanel().setProgressTimeLabel(
-                PlaybackProgressFormatter.toTimeText(current),
-                PlaybackProgressFormatter.toTimeText(total)
+                PlaybackProgressFormatter.formatPlaybackTime(current),
+                PlaybackProgressFormatter.formatPlaybackTime(total)
         );
     }
 }
