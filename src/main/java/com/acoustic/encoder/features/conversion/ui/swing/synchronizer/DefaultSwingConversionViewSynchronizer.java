@@ -85,7 +85,7 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
         if (!isSyncEnabled) return;
         parameters.setVoiceInstrument(
                 comps.voiceSelector().getSelectedIndex(),
-                new InstrumentId(comps.instrumentPanel().getSelectedItem().id())
+                comps.instrumentPanel().getSelectedItem().instrumentId()
         );
     }
 

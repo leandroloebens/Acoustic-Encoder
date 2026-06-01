@@ -1,5 +1,6 @@
 package com.acoustic.encoder.infrastructure.audio.export;
 
+import com.acoustic.encoder.domain.shared.InstrumentId;
 import com.acoustic.encoder.features.conversion.ui.swing.components.factory.InstrumentListProvider;
 import com.acoustic.encoder.domain.music.InstrumentOption;
 
@@ -34,7 +35,7 @@ public class MidiInstrumentListProvider implements InstrumentListProvider {
                 String name = inst.getName();
                 int program = inst.getPatch().getProgram(); // 0..127
                 if (inst.getPatch().getBank() == bank) {
-                    instruments.add(new InstrumentOption(name, program));
+                    instruments.add(new InstrumentOption(name, new InstrumentId(program)));
                 }
             }
         }

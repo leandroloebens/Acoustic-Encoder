@@ -1,8 +1,10 @@
 package com.acoustic.encoder.domain.music;
 
+import com.acoustic.encoder.domain.shared.InstrumentId;
+
 import java.util.Objects;
 
-public record InstrumentOption(String name, int id) {
+public record InstrumentOption(String name, InstrumentId instrumentId) {
 
     public InstrumentOption {
         Objects.requireNonNull(name, "name must not be null");
@@ -13,7 +15,7 @@ public record InstrumentOption(String name, int id) {
 
     @Override
     public String toString() {
-        return id + " - " + name;
+        return instrumentId + " - " + name;
     }
 
 }

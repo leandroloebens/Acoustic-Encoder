@@ -13,4 +13,8 @@ public record InstrumentId(int value) {
             throw new IllegalArgumentException("Instrument ID value must be less than " + MAX_INSTRUMENT_ID);
         }
     }
+
+    public String toString() {
+        return String.valueOf(value);
+    }
 }

@@ -290,7 +290,7 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
         List<InstrumentOption> instrumentOptions = new ArrayList<>();
 
         List<InstrumentOption> instruments = instrumentProvider.getInstrumentList();
-        instruments.sort(Comparator.comparingInt(InstrumentOption::id));
+        instruments.sort(Comparator.comparingInt(opt -> opt.instrumentId().value()));
 
         int expectedId = 0;
         for (InstrumentOption instrument : instruments) {
@@ -299,10 +299,10 @@ public class DefaultSwingConversionViewComponentsFactory implements SwingConvers
             if (
                 instrumentName.isEmpty()
                 || instrumentOptions.contains(instrument)
-                || instrument.id() != expectedId
+                || instrument.instrumentId().value() != expectedId
             ) continue;
 
-            instrumentOptions.add(new InstrumentOption(instrumentName, instrument.id()));
+            instrumentOptions.add(new InstrumentOption(instrumentName, instrument.instrumentId()));
             expectedId++;
         }
 
