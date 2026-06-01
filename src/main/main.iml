@@ -7,7 +7,8 @@
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="module" module-name="Software-Development-Course" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="flatlaf-3.2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.formdev:flatlaf:3.2.5" level="project" />
   </component>
 </module>
