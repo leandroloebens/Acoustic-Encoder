@@ -4,9 +4,7 @@ import com.acoustic.encoder.domain.music.MusicModel;
 import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 import com.acoustic.encoder.domain.voice.VoiceList;
-import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.VoiceParser;
-import com.acoustic.encoder.domain.event.EventBus;
 
 import java.util.List;
 import java.util.Objects;
