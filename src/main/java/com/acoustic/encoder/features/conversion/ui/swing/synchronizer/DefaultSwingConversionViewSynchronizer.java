@@ -7,7 +7,6 @@ import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.features.conversion.dto.MusicParametersState;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.dto.VoiceParametersState;
-import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
 import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
 
 public class DefaultSwingConversionViewSynchronizer implements SwingConversionViewSynchronizer {
@@ -19,19 +18,14 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
 
     private final ConversionViewSwingComponentsWrapper comps;
 
-    private final ConversionParametersService parametersService;
-
     private boolean isSyncEnabled = false;
 
     public DefaultSwingConversionViewSynchronizer(
-            ConversionViewSwingComponentsWrapper components,
-            ConversionParametersService parametersService
+            ConversionViewSwingComponentsWrapper components
     ) {
         if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
         this.comps = components;
 
-        if (parametersService == null) throw new IllegalArgumentException(NULL_PARAMETERS_SERVICE_ERROR_MSG);
-        this.parametersService = parametersService;
     }
 
     @Override
@@ -49,7 +43,7 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
 
         if (project == null) return;
 
-        this.parameters = parametersService.unwrapMusicProject(project);
+        this.parameters = MusicParametersState.fromMusicProject(project);
 
         syncInitialVoicesValues();
 

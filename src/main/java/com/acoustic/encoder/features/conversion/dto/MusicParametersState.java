@@ -7,6 +7,7 @@ import com.acoustic.encoder.domain.shared.Volume;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MusicParametersState {
 
@@ -22,9 +23,23 @@ public class MusicParametersState {
         this.voices = voiceParameters;
     }
 
+    public static MusicParametersState fromMusicProject(MusicProject project) {
+        Objects.requireNonNull(project, "MusicProject cannot be null!");
+
+        return new MusicParametersState(
+                project.bpm(),
+                project.voiceConfigList().stream()
+                    .map(VoiceParametersState::new)
+                    .toList()
+        );
+    }
+
     public Bpm getBpm() { return bpm; }
 
-    public void setBpm(Bpm bpm) { this.bpm = bpm; }
+    public void setBpm(Bpm bpm) {
+
+        this.bpm = Objects.requireNonNull(bpm, "bpm cannot be null");
+    }
 
     public List<VoiceParametersState> getAllVoices() {
         List<VoiceParametersState> copy = new ArrayList<>();

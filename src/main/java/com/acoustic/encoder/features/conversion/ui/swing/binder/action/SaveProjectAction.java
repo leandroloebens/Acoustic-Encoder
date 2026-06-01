@@ -2,7 +2,6 @@ package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
-import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.provider.TextInputProvider;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
@@ -21,13 +20,11 @@ public class SaveProjectAction implements Runnable {
     private final SwingFrame frame;
     private final ConversionController controller;
     private final SwingConversionViewSynchronizer synchronizer;
-    private final ConversionParametersService parametersService;
     private final TextInputProvider textProvider;
 
     public SaveProjectAction(
             SwingFrame frame,
             ConversionController controller,
-            ConversionParametersService parametersService,
             SwingConversionViewSynchronizer synchronizer,
             TextInputProvider textProvider
     ) {
@@ -36,9 +33,6 @@ public class SaveProjectAction implements Runnable {
 
         if (controller == null) throw new IllegalArgumentException("Controller may not be null");
         this.controller = controller;
-
-        if (parametersService == null) throw new IllegalArgumentException("ParametersService may not be null");
-        this.parametersService = parametersService;
 
         if (synchronizer == null) throw new IllegalArgumentException("Synchronizer may not be null");
         this.synchronizer = synchronizer;
@@ -60,8 +54,7 @@ public class SaveProjectAction implements Runnable {
 
         if (fileToSave != null) {
             try {
-                MusicProject project = parametersService.wrapMusicProject(
-                        textProvider.getTextInput(), synchronizer.getParameters());
+                MusicProject project = new MusicProject(textProvider.getTextInput(), synchronizer.getParameters());
 
                 controller.handleSaveProjectAction(project, fileToSave);
 

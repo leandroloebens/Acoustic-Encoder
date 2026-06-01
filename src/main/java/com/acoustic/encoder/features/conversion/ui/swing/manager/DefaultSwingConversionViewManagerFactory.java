@@ -2,8 +2,6 @@ package com.acoustic.encoder.features.conversion.ui.swing.manager;
 
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
-import com.acoustic.encoder.features.conversion.service.mapper.DefaultConversionParametersService;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManager;
 import com.acoustic.encoder.features.conversion.ui.ConversionViewManagerFactory;
 import com.acoustic.encoder.features.conversion.ui.swing.assembler.DefaultSwingConversionViewFrameAssembler;
@@ -35,11 +33,9 @@ public class DefaultSwingConversionViewManagerFactory implements ConversionViewM
     public ConversionViewManager createViewManager(ConversionController controller) {
         SwingConversionViewFrameAssembler conversionViewAssembler = getConversionViewAssembler();
 
-        ConversionParametersService parametersService = new DefaultConversionParametersService();
-
         SwingConversionViewEventBinder conversionViewBinder =
                 new DefaultSwingConversionViewEventBinder(
-                        eventBus, parametersService, DefaultSwingConversionViewSynchronizer::new
+                        eventBus, DefaultSwingConversionViewSynchronizer::new
                 );
 
         return new DefaultSwingConversionViewManager(

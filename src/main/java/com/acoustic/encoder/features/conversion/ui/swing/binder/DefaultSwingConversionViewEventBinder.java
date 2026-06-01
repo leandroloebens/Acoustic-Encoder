@@ -12,7 +12,6 @@ import com.acoustic.encoder.features.conversion.ui.swing.components.VoiceSelecto
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizer;
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizerFactory;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
 import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
@@ -35,7 +34,6 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     private static final String NULL_COMPONENTS_ERROR_MSG = "Conversion view components cannot be null!";
 
     private final EventBus eventBus;
-    private final ConversionParametersService parametersService;
     private final SwingConversionViewSynchronizerFactory synchronizerFactory;
 
     private SwingConversionViewSynchronizer synchronizer;
@@ -45,14 +43,10 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
 
     public DefaultSwingConversionViewEventBinder(
             EventBus eventBus,
-            ConversionParametersService parametersService,
             SwingConversionViewSynchronizerFactory synchronizerFactory
     ) {
         if (eventBus == null) throw new IllegalArgumentException(NULL_EVENT_BUS_ERROR_MSG);
         this.eventBus = eventBus;
-
-        if (parametersService == null) throw new IllegalArgumentException(NULL_PARAMETERS_SERVICE_ERROR_MSG);
-        this.parametersService = parametersService;
 
         if (synchronizerFactory == null) throw new IllegalArgumentException(NULL_SYNCHRONIZER_FACTORY_ERROR_MSG);
         this.synchronizerFactory = synchronizerFactory;
@@ -69,7 +63,7 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
         this.comps = components;
 
-        this.synchronizer = synchronizerFactory.createSynchronizer(comps, parametersService);
+        this.synchronizer = synchronizerFactory.createSynchronizer(comps);
         bindSynchronizer();
 
         List<BindingHandler> bindingHandlers = createBindingHandlers(frame, controller);
@@ -160,7 +154,6 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
                 frame,
                 controller,
                 synchronizer,
-                parametersService,
                 new MainTextAreaInputProvider(comps.mainTextAreaPanel()),
                 new InstrumentInputValidator(comps.instrumentPanel())
         );
@@ -182,7 +175,6 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
         return new SaveProjectAction(
                 frame,
                 controller,
-                parametersService,
                 synchronizer,
                 new MainTextAreaInputProvider(comps.mainTextAreaPanel())
         );

@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.conversion.ui.swing.binder.action;
 
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.features.conversion.service.mapper.ConversionParametersService;
+import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.provider.TextInputProvider;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.validator.InputValidator;
 import com.acoustic.encoder.features.conversion.ui.swing.binder.validator.ValidationResult;
@@ -16,7 +16,6 @@ public class ConvertAction implements Runnable {
     private final SwingFrame frame;
     private final ConversionController controller;
     private final SwingConversionViewSynchronizer synchronizer;
-    private final ConversionParametersService parametersService;
     private final TextInputProvider textInputProvider;
     private final InputValidator instrumentValidator;
 
@@ -24,7 +23,6 @@ public class ConvertAction implements Runnable {
             SwingFrame frame,
             ConversionController controller,
             SwingConversionViewSynchronizer synchronizer,
-            ConversionParametersService parametersService,
             TextInputProvider textInputProvider,
             InputValidator instrumentValidator
     ) {
@@ -36,9 +34,6 @@ public class ConvertAction implements Runnable {
 
         if (synchronizer == null) throw new IllegalArgumentException("Synchronizer cannot be null");
         this.synchronizer = synchronizer;
-
-        if (parametersService == null) throw new IllegalArgumentException("Parameters service cannot be null");
-        this.parametersService = parametersService;
 
         if (textInputProvider == null) throw new IllegalArgumentException("Text input provider cannot be null");
         this.textInputProvider = textInputProvider;
@@ -55,10 +50,7 @@ public class ConvertAction implements Runnable {
             if (!cleanedText.trim().isEmpty()) {
                 ValidationResult result = instrumentValidator.validate();
                 if (result.valid()) {
-                    controller.handleConvertAction(parametersService.wrapMusicProject(
-                            cleanedText, synchronizer.getParameters())
-                    );
-                    System.out.println(synchronizer.getParameters().toString());
+                    controller.handleConvertAction(new MusicProject(cleanedText, synchronizer.getParameters()));
                 }
                 else SwingMessageUtils.showWarningMessage(frame, result.feedbackMessage());
             }
