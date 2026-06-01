@@ -65,7 +65,7 @@ public class Main {
 
         var voiceParser = new DefaultVoiceParser(instructionParser, voiceConfigSelector);
 
-        var conversionService = new DefaultConversionService(voiceParser, eventBus);
+        var conversionService = new DefaultConversionService(voiceParser);
 
 
         // File Service

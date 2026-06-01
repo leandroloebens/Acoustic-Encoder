@@ -15,7 +15,7 @@ public class DefaultConversionService implements ConversionService {
 
     private final VoiceParser voiceParser;
 
-    public DefaultConversionService(VoiceParser voiceParser, EventBus eventBus) {
+    public DefaultConversionService(VoiceParser voiceParser) {
 
         this.voiceParser = Objects.requireNonNull(voiceParser, "VoiceParser cannot be null!");
     }
