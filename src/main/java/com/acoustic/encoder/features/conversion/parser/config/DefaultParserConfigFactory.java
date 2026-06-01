@@ -16,6 +16,8 @@ public class DefaultParserConfigFactory {
 
     public ParserConfig create(Map<String, MusicalInstruction> encoderMap) {
 
+        Objects.requireNonNull(encoderMap, "Encoder map cannot be null!");
+
         MusicalInstruction defaultInstruction = Objects.requireNonNull(
                 encoderMap.get(DEFAULT_INSTRUCTION_TOKEN),
                 "Default instruction not found!");
@@ -29,10 +31,14 @@ public class DefaultParserConfigFactory {
     }
 
     private void addGenericRules(List<TokenRule> tokenRules) {
+        Objects.requireNonNull(tokenRules, "Token rules cannot be null!");
+
         tokenRules.add(new DelayTokenRule());
     }
 
     private void addLiteralRules(List<TokenRule> tokenRules, Map<String, MusicalInstruction> encoderMap) {
+        Objects.requireNonNull(tokenRules, "Token rules cannot be null!");
+        Objects.requireNonNull(encoderMap, "Encoder map cannot be null!");
 
         encoderMap.entrySet().stream()
                 .filter(entry -> !DEFAULT_INSTRUCTION_TOKEN.equals(entry.getKey()))

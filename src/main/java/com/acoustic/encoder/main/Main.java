@@ -4,7 +4,7 @@ import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.features.conversion.parser.DefaultInstructionParser;
 import com.acoustic.encoder.features.conversion.parser.DefaultVoiceParser;
-import com.acoustic.encoder.features.conversion.parser.RoundRobinVoiceConfigSelector;
+import com.acoustic.encoder.features.conversion.parser.config.RoundRobinVoiceConfigSelector;
 import com.acoustic.encoder.features.conversion.parser.config.DefaultParserConfigFactory;
 import com.acoustic.encoder.features.conversion.parser.config.DefaultParsingConfigLoader;
 import com.acoustic.encoder.features.conversion.service.DefaultConversionService;
@@ -29,7 +29,6 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 
 import javax.sound.midi.MidiSystem;
-import javax.swing.*;
 
 public class Main {
 

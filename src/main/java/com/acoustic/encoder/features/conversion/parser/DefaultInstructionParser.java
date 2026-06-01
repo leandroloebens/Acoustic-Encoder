@@ -3,21 +3,20 @@ package com.acoustic.encoder.features.conversion.parser;
 import com.acoustic.encoder.features.conversion.parser.config.ParserConfig;
 import com.acoustic.encoder.domain.music.MusicalInstruction;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class DefaultInstructionParser implements InstructionParser {
 
     private final ParserConfig config;
 
     public DefaultInstructionParser(ParserConfig config) {
-        this.config = config;
+        this.config = Objects.requireNonNull(config, "Parser config cannot be null!");
     }
 
     @Override
     public List<MusicalInstruction> parseText(String text) {
+
+        Objects.requireNonNull(text, "Text cannot be null!");
 
         List<MusicalInstruction> instructionList = new ArrayList<>();
 

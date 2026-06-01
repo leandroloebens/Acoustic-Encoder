@@ -1,4 +1,4 @@
-package com.acoustic.encoder.features.conversion.parser;
+package com.acoustic.encoder.features.conversion.parser.config;
 
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 

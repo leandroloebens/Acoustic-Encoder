@@ -4,6 +4,7 @@ import com.acoustic.encoder.domain.music.MusicalInstruction;
 import com.acoustic.encoder.domain.voice.Voice;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 import com.acoustic.encoder.domain.voice.VoiceList;
+import com.acoustic.encoder.features.conversion.parser.config.VoiceConfigSelector;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,12 +34,6 @@ public class DefaultVoiceParser implements VoiceParser {
 
             List<MusicalInstruction> musicalInstructions = instructionParser.parseText(voiceText);
             VoiceConfig config = voiceConfigSelector.selectConfig(configs, voiceIndex);
-
-            // TESTE------------------------------ TODO limpar
-            for (MusicalInstruction musicalInstruction : musicalInstructions) {
-                System.out.println(musicalInstruction);
-            }
-            //---------------------------------
 
             voiceList.add(new Voice(musicalInstructions, config));
 

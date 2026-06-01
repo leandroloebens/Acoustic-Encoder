@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 public class DefaultParsingConfigLoader {
@@ -16,6 +17,8 @@ public class DefaultParsingConfigLoader {
     private final String fileName;
 
     public DefaultParsingConfigLoader(String fileName) {
+        Objects.requireNonNull(fileName, "File name cannot be null!");
+
         this.fileName = fileName;
     }
 

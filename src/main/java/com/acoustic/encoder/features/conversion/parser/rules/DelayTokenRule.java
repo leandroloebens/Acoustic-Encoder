@@ -4,6 +4,7 @@ import com.acoustic.encoder.features.conversion.parser.TokenMatch;
 import com.acoustic.encoder.domain.music.MusicalCommand;
 import com.acoustic.encoder.domain.music.MusicalInstruction;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +15,11 @@ public class DelayTokenRule implements TokenRule {
 
     @Override
     public Optional<TokenMatch> match(String text, int index) {
+        Objects.requireNonNull(text, "Text cannot be null!");
+        if (index < 0 || index >= text.length()) {
+            throw new IllegalArgumentException("Index is out of bounds!");
+        }
+
         Matcher matcher = PATTERN.matcher(text.substring(index));
 
         if (!matcher.lookingAt()) {
