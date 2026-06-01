@@ -56,6 +56,8 @@ public class MusicParametersState {
     }
 
     public void setVoiceVolume(int index, Volume volume) {
+        Objects.requireNonNull(volume, "volume cannot be null");
+
         if (index >= 0 && index < getNumberOfVoices()) {
             voices.get(index).setVolume(volume);
         } else {
@@ -64,6 +66,8 @@ public class MusicParametersState {
     }
 
     public void setVoiceOctave(int index, Octave octave) {
+        Objects.requireNonNull(octave, "octave cannot be null");
+
         if (index >= 0 && index < getNumberOfVoices()) {
             voices.get(index).setOctave(octave);
         } else {
@@ -72,6 +76,8 @@ public class MusicParametersState {
     }
 
     public void setVoiceInstrument(int index, InstrumentId instrument) {
+        Objects.requireNonNull(instrument, "instrument cannot be null");
+
         if (index >= 0 && index < getNumberOfVoices()) {
             voices.get(index).setInstrument(instrument);
         } else {
@@ -92,18 +98,28 @@ public class MusicParametersState {
         );
     }
 
-    public void setAllVoices(List<VoiceParametersState> voiceParameters) { this.voices = voiceParameters; }
+    public void setAllVoices(List<VoiceParametersState> voiceParameters) {
+        this.voices = Objects.requireNonNull(voiceParameters, "voiceParameters cannot be null");
+    }
 
     public void setSelectedVoice(int index, VoiceParametersState voiceParameters) {
+        Objects.requireNonNull(voiceParameters, "voiceParameters cannot be null");
+
         if (index >= 0 && index < getNumberOfVoices())
             voices.set(index, voiceParameters);
         else throw new IllegalArgumentException(INDEX_OUT_OF_BOUNDS);
     }
 
-    public int getNumberOfVoices() { return voices.size(); }
+    public int getNumberOfVoices() {
+
+        return Objects.requireNonNull(voices, "voices cannot be null").size();
+    }
 
     @Override
     public String toString() {
+        Objects.requireNonNull(voices, "voices cannot be null");
+        Objects.requireNonNull(bpm, "bpm cannot be null");
+
         String text = "MusicParametersState {" + "\n\t" + bpm;
 
         for (int i = 0; i < getNumberOfVoices(); i++) {

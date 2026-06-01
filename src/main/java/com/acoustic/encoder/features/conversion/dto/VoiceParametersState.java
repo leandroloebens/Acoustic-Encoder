@@ -5,6 +5,8 @@ import com.acoustic.encoder.domain.shared.Octave;
 import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 
+import java.util.Objects;
+
 public class VoiceParametersState {
 
     private InstrumentId instrument;
@@ -12,18 +14,14 @@ public class VoiceParametersState {
     private Octave octave;
 
     public VoiceParametersState(Volume volume, Octave octave, InstrumentId instrument) {
-        this.volume = volume;
-        this.octave = octave;
-        this.instrument = instrument;
-    }
-
-    public VoiceParametersState(VoiceParametersState other) {
-        this.volume = other.volume;
-        this.octave = other.octave;
-        this.instrument = other.instrument;
+        this.volume = Objects.requireNonNull(volume, "volume cannot be null");
+        this.octave = Objects.requireNonNull(octave, "octave cannot be null");
+        this.instrument = Objects.requireNonNull(instrument, "instrument cannot be null");
     }
 
     public VoiceParametersState(VoiceConfig config) {
+        Objects.requireNonNull(config, "config cannot be null");
+
         this.volume = config.defaultVolume();
         this.octave = config.defaultOctave();
         this.instrument = config.defaultInstrument();
@@ -34,7 +32,7 @@ public class VoiceParametersState {
     }
 
     public void setInstrument(InstrumentId instrument) {
-        this.instrument = instrument;
+        this.instrument = Objects.requireNonNull(instrument, "instrument cannot be null");
     }
 
     public Volume getVolume() {
@@ -42,7 +40,7 @@ public class VoiceParametersState {
     }
 
     public void setVolume(Volume volume) {
-        this.volume = volume;
+        this.volume = Objects.requireNonNull(volume, "volume cannot be null");
     }
 
     public Octave getOctave() {
@@ -50,7 +48,7 @@ public class VoiceParametersState {
     }
 
     public void setOctave(Octave octave) {
-        this.octave = octave;
+        this.octave = Objects.requireNonNull(octave, "octave cannot be null");
     }
 
     @Override
