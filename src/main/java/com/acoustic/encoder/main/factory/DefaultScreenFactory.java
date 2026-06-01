@@ -71,7 +71,7 @@ public class DefaultScreenFactory implements ScreenFactory  {
         ConversionViewManagerFactory managerFactory = new DefaultSwingConversionViewManagerFactory(eventBus);
 
         return new DefaultConversionScreen(
-                new DefaultConversionController(this.conversionService, this.textRepository),
+                new DefaultConversionController(this.conversionService, this.textRepository, this.eventBus),
                 managerFactory,
                 eventBus
         );

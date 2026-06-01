@@ -1,5 +1,7 @@
 package com.acoustic.encoder.features.conversion.controller;
 
+import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
+import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.ports.TextRepository;
 import com.acoustic.encoder.domain.music.MusicModel;
@@ -15,12 +17,15 @@ public class DefaultConversionController implements ConversionController {
 
     private final TextRepository textRepository;
 
-    public DefaultConversionController(ConversionService conversionService, TextRepository textRepository) {
+    private final EventBus eventBus;
 
-        this.conversionService = conversionService;
+    public DefaultConversionController(
+            ConversionService conversionService, TextRepository textRepository, EventBus eventBus
+    ) {
 
-        this.textRepository = textRepository;
-
+        this.conversionService = Objects.requireNonNull(conversionService, "Conversion service cannot be null!");
+        this.textRepository = Objects.requireNonNull(textRepository, "Text repository cannot be null!");
+        this.eventBus = Objects.requireNonNull(eventBus, "Event bus cannot be null!");
     }
 
     @Override
@@ -33,9 +38,7 @@ public class DefaultConversionController implements ConversionController {
                 input.voiceConfigList()
         );
 
-        //TESTE----------- TODO tirar
-        System.out.println(music);
-
+        this.eventBus.publish(new ConversionCompletedEvent(music));
     }
 
     @Override

@@ -15,12 +15,9 @@ public class DefaultConversionService implements ConversionService {
 
     private final VoiceParser voiceParser;
 
-    private final EventBus eventBus;
-
     public DefaultConversionService(VoiceParser voiceParser, EventBus eventBus) {
 
         this.voiceParser = Objects.requireNonNull(voiceParser, "VoiceParser cannot be null!");
-        this.eventBus = Objects.requireNonNull(eventBus, "EventBus cannot be null!");
     }
 
     @Override
@@ -31,10 +28,6 @@ public class DefaultConversionService implements ConversionService {
 
         VoiceList voiceList = voiceParser.parseVoices(text, configs);
 
-        MusicModel music = new MusicModel(voiceList, bpm);
-
-        this.eventBus.publish(new ConversionCompletedEvent(music));
-
-        return music;
+        return new MusicModel(voiceList, bpm);
     }
 }

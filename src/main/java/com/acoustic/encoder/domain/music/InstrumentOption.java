@@ -11,6 +11,7 @@ public record InstrumentOption(String name, InstrumentId instrumentId) {
         if (name.isBlank()) {
             throw new IllegalArgumentException("name must not be blank");
         }
+        Objects.requireNonNull(instrumentId, "instrumentId must not be null");
     }
 
     @Override
