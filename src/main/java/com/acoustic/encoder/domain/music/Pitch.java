@@ -14,7 +14,7 @@ public enum Pitch {
 
     Pitch(int value) {
 
-        if (value < MIN_VALUE || MAX_VALUE > 11) throw new IllegalArgumentException("Invalid pitch value!");
+        if (value < MIN_VALUE || value > MAX_VALUE) throw new IllegalArgumentException("Invalid pitch value!");
         this.value = value;
     }
 
