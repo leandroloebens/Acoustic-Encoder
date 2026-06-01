@@ -1,5 +1,6 @@
 package com.acoustic.encoder.infrastructure.audio.player.command.handlers;
 
+import com.acoustic.encoder.domain.music.Pitch;
 import com.acoustic.encoder.infrastructure.audio.player.MidiUtils;
 import com.acoustic.encoder.infrastructure.audio.player.command.MidiCommandHandler;
 import com.acoustic.encoder.infrastructure.audio.player.track.TrackContext;
@@ -14,7 +15,7 @@ public class MidiPlayNoteHandler implements MidiCommandHandler {
         Objects.requireNonNull(track, "Track cannot be null!");
         Objects.requireNonNull(context, "Track context cannot be null!");
 
-        MusicalNote note = new MusicalNote(parameter, context.state().octave(), context.settings().noteVelocity());
+        MusicalNote note = new MusicalNote(Pitch.fromValue(parameter), context.state().octave(), context.settings().noteVelocity());
 
         // Note ON
         track.add(MidiUtils.createNoteOnEvent(note, context.settings().channel(), context.state().tick()));

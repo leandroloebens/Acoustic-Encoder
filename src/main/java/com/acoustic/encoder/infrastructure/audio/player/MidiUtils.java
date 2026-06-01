@@ -71,7 +71,7 @@ public class MidiUtils {
         ShortMessage noteOn = new ShortMessage();
 
         try {
-            noteOn.setMessage(ShortMessage.NOTE_ON, channel, noteToMidi(note), note.velocity());
+            noteOn.setMessage(ShortMessage.NOTE_ON, channel, noteToMidi(note), note.velocity().value());
         } catch(InvalidMidiDataException e) {
             throw new RuntimeException("Error in note on message", e);
         }

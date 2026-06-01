@@ -3,13 +3,14 @@ package com.acoustic.encoder.infrastructure.audio.player.track;
 import com.acoustic.encoder.domain.shared.Bpm;
 import com.acoustic.encoder.domain.shared.InstrumentId;
 import com.acoustic.encoder.domain.shared.Octave;
+import com.acoustic.encoder.domain.shared.Velocity;
 
 public record TrackSettings(
         int channel,
         int ppqResolution,
         InstrumentId defaultInstrument,
         Octave defaultOctave,
-        int noteVelocity,
+        Velocity noteVelocity,
         Bpm defaultBpm,
         int baseNoteTickDuration
 ) {

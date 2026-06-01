@@ -1,6 +1,7 @@
 package com.acoustic.encoder.infrastructure.audio.player.track;
 
 import com.acoustic.encoder.domain.shared.Bpm;
+import com.acoustic.encoder.domain.shared.Velocity;
 import com.acoustic.encoder.infrastructure.audio.player.MidiUtils;
 import com.acoustic.encoder.infrastructure.audio.player.command.DefaultMidiCommandRegistry;
 import com.acoustic.encoder.domain.voice.Voice;
@@ -11,7 +12,7 @@ import javax.sound.midi.Track;
 
 public class DefaultTrackWriter implements TrackWriter {
 
-    private static final int NOTE_VELOCITY = 64;
+    private static final int DEUFAULT_NOTE_VELOCITY = 64;
 
     private final DefaultMidiCommandRegistry commandRegistry;
 
@@ -61,7 +62,7 @@ public class DefaultTrackWriter implements TrackWriter {
                 noteTickDuration,
                 channel,
                 ppqResolution,
-                NOTE_VELOCITY,
+                new Velocity(DEUFAULT_NOTE_VELOCITY),
                 initialBpm
         );
 

@@ -1,10 +1,7 @@
 package com.acoustic.encoder.infrastructure.audio.player.track;
 
 import com.acoustic.encoder.domain.music.MusicalInstruction;
-import com.acoustic.encoder.domain.shared.Bpm;
-import com.acoustic.encoder.domain.shared.InstrumentId;
-import com.acoustic.encoder.domain.shared.Octave;
-import com.acoustic.encoder.domain.shared.Volume;
+import com.acoustic.encoder.domain.shared.*;
 import com.acoustic.encoder.domain.voice.VoiceConfig;
 
 import java.util.Objects;
@@ -15,7 +12,7 @@ public record TrackContext(
 ) {
 
     public static TrackContext initialContext(
-            VoiceConfig config, int noteTickDuration, int channel, int ppqResolution, int noteVelocity, Bpm initialBpm
+            VoiceConfig config, int noteTickDuration, int channel, int ppqResolution, Velocity noteVelocity, Bpm initialBpm
     ) {
         Objects.requireNonNull(config, "VoiceConfig cannot be null");
         Objects.requireNonNull(initialBpm, "Initial BPM cannot be null");
