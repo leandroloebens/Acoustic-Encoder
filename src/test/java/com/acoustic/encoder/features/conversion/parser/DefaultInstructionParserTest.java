@@ -18,15 +18,12 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class DefaultInstructionParserTest {
 
-    // Usamos instâncias REAIS de Enums e Records para representar os dados.
-    // Escolhemos o NULL_COMMAND como nossa instrução padrão de teste.
+    // Mocks for dependencies
     private final MusicalInstruction defaultInstruction = new MusicalInstruction(MusicalCommand.NULL_COMMAND, 0);
 
     @Test
     public void shouldThrowExceptionWhenConfigIsNull() {
-        Exception exception = assertThrows(NullPointerException.class, () -> {
-            new DefaultInstructionParser(null);
-        });
+        Exception exception = assertThrows(NullPointerException.class, () -> new DefaultInstructionParser(null));
         assertEquals("Parser config cannot be null!", exception.getMessage());
     }
 
@@ -35,9 +32,7 @@ public class DefaultInstructionParserTest {
         ParserConfig config = new ParserConfig(List.of(), defaultInstruction);
         DefaultInstructionParser parser = new DefaultInstructionParser(config);
 
-        Exception exception = assertThrows(NullPointerException.class, () -> {
-            parser.parseText(null);
-        });
+        Exception exception = assertThrows(NullPointerException.class, () -> parser.parseText(null));
         assertEquals("Text cannot be null!", exception.getMessage());
     }
 
@@ -53,7 +48,7 @@ public class DefaultInstructionParserTest {
 
     @Test
     public void shouldReturnDefaultInstructionWhenNoRuleMatches() {
-        // Criamos uma configuração real, sem nenhuma TokenRule
+        // Mock config
         ParserConfig config = new ParserConfig(List.of(), defaultInstruction);
 
         DefaultInstructionParser parser = new DefaultInstructionParser(config);
@@ -62,7 +57,7 @@ public class DefaultInstructionParserTest {
 
         assertEquals(2, result.size(), "Should return one instruction for each character");
 
-        // Verifica se ambas as letras retornaram nossa instrução base de NULL_COMMAND
+        // Verifies that the default instruction is returned for each character
         assertEquals(defaultInstruction, result.get(0));
         assertEquals(defaultInstruction, result.get(1));
     }
@@ -72,35 +67,35 @@ public class DefaultInstructionParserTest {
             @Mock TokenRule shortRule,
             @Mock TokenRule longRule) {
 
-        // 1. Setup: Criamos instruções reais usando comandos diferentes do seu Enum
+        // 1. Setup: Creates real MusicalInstructions using different MusicalCommands from the Enum
         MusicalInstruction shortInstruction = new MusicalInstruction(MusicalCommand.PLAY_NOTE, 1);
         MusicalInstruction longInstruction = new MusicalInstruction(MusicalCommand.CHANGE_INSTRUMENT, 2);
 
         ParserConfig config = new ParserConfig(List.of(shortRule, longRule), defaultInstruction);
 
-        // 2. Programando o comportamento do nosso mock de TokenRule
-        // Simulando a leitura do índice 0:
+        // 2. Programming TokenRule mocks
+        // Simulates index 0 reading
         when(shortRule.match("ABC", 0))
                 .thenReturn(Optional.of(new TokenMatch(shortInstruction, 1)));
         when(longRule.match("ABC", 0))
                 .thenReturn(Optional.of(new TokenMatch(longInstruction, 2)));
 
-        // Simulando a leitura do índice 2 (após a regra longa consumir "AB"):
+        // SSimulates index 2 reading (after long rule consumes "AB"):
         when(shortRule.match("ABC", 2)).thenReturn(Optional.empty());
         when(longRule.match("ABC", 2)).thenReturn(Optional.empty());
 
         DefaultInstructionParser parser = new DefaultInstructionParser(config);
 
-        // 3. Ação
+        // 3. Action
         List<MusicalInstruction> result = parser.parseText("ABC");
 
-        // 4. Verificação
+        // 4. Assertions
         assertEquals(2, result.size(), "Should return 2 commands: the long rule (size 2) and the default (size 1)");
 
-        // O algoritmo deve selecionar a instrução que usou CHANGE_INSTRUMENT (regra longa)
+        // Must select the rule that consumes more characters (CHANGE_INSTRUMENT)
         assertEquals(longInstruction, result.get(0), "The rule with the highest character consumption should win");
 
-        // O último caractere "C" deve cair na instrução padrão (NULL_COMMAND)
+        // Last character 'C' should be handled by the default rule
         assertEquals(defaultInstruction, result.get(1), "The unmatched character should fall back to default");
     }
 }
