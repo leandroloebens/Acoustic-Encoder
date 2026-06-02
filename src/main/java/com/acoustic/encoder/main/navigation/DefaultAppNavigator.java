@@ -1,14 +1,19 @@
 package com.acoustic.encoder.main.navigation;
 
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
+import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
-import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpenEvent;
+import com.acoustic.encoder.features.conversion.event.ConversionCloseRequestEvent;
 import com.acoustic.encoder.features.conversion.ui.ConversionScreen;
 import com.acoustic.encoder.features.player.ui.PlayerScreen;
-import com.acoustic.encoder.features.start.event.StartScreenCloseRequestEvent;
+import com.acoustic.encoder.features.start.event.StartCloseRequestEvent;
 import com.acoustic.encoder.features.start.ui.StartScreen;
 import com.acoustic.encoder.main.factory.ScreenFactory;
+import com.acoustic.encoder.main.navigation.listener.NavConversionCloseRequestListener;
+import com.acoustic.encoder.main.navigation.listener.NavConversionCompletedListener;
+import com.acoustic.encoder.main.navigation.listener.NavProjectReadyToOpenListener;
+import com.acoustic.encoder.main.navigation.listener.NavStartCloseRequestListener;
 
 
 public class DefaultAppNavigator implements AppNavigator {
@@ -62,6 +67,11 @@ public class DefaultAppNavigator implements AppNavigator {
 
     @Override
     public void displayConversionScreen() {
+        // After starting up the conversion screen, there's no need to keep the start screen reference
+        // (Start screen is always closed/disposed by its own, this only removes it's reference, allowing it to be
+        // destroyed and collected by the Garbage Collector)
+        if (this.startScreen != null) this.startScreen = null;
+
         this.conversionScreen.showWindow();
     }
 
@@ -70,15 +80,19 @@ public class DefaultAppNavigator implements AppNavigator {
         this.playerScreen.showWindow();
     }
 
-    private void destroyStartScreen() {
-        this.startScreen = null;
-        this.displayConversionScreen();
-    }
-
     private void setEvents() {
-        eventBus.subscribe(StartScreenCloseRequestEvent.class, event -> closeApp());
-        eventBus.subscribe(ProjectReadyToOpen.class, event -> destroyStartScreen());
-        eventBus.subscribe(ConversionScreenCloseRequestEvent.class, event -> closeApp());
+        eventBus.subscribeOnUiThread(
+                StartCloseRequestEvent.class, new NavStartCloseRequestListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ProjectReadyToOpenEvent.class, new NavProjectReadyToOpenListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ConversionCompletedEvent.class, new NavConversionCompletedListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ConversionCloseRequestEvent.class, new NavConversionCloseRequestListener(this)
+        );
     }
 
 }

@@ -20,13 +20,13 @@ import com.acoustic.encoder.infrastructure.audio.player.command.DefaultMidiComma
 import com.acoustic.encoder.infrastructure.audio.player.track.DefaultTrackWriter;
 import com.acoustic.encoder.infrastructure.event.DefaultEventBus;
 import com.acoustic.encoder.infrastructure.file.FileTextRepository;
+import com.acoustic.encoder.infrastructure.ui_shared.swing.SwingThreadDispatcher;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingFontUtils;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 import com.acoustic.encoder.main.factory.DefaultScreenFactory;
 import com.acoustic.encoder.main.navigation.DefaultAppNavigator;
-import com.acoustic.encoder.main.navigation.listener.NavigationConversionCompletedListener;
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.sound.midi.MidiSystem;
 
@@ -46,7 +46,7 @@ public class Main {
 
 
         // Event Bus
-        var eventBus = new DefaultEventBus();
+        var eventBus = new DefaultEventBus(new SwingThreadDispatcher());
 
 
         // Start Service
@@ -99,10 +99,6 @@ public class Main {
         eventBus.subscribe(
                 ConversionCompletedEvent.class,
                 new PlayerConversionCompletedListener(audioPlayerService)
-        );
-        eventBus.subscribe(
-                ConversionCompletedEvent.class,
-                new NavigationConversionCompletedListener(appNavigator)
         );
         eventBus.subscribe(
                 AppShutdownEvent.class,

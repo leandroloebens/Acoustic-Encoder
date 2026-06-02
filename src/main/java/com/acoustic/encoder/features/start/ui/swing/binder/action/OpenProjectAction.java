@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.start.ui.swing.binder.action;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.start.controller.StartController;
-import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpenEvent;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingMessageUtils;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
@@ -46,7 +46,7 @@ public class OpenProjectAction implements Runnable {
         if (fileToLoad != null) {
             try {
                 MusicProject project = controller.handleOpenProjectAction(fileToLoad);
-                eventBus.publish(new ProjectReadyToOpen(project));
+                eventBus.publish(new ProjectReadyToOpenEvent(project));
             } catch (IOException | IllegalArgumentException e) {
                 SwingMessageUtils.showErrorMessage(frame, "Error while loading project: " + e.getMessage());
             }

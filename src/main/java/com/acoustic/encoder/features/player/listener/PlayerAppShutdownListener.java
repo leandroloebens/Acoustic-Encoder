@@ -20,4 +20,5 @@ public class PlayerAppShutdownListener implements EventListener<AppShutdownEvent
 
         audioPlayerService.closePlayer();
     }
+
 }

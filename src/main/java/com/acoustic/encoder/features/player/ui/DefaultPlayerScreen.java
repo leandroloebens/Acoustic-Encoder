@@ -3,7 +3,9 @@ package com.acoustic.encoder.features.player.ui;
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.player.controller.AudioPlayerController;
-import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
+import com.acoustic.encoder.features.player.event.PlayerCloseRequestEvent;
+import com.acoustic.encoder.features.player.ui.listener.PlayerViewAppShutdownListener;
+import com.acoustic.encoder.features.player.ui.listener.PlayerViewCloseRequestListener;
 
 public class DefaultPlayerScreen implements PlayerScreen {
 
@@ -47,20 +49,21 @@ public class DefaultPlayerScreen implements PlayerScreen {
 
     @Override
     public void hideWindow() {
-        //this.frame.setVisible(false);
         this.manager.hideFrame();
     }
 
     @Override
     public void closeWindow() {
-        //this.frame.disposeFrame();
         this.manager.disposeFrame();
     }
 
     private void setEvents() {
-        eventBus.subscribe(AppShutdownEvent.class, event -> closeWindow());
-        eventBus.subscribe(
-                PlayerClosedEvent.class, event -> hideWindow());
+        eventBus.subscribeOnUiThread(
+                AppShutdownEvent.class, new PlayerViewAppShutdownListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                PlayerCloseRequestEvent.class, new PlayerViewCloseRequestListener(this)
+        );
     }
 
 }

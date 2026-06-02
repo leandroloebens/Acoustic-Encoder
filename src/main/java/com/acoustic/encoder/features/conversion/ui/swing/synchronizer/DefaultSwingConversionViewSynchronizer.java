@@ -1,7 +1,6 @@
 package com.acoustic.encoder.features.conversion.ui.swing.synchronizer;
 
 import com.acoustic.encoder.domain.shared.Bpm;
-import com.acoustic.encoder.domain.shared.InstrumentId;
 import com.acoustic.encoder.domain.shared.Octave;
 import com.acoustic.encoder.domain.shared.Volume;
 import com.acoustic.encoder.features.conversion.dto.MusicParametersState;
@@ -9,10 +8,9 @@ import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.conversion.dto.VoiceParametersState;
 import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
 
-public class DefaultSwingConversionViewSynchronizer implements SwingConversionViewSynchronizer {
+import java.util.Objects;
 
-    private static final String NULL_PARAMETERS_SERVICE_ERROR_MSG = "Parameters service cannot be null!";
-    private static final String NULL_COMPONENTS_ERROR_MSG = "Components cannot be null!";
+public class DefaultSwingConversionViewSynchronizer implements SwingConversionViewSynchronizer {
 
     private MusicParametersState parameters = new MusicParametersState();
 
@@ -23,9 +21,7 @@ public class DefaultSwingConversionViewSynchronizer implements SwingConversionVi
     public DefaultSwingConversionViewSynchronizer(
             ConversionViewSwingComponentsWrapper components
     ) {
-        if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
-        this.comps = components;
-
+        this.comps = Objects.requireNonNull(components, "Conversion components cannot be null");
     }
 
     @Override

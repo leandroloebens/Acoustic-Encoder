@@ -3,7 +3,9 @@ package com.acoustic.encoder.features.conversion.ui;
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
-import com.acoustic.encoder.features.conversion.event.ConversionScreenCloseRequestEvent;
+import com.acoustic.encoder.features.conversion.event.ConversionCloseRequestEvent;
+import com.acoustic.encoder.features.conversion.ui.listener.ConversionViewAppShutdownListener;
+import com.acoustic.encoder.features.conversion.ui.listener.ConversionViewCloseRequestListener;
 
 public class DefaultConversionScreen implements ConversionScreen {
 
@@ -57,9 +59,12 @@ public class DefaultConversionScreen implements ConversionScreen {
     }
 
     private void setEvents() {
-        eventBus.subscribe(AppShutdownEvent.class, event -> closeWindow());
-        eventBus.subscribe(
-                ConversionScreenCloseRequestEvent.class, event -> closeWindow());
+        eventBus.subscribeOnUiThread(
+                AppShutdownEvent.class, new ConversionViewAppShutdownListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ConversionCloseRequestEvent.class, new ConversionViewCloseRequestListener(this)
+        );
     }
 
 }

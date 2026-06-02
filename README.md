@@ -11,6 +11,7 @@ Welcome to our **Software Development Course** repository! This space is managed
 - [Team Members](#team-members)
 - [How to Contribute](#how-to-contribute)
 - [Getting Started](#getting-started)
+- [Setting up FlatLaf library in IntelliJ IDE](#setting-up-flatlaf-library-in-intellij-ide)
 - [License](#license)
 
 ---
@@ -52,8 +53,6 @@ Software-Development-Course/
 
 ## How to Contribute
 
-Please read our [CONTRIBUTING.md](CONTRIBUTING.md) before making any changes to the repository.
-
 In short:
 1. **Clone** the repository to your local machine.
 2. Create a **new branch** for your work (e.g., `assignment-01` or `lab-02`).
@@ -78,13 +77,13 @@ cd Software-Development-Course
 ## Setting up FlatLaf library in IntelliJ IDE
 
 Run Menu -> Edit Configurations -> Select your application (probably "Main") -> Modify Options -> Check "Add VM options"
--> Back to your selected application, type on the VM options box and apply: 
+-> Back to your selected application, type on the VM options box: 
 
 ```bash
 --enable-native-access=ALL-UNNAMED
 ```
 
-Then, go to File Menu -> Project Structure -> Project Settings -> Libraries -> + -> Choose "flatlaf-3.2.5" -> Apply
+Click "Apply" and then "OK". Now you can run your application and the FlatLaf library should work without any issues.
 
 ---
 
