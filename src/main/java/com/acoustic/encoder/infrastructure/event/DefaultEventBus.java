@@ -40,7 +40,7 @@ public class DefaultEventBus implements EventBus {
     @Override
     public synchronized <T> void subscribe(Class<T> eventType, EventListener<T> listener) {
         this.listeners
-                .computeIfAbsent(eventType, k -> new ArrayList<>())
+                .computeIfAbsent(eventType, _ -> new ArrayList<>())
                 .add(listener);
     }
 
@@ -50,7 +50,7 @@ public class DefaultEventBus implements EventBus {
                 uiThreadDispatcher.dispatchOnUiThread(() -> listener.onEvent(event));
 
         wrapperMap
-                .computeIfAbsent(eventType, k -> new IdentityHashMap<>())
+                .computeIfAbsent(eventType, _ -> new IdentityHashMap<>())
                 .put(listener, wrappedListener);
 
         subscribe(eventType, wrappedListener);
@@ -84,7 +84,7 @@ public class DefaultEventBus implements EventBus {
 
         EventListener<?> actual = (toRemove != null) ? toRemove : listener;
 
-        this.listeners.computeIfPresent(eventType, (k, v) -> {
+        this.listeners.computeIfPresent(eventType, (_, v) -> {
             v.remove(actual);
             return v.isEmpty() ? null : v;
         });
