@@ -17,8 +17,9 @@ public class PlayerConversionCompletedListener implements EventListener<Conversi
     public void onEvent(ConversionCompletedEvent event) {
 
         try {
+            playerService.stopMusic();
             playerService.setPlayerMusic(event.musicModel());
-        }   catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
