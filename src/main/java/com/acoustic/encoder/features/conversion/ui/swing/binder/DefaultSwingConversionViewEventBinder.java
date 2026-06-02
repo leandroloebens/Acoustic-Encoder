@@ -13,7 +13,7 @@ import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConve
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizerFactory;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
-import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpenEvent;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.BindingHandler;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.ButtonClickBindingHandler;
@@ -90,11 +90,11 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     }
 
     private void bindSynchronizer() {
-        EventListener<ProjectReadyToOpen> openListener =
+        EventListener<ProjectReadyToOpenEvent> openListener =
                 event ->
                         SwingUtilities.invokeLater(() -> synchronizer.syncMusicProject(event.project()));
-        eventBus.subscribe(ProjectReadyToOpen.class, openListener);
-        removers.add(() -> eventBus.unsubscribe(ProjectReadyToOpen.class, openListener));
+        eventBus.subscribe(ProjectReadyToOpenEvent.class, openListener);
+        removers.add(() -> eventBus.unsubscribe(ProjectReadyToOpenEvent.class, openListener));
     }
 
     private List<BindingHandler> createBindingHandlers(

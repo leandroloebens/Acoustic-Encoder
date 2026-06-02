@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.player.ui.swing.binder.action;
 
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.features.player.event.PlayerClosedEvent;
+import com.acoustic.encoder.features.player.event.PlayerCloseRequestEvent;
 
 public class PlayerFrameExitAction implements Runnable {
 
@@ -14,6 +14,6 @@ public class PlayerFrameExitAction implements Runnable {
 
     @Override
     public void run() {
-        eventBus.publish(new PlayerClosedEvent());
+        eventBus.publish(new PlayerCloseRequestEvent());
     }
 }

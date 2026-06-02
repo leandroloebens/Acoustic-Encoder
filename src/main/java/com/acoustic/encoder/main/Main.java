@@ -24,9 +24,9 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingFontUtils;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.utils.SwingUtils;
 import com.acoustic.encoder.main.factory.DefaultScreenFactory;
 import com.acoustic.encoder.main.navigation.DefaultAppNavigator;
-import com.acoustic.encoder.main.navigation.listener.NavigationConversionCompletedListener;
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.acoustic.encoder.main.navigation.listener.NavConversionCompletedListener;
 import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 
 import javax.sound.midi.MidiSystem;
 
@@ -102,7 +102,7 @@ public class Main {
         );
         eventBus.subscribe(
                 ConversionCompletedEvent.class,
-                new NavigationConversionCompletedListener(appNavigator)
+                new NavConversionCompletedListener(appNavigator)
         );
         eventBus.subscribe(
                 AppShutdownEvent.class,

@@ -4,9 +4,9 @@ import com.acoustic.encoder.features.conversion.dto.MusicProject;
 
 import java.util.Objects;
 
-public record ProjectReadyToOpen(MusicProject project) {
+public record ProjectReadyToOpenEvent(MusicProject project) {
 
-    public ProjectReadyToOpen {
+    public ProjectReadyToOpenEvent {
         Objects.requireNonNull(project, "project must not be null");
 
     }

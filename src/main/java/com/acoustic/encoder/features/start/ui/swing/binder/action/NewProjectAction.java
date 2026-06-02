@@ -3,7 +3,7 @@ package com.acoustic.encoder.features.start.ui.swing.binder.action;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.conversion.dto.MusicProject;
 import com.acoustic.encoder.features.start.controller.StartController;
-import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpenEvent;
 
 public class NewProjectAction implements Runnable {
 
@@ -21,6 +21,6 @@ public class NewProjectAction implements Runnable {
     @Override
     public void run() {
         MusicProject project = controller.handleNewProjectAction();
-        eventBus.publish(new ProjectReadyToOpen(project));
+        eventBus.publish(new ProjectReadyToOpenEvent(project));
     }
 }

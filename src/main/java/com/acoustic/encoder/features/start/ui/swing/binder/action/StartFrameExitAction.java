@@ -1,7 +1,7 @@
 package com.acoustic.encoder.features.start.ui.swing.binder.action;
 
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.features.start.event.StartScreenCloseRequestEvent;
+import com.acoustic.encoder.features.start.event.StartCloseRequestEvent;
 
 public class StartFrameExitAction implements Runnable {
 
@@ -14,6 +14,6 @@ public class StartFrameExitAction implements Runnable {
 
     @Override
     public void run() {
-        eventBus.publish(new StartScreenCloseRequestEvent());
+        eventBus.publish(new StartCloseRequestEvent());
     }
 }

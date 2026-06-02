@@ -2,13 +2,16 @@ package com.acoustic.encoder.features.start.ui;
 
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
 import com.acoustic.encoder.domain.event.EventBus;
-import com.acoustic.encoder.features.start.event.ProjectReadyToOpen;
+import com.acoustic.encoder.features.start.event.ProjectReadyToOpenEvent;
 import com.acoustic.encoder.features.start.controller.StartController;
-import com.acoustic.encoder.features.start.event.StartScreenCloseRequestEvent;
+import com.acoustic.encoder.features.start.event.StartCloseRequestEvent;
+import com.acoustic.encoder.features.start.ui.listener.StartViewProjectReadyToOpenListener;
+import com.acoustic.encoder.features.start.ui.listener.StartViewAppShutdownListener;
+import com.acoustic.encoder.features.start.ui.listener.StartViewCloseRequestListener;
+
+import java.util.Objects;
 
 public class DefaultStartScreen implements StartScreen {
-    private static final String ILLEGAL_FILE_SERVICE_ARGUMENT = "File service cannot be null";
-    private static final String ILLEGAL_MANAGER_ARGUMENT = "Start view manager cannot be null";
 
     private final StartController controller;
 
@@ -19,14 +22,12 @@ public class DefaultStartScreen implements StartScreen {
     private final EventBus eventBus;
 
     public DefaultStartScreen(StartController controller, StartViewManagerFactory managerFactory, EventBus eventBus) {
-        if (controller == null) throw new IllegalArgumentException(ILLEGAL_FILE_SERVICE_ARGUMENT);
-        this.controller = controller;
 
-        if (managerFactory == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
-        this.managerFactory = managerFactory;
+        this.controller = Objects.requireNonNull(controller, "StartController cannot be null");
 
-        if (eventBus == null) throw new IllegalArgumentException(ILLEGAL_MANAGER_ARGUMENT);
-        this.eventBus = eventBus;
+        this.managerFactory = Objects.requireNonNull(managerFactory, "StartViewManagerFactory cannot be null");
+
+        this.eventBus = Objects.requireNonNull(eventBus, "EventBus cannot be null");
 
         setEvents();
 
@@ -36,7 +37,7 @@ public class DefaultStartScreen implements StartScreen {
 
     @Override
     public void initialize() {
-        this.manager = managerFactory.createViewManager(controller);;
+        this.manager = managerFactory.createViewManager(controller);
     }
 
     @Override
@@ -55,9 +56,9 @@ public class DefaultStartScreen implements StartScreen {
     }
 
     private void setEvents() {
-        eventBus.subscribe(AppShutdownEvent.class, event -> closeWindow());
-        eventBus.subscribe(StartScreenCloseRequestEvent.class, event -> closeWindow());
-        eventBus.subscribe(ProjectReadyToOpen.class, event -> closeWindow());
+        eventBus.subscribe(AppShutdownEvent.class, new StartViewAppShutdownListener(this));
+        eventBus.subscribe(StartCloseRequestEvent.class, new StartViewCloseRequestListener(this));
+        eventBus.subscribe(ProjectReadyToOpenEvent.class, new StartViewProjectReadyToOpenListener(this));
     }
 
 }
