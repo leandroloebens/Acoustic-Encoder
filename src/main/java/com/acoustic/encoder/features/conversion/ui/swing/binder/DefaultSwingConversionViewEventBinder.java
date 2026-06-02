@@ -13,6 +13,7 @@ import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConve
 import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.SwingConversionViewSynchronizerFactory;
 import com.acoustic.encoder.features.conversion.controller.ConversionController;
 import com.acoustic.encoder.features.conversion.ui.swing.components.dto.ConversionViewSwingComponentsWrapper;
+import com.acoustic.encoder.features.conversion.ui.swing.synchronizer.listener.SynchronizerProjectReadyToOpenListener;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpenEvent;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.components.SwingFrame;
 import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.BindingHandler;
@@ -22,16 +23,11 @@ import com.acoustic.encoder.infrastructure.ui_shared.swing.handler.FrameWindowBi
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DefaultSwingConversionViewEventBinder implements SwingConversionViewEventBinder {
 
-    private static final String NULL_EVENT_BUS_ERROR_MSG = "EventBus cannot be null!";
-    private static final String NULL_PARAMETERS_SERVICE_ERROR_MSG = "Parameters service cannot be null!";
-    private static final String NULL_SYNCHRONIZER_FACTORY_ERROR_MSG = "Synchronizer factory cannot be null!";
-
     private final static String INVALID_INSTRUMENT_INPUT_WARNING = "Invalid instrument - Last valid instrument set";
-
-    private static final String NULL_COMPONENTS_ERROR_MSG = "Conversion view components cannot be null!";
 
     private final EventBus eventBus;
     private final SwingConversionViewSynchronizerFactory synchronizerFactory;
@@ -45,11 +41,10 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
             EventBus eventBus,
             SwingConversionViewSynchronizerFactory synchronizerFactory
     ) {
-        if (eventBus == null) throw new IllegalArgumentException(NULL_EVENT_BUS_ERROR_MSG);
-        this.eventBus = eventBus;
+        this.eventBus = Objects.requireNonNull(eventBus, "EventBus cannot be null");
 
-        if (synchronizerFactory == null) throw new IllegalArgumentException(NULL_SYNCHRONIZER_FACTORY_ERROR_MSG);
-        this.synchronizerFactory = synchronizerFactory;
+        this.synchronizerFactory =
+                Objects.requireNonNull(synchronizerFactory, "Synchronizer factory cannot be null");
     }
 
     @Override
@@ -60,8 +55,7 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
     ) {
         if (bound) return this.synchronizer;
 
-        if (components == null) throw new IllegalArgumentException(NULL_COMPONENTS_ERROR_MSG);
-        this.comps = components;
+        this.comps = Objects.requireNonNull(components, "Conversion view components cannot be null!");
 
         this.synchronizer = synchronizerFactory.createSynchronizer(comps);
         bindSynchronizer();
@@ -91,9 +85,9 @@ public class DefaultSwingConversionViewEventBinder implements SwingConversionVie
 
     private void bindSynchronizer() {
         EventListener<ProjectReadyToOpenEvent> openListener =
-                event ->
-                        SwingUtilities.invokeLater(() -> synchronizer.syncMusicProject(event.project()));
-        eventBus.subscribe(ProjectReadyToOpenEvent.class, openListener);
+                new SynchronizerProjectReadyToOpenListener(synchronizer);
+
+        eventBus.subscribeOnUiThread(ProjectReadyToOpenEvent.class, openListener);
         removers.add(() -> eventBus.unsubscribe(ProjectReadyToOpenEvent.class, openListener));
     }
 

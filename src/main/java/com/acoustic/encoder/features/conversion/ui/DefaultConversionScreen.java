@@ -59,9 +59,12 @@ public class DefaultConversionScreen implements ConversionScreen {
     }
 
     private void setEvents() {
-        eventBus.subscribe(AppShutdownEvent.class, new ConversionViewAppShutdownListener(this));
-        eventBus.subscribe(
-                ConversionCloseRequestEvent.class, new ConversionViewCloseRequestListener(this));
+        eventBus.subscribeOnUiThread(
+                AppShutdownEvent.class, new ConversionViewAppShutdownListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ConversionCloseRequestEvent.class, new ConversionViewCloseRequestListener(this)
+        );
     }
 
 }

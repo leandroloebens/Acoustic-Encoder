@@ -58,9 +58,12 @@ public class DefaultPlayerScreen implements PlayerScreen {
     }
 
     private void setEvents() {
-        eventBus.subscribe(AppShutdownEvent.class, new PlayerViewAppShutdownListener(this));
-        eventBus.subscribe(
-                PlayerCloseRequestEvent.class, new PlayerViewCloseRequestListener(this));
+        eventBus.subscribeOnUiThread(
+                AppShutdownEvent.class, new PlayerViewAppShutdownListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                PlayerCloseRequestEvent.class, new PlayerViewCloseRequestListener(this)
+        );
     }
 
 }

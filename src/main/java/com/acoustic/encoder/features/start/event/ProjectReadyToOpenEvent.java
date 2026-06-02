@@ -7,7 +7,7 @@ import java.util.Objects;
 public record ProjectReadyToOpenEvent(MusicProject project) {
 
     public ProjectReadyToOpenEvent {
-        Objects.requireNonNull(project, "project must not be null");
+        Objects.requireNonNull(project, "Project must not be null");
 
     }
 }

@@ -1,6 +1,7 @@
 package com.acoustic.encoder.main.navigation;
 
 import com.acoustic.encoder.domain.event.AppShutdownEvent;
+import com.acoustic.encoder.domain.event.ConversionCompletedEvent;
 import com.acoustic.encoder.domain.event.EventBus;
 import com.acoustic.encoder.features.start.event.ProjectReadyToOpenEvent;
 import com.acoustic.encoder.features.conversion.event.ConversionCloseRequestEvent;
@@ -10,6 +11,7 @@ import com.acoustic.encoder.features.start.event.StartCloseRequestEvent;
 import com.acoustic.encoder.features.start.ui.StartScreen;
 import com.acoustic.encoder.main.factory.ScreenFactory;
 import com.acoustic.encoder.main.navigation.listener.NavConversionCloseRequestListener;
+import com.acoustic.encoder.main.navigation.listener.NavConversionCompletedListener;
 import com.acoustic.encoder.main.navigation.listener.NavProjectReadyToOpenListener;
 import com.acoustic.encoder.main.navigation.listener.NavStartCloseRequestListener;
 
@@ -79,9 +81,18 @@ public class DefaultAppNavigator implements AppNavigator {
     }
 
     private void setEvents() {
-        eventBus.subscribe(StartCloseRequestEvent.class, new NavStartCloseRequestListener(this));
-        eventBus.subscribe(ProjectReadyToOpenEvent.class, new NavProjectReadyToOpenListener(this));
-        eventBus.subscribe(ConversionCloseRequestEvent.class, new NavConversionCloseRequestListener(this));
+        eventBus.subscribeOnUiThread(
+                StartCloseRequestEvent.class, new NavStartCloseRequestListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ProjectReadyToOpenEvent.class, new NavProjectReadyToOpenListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ConversionCompletedEvent.class, new NavConversionCompletedListener(this)
+        );
+        eventBus.subscribeOnUiThread(
+                ConversionCloseRequestEvent.class, new NavConversionCloseRequestListener(this)
+        );
     }
 
 }

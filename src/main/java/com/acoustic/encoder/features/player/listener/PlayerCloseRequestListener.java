@@ -5,6 +5,7 @@ import com.acoustic.encoder.features.player.event.PlayerCloseRequestEvent;
 import com.acoustic.encoder.domain.event.EventListener;
 
 public class PlayerCloseRequestListener implements EventListener<PlayerCloseRequestEvent> {
+
     private final AudioPlayerController controller;
 
     public PlayerCloseRequestListener(AudioPlayerController controller) {
@@ -15,4 +16,5 @@ public class PlayerCloseRequestListener implements EventListener<PlayerCloseRequ
     public void onEvent(PlayerCloseRequestEvent event) {
         this.controller.handlePauseAction();
     }
+
 }

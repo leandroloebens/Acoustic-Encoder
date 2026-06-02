@@ -25,6 +25,8 @@ import com.acoustic.encoder.features.player.listener.PlayerCloseRequestListener;
 import com.acoustic.encoder.features.player.service.AudioPlayerService;
 import com.acoustic.encoder.features.conversion.service.ConversionService;
 
+import java.util.Objects;
+
 
 public class DefaultScreenFactory implements ScreenFactory  {
 
@@ -47,11 +49,16 @@ public class DefaultScreenFactory implements ScreenFactory  {
             AudioPlayerService audioPlayerService
     ) {
 
-        this.startService = startService;
-        this.conversionService = conversionService;
-        this.textRepository = textRepository;
-        this.audioPlayerService = audioPlayerService;
-        this.eventBus = eventBus;
+        this.startService =
+                Objects.requireNonNull(startService, "StartService cannot be null!");
+        this.conversionService =
+                Objects.requireNonNull(conversionService, "ConversionService cannot be null!");
+        this.textRepository =
+                Objects.requireNonNull(textRepository, "TextRepository cannot be null!");
+        this.audioPlayerService =
+                Objects.requireNonNull(audioPlayerService, "AudioPlayerService cannot be null!");
+        this.eventBus =
+                Objects.requireNonNull(eventBus, "EventBus cannot be null!");
 
     }
 

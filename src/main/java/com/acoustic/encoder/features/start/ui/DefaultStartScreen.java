@@ -56,9 +56,15 @@ public class DefaultStartScreen implements StartScreen {
     }
 
     private void setEvents() {
-        eventBus.subscribe(AppShutdownEvent.class, new StartViewAppShutdownListener(this));
-        eventBus.subscribe(StartCloseRequestEvent.class, new StartViewCloseRequestListener(this));
-        eventBus.subscribe(ProjectReadyToOpenEvent.class, new StartViewProjectReadyToOpenListener(this));
+        eventBus.subscribeOnUiThread
+                (AppShutdownEvent.class, new StartViewAppShutdownListener(this)
+        );
+        eventBus.subscribeOnUiThread
+                (StartCloseRequestEvent.class, new StartViewCloseRequestListener(this)
+        );
+        eventBus.subscribeOnUiThread
+                (ProjectReadyToOpenEvent.class, new StartViewProjectReadyToOpenListener(this)
+        );
     }
 
 }
