@@ -4,6 +4,26 @@ A desktop application that turns text into MIDI music. Each character is interpr
 
 > Developed for the Software Development course at UFRGS, with a focus on object-oriented programming, layered architecture, event-driven communication, and automated testing.
 
+## Screenshots
+
+### Start Screen
+
+Create a new composition or continue working on a saved project.
+
+![Acoustic Encoder start screen](docs/images/start-screen.jpeg)
+
+### Text-to-Sound Editor
+
+Write or import text, configure each voice, adjust the tempo, and convert the result into music.
+
+![Acoustic Encoder text-to-sound editor](docs/images/conversion-screen.jpeg)
+
+### Music Player
+
+Listen to the generated composition, navigate through it, and export it as a MIDI file.
+
+![Acoustic Encoder music player](docs/images/music-player.jpeg)
+
 ## Features
 
 - Converts text into MIDI notes and commands
