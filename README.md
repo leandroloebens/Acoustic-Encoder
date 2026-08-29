@@ -22,7 +22,7 @@ Write or import text, configure each voice, adjust the tempo, and convert the re
 
 Listen to the generated composition, navigate through it, and export it as a MIDI file.
 
-![Acoustic Encoder music player](docs/images/music-player.jpeg)
+![Acoustic Encoder music player](docs/images/music-player.png)
 
 ## Features
 
